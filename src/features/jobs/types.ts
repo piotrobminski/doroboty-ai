@@ -1,3 +1,5 @@
+import type { CompetencyCard } from "@/features/prototype/competency";
+
 export const jobCategories = ["build", "apply", "lead"] as const;
 export const jobFunctions = [
   "product",
@@ -45,6 +47,7 @@ export type Job = {
   title: string;
   summary: string;
   description: string;
+  competencyCard?: CompetencyCard;
   category: JobCategory;
   function: JobFunction;
   remoteStatus: RemoteStatus;

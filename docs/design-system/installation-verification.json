@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-13",
+  "activeSystem": "Technologia po ludzku v1",
+  "activeReference": "technologia-po-ludzku/",
+  "agentEntry": "technologia-po-ludzku/agent-kit/design.md",
+  "importedFiles": 168,
+  "legacyCompatibilityFiles": 67,
+  "node": "v24.14.0",
+  "fullGate": {
+    "command": "./scripts/verify",
+    "exitCode": 1,
+    "format": "pass",
+    "referenceIntegrity": "pass",
+    "referenceSyntax": "pass",
+    "referenceTests": {
+      "passed": 10,
+      "failed": 0
+    },
+    "lint": "pass",
+    "types": "pass",
+    "hostUnitTests": {
+      "passed": 27,
+      "failed": 0
+    },
+    "baselinePacket": "pass (120 journeys)",
+    "productionBuild": "pass",
+    "e2e": {
+      "status": "blocked before browser launch",
+      "scenariosUnableToStart": 34,
+      "reason": "Provisioned Playwright chromium_headless_shell-1243 executable is missing.",
+      "browserInstalledByThisTask": false
+    }
+  },
+  "receivingLinks": {
+    "checked": 160,
+    "broken": 0,
+    "scope": "Active receiving Markdown links; archived snapshots retain their original link context as explained in ARCHIVE.md."
+  },
+  "manualPreview": {
+    "command": "npm run design-system:dev",
+    "url": "http://127.0.0.1:8952/ui-examples.html",
+    "browser": "ChatGPT in-app browser",
+    "result": "pass",
+    "observed": [
+      "Gallery loads from the target repository with the new palette, assets and four cards.",
+      "Named example dialog opens and closes.",
+      "Documentation, long-content example and representative-screen links are present."
+    ],
+    "screenshot": "installation-preview.png"
+  },
+  "scope": {
+    "runtimeReactComponentsChanged": false,
+    "runtimeTokensOrCSSChanged": false,
+    "routesOrStorageChanged": false,
+    "featuresRegister": "Reviewed; no behavior update required.",
+    "newVisualMigrationClaimed": false
+  },
+  "review": {
+    "sourcePackage": "All168 imported files match the receiving SHA-256 inventory.",
+    "legacyPackage": "All67 original files remain unchanged for current runtime asset imports.",
+    "instructions": "AGENTS.md, CLAUDE.md, README.md, GUI.md and receiving guidance use the same active entry and authority.",
+    "hostIntegration": "Maps source anatomy to existing React/Base UI, preserves HashRouter and richer host data/workflows, and distinguishes source demo behavior from local product operations."
+  },
+  "limits": [
+    "No full host E2E result: browser binaries were not provisioned; no automatic browser installation was performed.",
+    "Reference preview smoke checks do not demonstrate migration or complete accessibility of the React application.",
+    "Historical company-page findings remain open until targeted implementation and evidence."
+  ]
+}

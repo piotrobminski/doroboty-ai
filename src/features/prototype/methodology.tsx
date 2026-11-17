@@ -1,3 +1,4 @@
+import { PageTitle } from "./shell";
 const criteria = [
   ["AI zmienia pracę", "Technologia wpływa na odpowiedzialność, decyzje lub rezultat stanowiska."],
   [
@@ -16,27 +17,23 @@ const criteria = [
 
 export default function MethodologyPage() {
   return (
-    <article className="mx-auto max-w-5xl px-5 py-14 lg:px-8 lg:py-20">
-      <p className="text-xs font-medium tracking-[var(--gui-tracking-xl)] text-muted-foreground">
-        Nasze kryteria
-      </p>
-      <h1 className="mt-3 text-4xl font-semibold tracking-[var(--gui-tracking-s)] sm:text-5xl">
+    <article className="prototype-section information-page">
+      <PageTitle
+        eyebrow="Nasze kryteria / Praca z AI"
+        description="DoRoboty.ai pokazuje role, w których AI jest częścią realnej odpowiedzialności i mierzalnego wyniku."
+      >
         Nie każda praca z chatbotem jest pracą z AI.
-      </h1>
-      <p className="mt-5 max-w-3xl text-lg leading-relaxed text-muted-foreground">
-        DoRoboty.ai pokazuje role, w których AI jest częścią realnej odpowiedzialności i mierzalnego
-        wyniku.
-      </p>
+      </PageTitle>
       <div className="mt-12 grid gap-5 sm:grid-cols-2">
         {criteria.map(([title, body], index) => (
-          <section key={title} className="rounded-xl bg-card p-6">
+          <section key={title} className="prototype-panel">
             <span className="text-xs font-medium text-muted-foreground">0{index + 1}</span>
             <h2 className="mt-3 text-xl font-semibold">{title}</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{body}</p>
           </section>
         ))}
       </div>
-      <section className="mt-12 rounded-xl bg-muted/40 p-7">
+      <section className="prototype-panel mt-12">
         <h2 className="text-2xl font-semibold">Weryfikacja nie jest rekomendacją</h2>
         <p className="mt-3 text-base leading-relaxed text-muted-foreground">
           Sprawdzamy źródło i kompletność informacji. Kandydat nadal powinien sam ocenić firmę,

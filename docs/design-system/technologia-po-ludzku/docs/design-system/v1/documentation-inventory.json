@@ -1,0 +1,433 @@
+{
+  "version": "v1",
+  "status": "do oceny",
+  "families": [
+    {
+      "id": "c01",
+      "name": "Nawigacja globalna",
+      "sources": [
+        "S01",
+        "S02",
+        "S06",
+        "S11"
+      ],
+      "dependencies": [
+        "c04",
+        "c05",
+        "c22"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c02",
+      "name": "Powrót i kontekst",
+      "sources": [
+        "S06",
+        "S07",
+        "S19"
+      ],
+      "dependencies": [
+        "c01",
+        "c04"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c03",
+      "name": "Nagłówki kontekstowe",
+      "sources": [
+        "S01",
+        "S02",
+        "S06",
+        "S07",
+        "S11",
+        "S12"
+      ],
+      "dependencies": [
+        "c04",
+        "c05",
+        "c06",
+        "c22"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c04",
+      "name": "Akcje i przyciski",
+      "sources": [
+        "S01",
+        "S06",
+        "S09",
+        "S13",
+        "S17",
+        "S20"
+      ],
+      "dependencies": [
+        "c22",
+        "c23"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c05",
+      "name": "Tożsamość pracodawcy",
+      "sources": [
+        "S01",
+        "S06",
+        "S11",
+        "S17"
+      ],
+      "dependencies": [
+        "c06"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c06",
+      "name": "Oznaczenie obszaru pracy",
+      "sources": [
+        "S01",
+        "S06",
+        "S11",
+        "S18"
+      ],
+      "dependencies": [
+        "c05",
+        "c07",
+        "c10",
+        "c13"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c07",
+      "name": "Tag informacyjny",
+      "sources": [
+        "S01",
+        "S06",
+        "S07"
+      ],
+      "dependencies": [
+        "c06",
+        "c14"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c08",
+      "name": "Pole formularza",
+      "sources": [
+        "S08",
+        "S10",
+        "S11",
+        "S13",
+        "S14",
+        "S15"
+      ],
+      "dependencies": [
+        "c09",
+        "c10",
+        "c11",
+        "c22",
+        "c25"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c09",
+      "name": "Lista wyboru",
+      "sources": [
+        "S01",
+        "S02",
+        "S11",
+        "S12",
+        "S13"
+      ],
+      "dependencies": [
+        "c08",
+        "c13",
+        "c15"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c10",
+      "name": "Wybór: checkbox i kafel radiowy",
+      "sources": [
+        "S01",
+        "S03",
+        "S11",
+        "S12",
+        "S14"
+      ],
+      "dependencies": [
+        "c06",
+        "c08",
+        "c13"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c11",
+      "name": "Wybór pliku",
+      "sources": [
+        "S08",
+        "S09",
+        "S10"
+      ],
+      "dependencies": [
+        "c08",
+        "c22",
+        "c23"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c12",
+      "name": "Wyszukiwarka ofert",
+      "sources": [
+        "S01",
+        "S02",
+        "S04"
+      ],
+      "dependencies": [
+        "c04",
+        "c08",
+        "c09",
+        "c13",
+        "c14"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c13",
+      "name": "Panel filtrów i wybór obszaru",
+      "sources": [
+        "S01",
+        "S02",
+        "S03",
+        "S04"
+      ],
+      "dependencies": [
+        "c06",
+        "c09",
+        "c10",
+        "c14",
+        "c15"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c14",
+      "name": "Aktywne kryterium",
+      "sources": [
+        "S03",
+        "S04"
+      ],
+      "dependencies": [
+        "c04",
+        "c07",
+        "c13"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c15",
+      "name": "Nagłówek wyników i sortowanie",
+      "sources": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05"
+      ],
+      "dependencies": [
+        "c06",
+        "c09",
+        "c14"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c16",
+      "name": "Karta oferty",
+      "sources": [
+        "S01",
+        "S02",
+        "S03",
+        "S20"
+      ],
+      "dependencies": [
+        "c04",
+        "c05",
+        "c06",
+        "c07",
+        "c17"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c17",
+      "name": "Fakty i wynagrodzenie",
+      "sources": [
+        "S01",
+        "S06",
+        "S07",
+        "S14"
+      ],
+      "dependencies": [
+        "c07",
+        "c08",
+        "c16",
+        "c20"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c18",
+      "name": "Sekcje opisu oferty",
+      "sources": [
+        "S06",
+        "S07",
+        "S15",
+        "S16"
+      ],
+      "dependencies": [
+        "c05",
+        "c07",
+        "c17",
+        "c19"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c19",
+      "name": "Etapy rekrutacji",
+      "sources": [
+        "S06",
+        "S07"
+      ],
+      "dependencies": [
+        "c18",
+        "c21"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c20",
+      "name": "Panel kontekstowy",
+      "sources": [
+        "S06",
+        "S07",
+        "S11",
+        "S12",
+        "S15",
+        "S16"
+      ],
+      "dependencies": [
+        "c04",
+        "c05",
+        "c06",
+        "c17",
+        "c22"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c21",
+      "name": "Nawigacja etapów tworzenia",
+      "sources": [
+        "S11",
+        "S12",
+        "S13",
+        "S15",
+        "S16"
+      ],
+      "dependencies": [
+        "c04",
+        "c22",
+        "c25"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c22",
+      "name": "Informacja zwrotna i walidacja",
+      "sources": [
+        "S10",
+        "S13",
+        "S15",
+        "S20"
+      ],
+      "dependencies": [
+        "c04",
+        "c08",
+        "c21",
+        "c23",
+        "c24"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c23",
+      "name": "Dialog modalny",
+      "sources": [
+        "S08",
+        "S09",
+        "S10",
+        "S18",
+        "S21"
+      ],
+      "dependencies": [
+        "c04",
+        "c08",
+        "c10",
+        "c11",
+        "c22",
+        "c24"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c24",
+      "name": "Stan pusty i potwierdzenie",
+      "sources": [
+        "S04",
+        "S05",
+        "S17",
+        "S19",
+        "S21"
+      ],
+      "dependencies": [
+        "c04",
+        "c05",
+        "c06",
+        "c23"
+      ],
+      "sections": 11
+    },
+    {
+      "id": "c25",
+      "name": "Grupowanie formularza i rama podglądu",
+      "sources": [
+        "S11",
+        "S12",
+        "S15",
+        "S16"
+      ],
+      "dependencies": [
+        "c03",
+        "c08",
+        "c09",
+        "c10",
+        "c20",
+        "c21",
+        "c22"
+      ],
+      "sections": 11
+    }
+  ],
+  "screens": 21,
+  "crops": 33,
+  "scope": "Designer-facing documentation only"
+}

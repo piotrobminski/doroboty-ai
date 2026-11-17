@@ -11,10 +11,10 @@ export function SalaryFact({ job }: { job: Job }) {
     <div>
       {amount ? (
         <>
-          <span className="pp-salary-tag">
+          <span className="tph-salary-tag">
             {amount} {job.salaryCurrency === "EUR" ? "EUR" : "zł"}
           </span>
-          <p className="pp-salary-description">
+          <p className="tph-salary-description">
             {contractLabels[job.contract]} ·{" "}
             {job.salaryKind === "net"
               ? "netto" + (job.contract === "b2b" ? " + VAT" : "")
@@ -23,7 +23,7 @@ export function SalaryFact({ job }: { job: Job }) {
           </p>
         </>
       ) : (
-        <span className="pp-salary-missing">Nie podano wynagrodzenia</span>
+        <span className="tph-salary-missing">Nie podano wynagrodzenia</span>
       )}
     </div>
   );

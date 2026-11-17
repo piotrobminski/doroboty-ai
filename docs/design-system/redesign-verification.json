@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-13",
+  "branch": "main",
+  "system": "Technologia po ludzku v1",
+  "referenceUpdate": "1.1 proposed; awaiting user acceptance",
+  "node": "v24.22.1",
+  "runtime": "React / TypeScript / Vite / Base UI",
+  "referenceInventories": {
+    "active": 168,
+    "historical": 67,
+    "mutated": false
+  },
+  "fullGate": {
+    "command": "./scripts/verify",
+    "status": "passed",
+    "exitCode": 0,
+    "format": "passed",
+    "referenceIntegrity": "passed",
+    "referenceTests": {
+      "passed": 10,
+      "failed": 0
+    },
+    "lint": "passed",
+    "types": "passed",
+    "hostUnitTests": {
+      "passed": 27,
+      "failed": 0
+    },
+    "baselineJourneys": 120,
+    "build": "passed",
+    "browserTests": {
+      "passed": 41,
+      "failed": 0,
+      "workers": 7,
+      "durationSeconds": 15.7
+    },
+    "browser": "Already provisioned Chromium headless shell, cache revision 1208, selected through PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH; no installation"
+  },
+  "coverage": {
+    "widths": [1280, 390, 320],
+    "routeRoleStates": 38,
+    "sourceComparisons": ["listing", "candidate offer", "recruiter form"],
+    "keyboard": [
+      "public modal focus containment/Escape/return",
+      "workspace navigation",
+      "Base UI select portal",
+      "chip removal",
+      "record tabs",
+      "submission errors",
+      "recruiting transitions",
+      "withdrawal"
+    ],
+    "edgeData": [
+      "long unbroken role/company/location",
+      "missing salary",
+      "broken local logo",
+      "custom CV snapshot",
+      "empty company",
+      "saved/empty lists"
+    ]
+  },
+  "limitations": [
+    "No manual screen-reader audit",
+    "No CI, deployment or human design acceptance claimed",
+    "Reference-update approval remains pending"
+  ],
+  "review": {
+    "pass": "separate manual diff/visual review completed",
+    "localLinksChecked": 180,
+    "missingLocalLinks": 0,
+    "newSharedComponentExports": 4,
+    "remainingApproval": "User acceptance of proposed reference 1.1 profiles"
+  },
+  "buildWarnings": [
+    "Existing Zod PURE-comment annotations removed by Rollup",
+    "Main JS chunk exceeds the 500 kB advisory threshold"
+  ]
+}

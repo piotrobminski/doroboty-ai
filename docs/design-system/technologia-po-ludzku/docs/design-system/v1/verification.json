@@ -1,0 +1,63 @@
+{
+  "families": 25,
+  "sectionsPerFamily": {
+    "c01": 11,
+    "c02": 11,
+    "c03": 11,
+    "c04": 11,
+    "c05": 11,
+    "c06": 11,
+    "c07": 11,
+    "c08": 11,
+    "c09": 11,
+    "c10": 11,
+    "c11": 11,
+    "c12": 11,
+    "c13": 11,
+    "c14": 11,
+    "c15": 11,
+    "c16": 11,
+    "c17": 11,
+    "c18": 11,
+    "c19": 11,
+    "c20": 11,
+    "c21": 11,
+    "c22": 11,
+    "c23": 11,
+    "c24": 11,
+    "c25": 11
+  },
+  "screens": 21,
+  "brokenLocalLinks": [],
+  "duplicateIDs": [],
+  "images": 49,
+  "imagesWithoutAlt": 0,
+  "unresolvedPlaceholders": [],
+  "wordCount": 26966,
+  "validationDate": "2026-11-13",
+  "note": "Sprawdzenie struktury artefaktu; nie test zgodności produktu z WCAG.",
+  "implementationSourcesUnchanged": true,
+  "browserChecks": [
+    {
+      "check": "1280px: wszystkie25 kart ×11 sekcji; brak przepełnienia szerokości strony",
+      "result": "pass"
+    },
+    {
+      "check": "Wyszukiwanie: karta, pole i TOŻSAMOŚĆ → po1 trafieniu, sprawdzone odsyłacze #c16/#c08",
+      "result": "pass"
+    },
+    {
+      "check": "390px: wyszukana rodzina widoczna przy polu; karta i obraz źródłowy czytelne; brak przepełnienia strony",
+      "result": "pass"
+    },
+    {
+      "check": "320px: brak przepełnienia całej strony; szerokie tabele mają własne przewijanie",
+      "result": "pass"
+    },
+    {
+      "check": "Powrót do #top i przywrócenie bazowego viewportu1280px;25 rodzin,21 ekranów i275 sekcji w DOM",
+      "result": "pass"
+    }
+  ],
+  "documentationHTMLSHA256": "8d841dc06b83c8f0dff4f465d5f09e9ee37d7a6dd9a0cb6134bbf04ec864fcfa"
+}

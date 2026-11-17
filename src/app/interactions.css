@@ -1,43 +1,32 @@
-/* Shared host feedback; controls can customize the hover colors without changing geometry. */
-:where(
-  a[href],
-  button,
-  [role="button"],
-  input[type="submit"],
-  input[type="button"],
-  input[type="reset"]
-):not(:disabled, [aria-disabled="true"], [data-disabled]) {
+/* Deliberate feedback belongs to the control, never to every link's whole surface. */
+:where(a[href], button, [role="button"], summary, input[type="submit"]):not(
+  :disabled,
+  [aria-disabled="true"],
+  [data-disabled]
+) {
   cursor: pointer;
 }
-:where(
-  a[href],
-  button,
-  [role="button"],
-  input[type="submit"],
-  input[type="button"],
-  input[type="reset"]
-):is(:disabled, [aria-disabled="true"], [data-disabled]) {
+:where(button, [role="button"]):is(:disabled, [aria-disabled="true"], [data-disabled]) {
   cursor: not-allowed;
 }
-:where(
-    a[href],
-    button,
-    [role="button"],
-    input[type="submit"],
-    input[type="button"],
-    input[type="reset"]
-  ):not(:disabled, [aria-disabled="true"], [data-disabled]):hover {
-  background-color: var(--control-hover-bg, var(--gui-color-1-transparent));
-  color: var(--control-hover-text, var(--gui-text));
+:where(.ui-button, .nav-link, .tph-category-tab, .tph-view-link, .tph-page-button):not(
+    :disabled,
+    [aria-disabled="true"],
+    [data-disabled]
+  ):hover {
+  background-color: var(--control-hover-bg, var(--tph-violet-tint));
+  color: var(--control-hover-text, var(--tph-ink));
 }
-
-/* Selected navigation stays visibly selected during hover. */
-:where(.nav-active, .pp-category-tab.pp-selected, .pp-view-link[aria-current="page"]) {
-  --control-hover-bg: var(--gui-neutral-9);
-  --control-hover-text: white;
+:where(a[href]):not(.ui-button, .brand, .nav-link, .public-nav-link):hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
-/* Preserve the checked checkbox treatment rather than replacing it with a quiet action. */
-[role="checkbox"][aria-checked="true"] {
-  --control-hover-bg: var(--gui-neutral-9);
-  --control-hover-text: white;
+.public-nav-link:hover {
+  color: var(--tph-violet);
+}
+.ui-checkbox:hover {
+  border-color: var(--tph-violet);
+}
+.ui-select-item[data-highlighted] {
+  background: var(--tph-violet-tint);
 }

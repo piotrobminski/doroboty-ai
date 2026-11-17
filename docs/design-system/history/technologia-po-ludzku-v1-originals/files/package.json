@@ -1,0 +1,14 @@
+{
+  "name": "doroboty-job-listing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "check": "node --check app.js && node --check jobs.mjs && node --check job-store.mjs && node --check job-view.mjs && node --check job.js && node --check create-job.js && node --check icon-schemes.mjs && node --check listing-components.mjs && node --check agent-kit/examples.mjs && node --check agent-kit/dialog.mjs && node --check agent-kit/fixtures.mjs && node --check agent-kit/long-content.mjs && node --check scripts/export-agent-kit.mjs && node --check icon-directions.js && node --check scripts/serve.mjs && node --check scripts/build.mjs",
+    "test": "node --test qa/job-pages/data.test.mjs qa/agent-kit/components.test.mjs",
+    "export:agent": "node scripts/export-agent-kit.mjs"
+  }
+}

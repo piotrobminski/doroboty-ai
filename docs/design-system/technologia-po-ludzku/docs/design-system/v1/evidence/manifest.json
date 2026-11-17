@@ -1,0 +1,1550 @@
+{
+  "version": "v1",
+  "status": "Do oceny",
+  "date": "2026-11-13",
+  "screens": [
+    {
+      "id": "S01",
+      "label": "Listing — desktop, wariant C",
+      "file": "evidence/S01.png",
+      "url": "http://127.0.0.1:4174/",
+      "mode": "full-page",
+      "regions": {
+        "#icon-legend": {
+          "height": 18,
+          "width": 964,
+          "x": 269,
+          "y": 780.8125
+        },
+        ".additional-filters": {
+          "height": 331,
+          "width": 205,
+          "x": 32,
+          "y": 1020.96875
+        },
+        ".card-top": {
+          "height": 49.1875,
+          "width": 916,
+          "x": 293,
+          "y": 838.8125
+        },
+        ".category-list": {
+          "height": 283,
+          "width": 205,
+          "x": 32,
+          "y": 715.96875
+        },
+        ".hero": {
+          "height": 415.96875,
+          "width": 1201,
+          "x": 32,
+          "y": 123
+        },
+        ".job-card": {
+          "height": 168.1875,
+          "width": 964,
+          "x": 269,
+          "y": 816.8125
+        },
+        ".job-card:nth-child(2)": {
+          "height": 168.1875,
+          "width": 964,
+          "x": 269,
+          "y": 997
+        },
+        ".job-card:nth-child(3)": {
+          "height": 168.1875,
+          "width": 964,
+          "x": 269,
+          "y": 1177.1875
+        },
+        ".results-heading": {
+          "height": 55.34375,
+          "width": 964,
+          "x": 269,
+          "y": 675.96875
+        },
+        ".results-meta": {
+          "height": 16.5,
+          "width": 964,
+          "x": 269,
+          "y": 748.3125
+        },
+        ".search-bar": {
+          "height": 69,
+          "width": 1201,
+          "x": 32,
+          "y": 570.96875
+        },
+        ".sidebar": {
+          "height": 2397.09375,
+          "width": 205,
+          "x": 32,
+          "y": 675.96875
+        },
+        ".site-footer": {
+          "height": 101,
+          "width": 1265,
+          "x": 0,
+          "y": 3141.0625
+        },
+        ".site-header": {
+          "height": 91,
+          "width": 1265,
+          "x": 0,
+          "y": 0
+        },
+        ".tag-list": {
+          "height": 24.5,
+          "width": 340.046875,
+          "x": 293,
+          "y": 941.5
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 3242
+      },
+      "sha256": "57bb7070ba04ff8e861b3c40ee1ee6d91ffd030a2caf3b80acc3b33e7d2aacaa",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S02",
+      "label": "Listing — mobile 390",
+      "file": "evidence/S02.png",
+      "url": "http://127.0.0.1:4174/",
+      "mode": "full-page",
+      "regions": {
+        ".additional-filters": {
+          "height": 56,
+          "width": 339,
+          "x": 18,
+          "y": 893.46875
+        },
+        ".category-list": {
+          "height": 44,
+          "width": 339,
+          "x": 18,
+          "y": 841.46875
+        },
+        ".hero": {
+          "height": 564.46875,
+          "width": 339,
+          "x": 18,
+          "y": 75
+        },
+        ".job-card": {
+          "height": 215,
+          "width": 339,
+          "x": 18,
+          "y": 1204.015625
+        },
+        ".search-bar": {
+          "height": 119,
+          "width": 339,
+          "x": 18,
+          "y": 663.46875
+        },
+        ".site-header": {
+          "height": 75,
+          "width": 375,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "viewport": {
+        "clientWidth": 375,
+        "dpr": 1,
+        "height": 844,
+        "width": 390
+      },
+      "bitmap": {
+        "width": 375,
+        "height": 4135
+      },
+      "sha256": "855082123d101c4b76f8567c5ab39968cb3774430f64364856ef8f19cdf87e46",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S03",
+      "label": "Listing — Build i praca zdalna",
+      "file": "evidence/S03.png",
+      "url": "http://127.0.0.1:4174/?category=Build&remote=1",
+      "mode": "full-page",
+      "regions": {
+        "#active-filters": {
+          "height": 44,
+          "width": 964,
+          "x": 269,
+          "y": 780.8125
+        },
+        ".category-list": {
+          "height": 283,
+          "width": 205,
+          "x": 32,
+          "y": 715.96875
+        },
+        ".job-card": {
+          "height": 168.1875,
+          "width": 964,
+          "x": 269,
+          "y": 876.8125
+        },
+        ".results-heading": {
+          "height": 55.34375,
+          "width": 964,
+          "x": 269,
+          "y": 675.96875
+        },
+        ".results-meta": {
+          "height": 16.5,
+          "width": 964,
+          "x": 269,
+          "y": 748.3125
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 1911
+      },
+      "sha256": "00b386ba38bbbbc58e1f0f6dc8b4605e0c921fd89c45f17090755165982fe000",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S04",
+      "label": "Listing — pusty wynik z zachowanymi kryteriami",
+      "file": "evidence/S04.png",
+      "url": "http://127.0.0.1:4174/?q=Brak+takiej+roli&category=Build&remote=1",
+      "mode": "full-page",
+      "regions": {
+        "#active-filters": {
+          "height": 44,
+          "width": 964,
+          "x": 269,
+          "y": 780.8125
+        },
+        ".empty-state": {
+          "height": 454.875,
+          "width": 964,
+          "x": 269,
+          "y": 876.8125
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 1911
+      },
+      "sha256": "4251f38bec446a67355299a694dd620a92c3cc6cd245ab8f6d6c98bf5cb2246d",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S05",
+      "label": "Zapisane — stan pusty",
+      "file": "evidence/S05.png",
+      "url": "http://127.0.0.1:4174/?savedOnly=1",
+      "mode": "full-page",
+      "regions": {
+        "#saved-view": {
+          "height": 44,
+          "width": 131.59375,
+          "x": 1101.40625,
+          "y": 23
+        },
+        ".empty-state": {
+          "height": 454.875,
+          "width": 964,
+          "x": 269,
+          "y": 816.8125
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 1911
+      },
+      "sha256": "9a08407aa16421e23983de0d01afdf3f32e3acf3aedfb81819fbca34d8d7c2bf",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S06",
+      "label": "Oferta kandydata — desktop",
+      "file": "evidence/S06.png",
+      "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+      "mode": "full-page",
+      "regions": {
+        ".ai-context": {
+          "height": 121,
+          "width": 826,
+          "x": 32,
+          "y": 799.234375
+        },
+        ".application-card": {
+          "height": 526,
+          "width": 328,
+          "x": 905,
+          "y": 464.171875
+        },
+        ".hiring-process": {
+          "height": 303.1875,
+          "width": 826,
+          "x": 32,
+          "y": 1769.796875
+        },
+        ".offer-breadcrumb": {
+          "height": 79,
+          "width": 1201,
+          "x": 32,
+          "y": 91
+        },
+        ".offer-company-about": {
+          "height": 208,
+          "width": 826,
+          "x": 32,
+          "y": 2109.984375
+        },
+        ".offer-facts": {
+          "height": 129.1875,
+          "width": 826,
+          "x": 32,
+          "y": 434.171875
+        },
+        ".offer-hero": {
+          "height": 264.171875,
+          "width": 1201,
+          "x": 32,
+          "y": 170
+        },
+        ".offer-section": {
+          "height": 171.875,
+          "width": 826,
+          "x": 32,
+          "y": 600.359375
+        },
+        ".offer-skills": {
+          "height": 92.5,
+          "width": 826,
+          "x": 32,
+          "y": 1640.296875
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 2615
+      },
+      "sha256": "5b9f98e921787d7c7abc6d443ffb3c7941cebb81e74b5e5b13c8e519276ced7d",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S07",
+      "label": "Oferta kandydata — mobile 390",
+      "file": "evidence/S07.png",
+      "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+      "mode": "full-page",
+      "regions": {
+        ".application-card": {
+          "height": 519.59375,
+          "width": 339,
+          "x": 18,
+          "y": 2757.140625
+        },
+        ".offer-facts": {
+          "height": 203.375,
+          "width": 339,
+          "x": 18,
+          "y": 513.9375
+        },
+        ".offer-hero": {
+          "height": 376.9375,
+          "width": 339,
+          "x": 18,
+          "y": 137
+        }
+      },
+      "viewport": {
+        "clientWidth": 375,
+        "dpr": 1,
+        "height": 844,
+        "width": 390
+      },
+      "bitmap": {
+        "width": 375,
+        "height": 3641
+      },
+      "sha256": "1e908e4b798c6f03ac29624f0481f605fdfef4cd6464cefe833c959c2b9e7fdb",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S08",
+      "label": "Dialog aplikacji — formularz",
+      "file": "evidence/S08.png",
+      "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+      "mode": "viewport",
+      "regions": {
+        "#application-dialog": {
+          "height": 672,
+          "width": 620,
+          "x": 330,
+          "y": 24
+        },
+        ".application-form": null
+      },
+      "viewport": {
+        "clientWidth": 1280,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1280,
+        "height": 720
+      },
+      "sha256": "8d32724e572539a61a457e0039d5f933eef191a5ced1e081f45228cf6ae32785",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S09",
+      "label": "Dialog aplikacji — plik i dolna część",
+      "file": "evidence/S09.png",
+      "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+      "mode": "viewport",
+      "regions": {
+        "#application-dialog": {
+          "height": 672,
+          "width": 620,
+          "x": 330,
+          "y": 24
+        },
+        ".file-field": {
+          "height": 96.59375,
+          "width": 539,
+          "x": 363,
+          "y": 457.734375
+        }
+      },
+      "viewport": {
+        "clientWidth": 1280,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1280,
+        "height": 720
+      },
+      "sha256": "e4acf3fea97399d2bad3205ce332c7f91358adb9475ffdeb3f94ca3bfaf806c6",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S10",
+      "label": "Dialog aplikacji — błędy wymaganych danych",
+      "file": "evidence/S10.png",
+      "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+      "mode": "viewport",
+      "regions": {
+        "#application-dialog": {
+          "height": 672,
+          "width": 620,
+          "x": 330,
+          "y": 24
+        }
+      },
+      "viewport": {
+        "clientWidth": 1280,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1280,
+        "height": 720
+      },
+      "sha256": "c2755cb30e396bc869029232b5bb09dcfd544f3a6cb909d29489071e18c636e2",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S11",
+      "label": "Rekruter — etap 1 desktop",
+      "file": "evidence/S11.png",
+      "url": "http://127.0.0.1:4174/create-job.html",
+      "mode": "full-page",
+      "regions": {
+        ".area-picker": {
+          "height": 159.5,
+          "width": 814,
+          "x": 61,
+          "y": 773.1875
+        },
+        ".composer-actions": {
+          "height": 57,
+          "width": 872,
+          "x": 32,
+          "y": 1669.6875
+        },
+        ".composer-steps": {
+          "height": 81,
+          "width": 1201,
+          "x": 32,
+          "y": 328.28125
+        },
+        ".composer-summary": {
+          "height": 554.6875,
+          "width": 300,
+          "x": 933,
+          "y": 438.28125
+        },
+        ".creator-intro": {
+          "height": 237.28125,
+          "width": 1201,
+          "x": 32,
+          "y": 91
+        },
+        ".field-grid": {
+          "height": 96.5,
+          "width": 814,
+          "x": 61,
+          "y": 957.6875
+        },
+        ".form-card": {
+          "height": 741.40625,
+          "width": 872,
+          "x": 32,
+          "y": 438.28125
+        },
+        ".salary-inputs": {
+          "height": 96.5,
+          "width": 814,
+          "x": 61,
+          "y": 1373.09375
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 1896
+      },
+      "sha256": "29b243f4db5699bd2f2591fa639b2e42c4ef8a51cac2e0df44bc0d78d976cc06",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S12",
+      "label": "Rekruter — etap 1 mobile 390",
+      "file": "evidence/S12.png",
+      "url": "http://127.0.0.1:4174/create-job.html",
+      "mode": "full-page",
+      "regions": {
+        ".area-picker": {
+          "height": 173.5,
+          "width": 303,
+          "x": 36,
+          "y": 774.28125
+        },
+        ".composer-actions": {
+          "height": 57,
+          "width": 339,
+          "x": 18,
+          "y": 1894.46875
+        },
+        ".composer-steps": {
+          "height": 79,
+          "width": 339,
+          "x": 18,
+          "y": 346.59375
+        },
+        ".creator-intro": {
+          "height": 271.59375,
+          "width": 339,
+          "x": 18,
+          "y": 75
+        },
+        ".form-card": {
+          "height": 939.1875,
+          "width": 339,
+          "x": 18,
+          "y": 447.59375
+        }
+      },
+      "viewport": {
+        "clientWidth": 375,
+        "dpr": 1,
+        "height": 844,
+        "width": 390
+      },
+      "bitmap": {
+        "width": 375,
+        "height": 2149
+      },
+      "sha256": "e5a2dc4ddebf606f53148fe0dffed5bbf80034a194810a44e0e451d82b3cc3cd",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S13",
+      "label": "Rekruter — błędy po próbie przejścia do opisu",
+      "file": "evidence/S13.png",
+      "url": "http://127.0.0.1:4174/create-job.html",
+      "mode": "full-page",
+      "regions": {
+        "#form-error-summary": {
+          "height": 52.796875,
+          "width": 872,
+          "x": 32,
+          "y": 438.28125
+        },
+        "#title": {
+          "height": 47,
+          "width": 814,
+          "x": 61,
+          "y": 680.484375
+        },
+        ".field-error": {
+          "height": 18,
+          "width": 814,
+          "x": 61,
+          "y": 733.484375
+        },
+        ".form-card": {
+          "height": 789.40625,
+          "width": 872,
+          "x": 32,
+          "y": 511.078125
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 2040
+      },
+      "sha256": "d1e0f966adbef303bd91b41a27862a8a9507b1fb43a0a537119307e7ed0a325b",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S14",
+      "label": "Rekruter — wyłączone widełki",
+      "file": "evidence/S14.png",
+      "url": "http://127.0.0.1:4174/create-job.html",
+      "mode": "full-page",
+      "regions": {
+        ".area-picker": {
+          "height": 159.5,
+          "width": 814,
+          "x": 61,
+          "y": 773.1875
+        },
+        ".salary-inputs": {
+          "height": 96.5,
+          "width": 814,
+          "x": 61,
+          "y": 1373.09375
+        },
+        ".salary-undisclosed": {
+          "height": 44,
+          "width": 814,
+          "x": 61,
+          "y": 1463.59375
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 1896
+      },
+      "sha256": "0518600556c724404b198daea2b97b91f3c57c9754cc869df57290b40d46b89c",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S15",
+      "label": "Rekruter — etap 2 z treścią",
+      "file": "evidence/S15.png",
+      "url": "http://127.0.0.1:4174/create-job.html",
+      "mode": "full-page",
+      "regions": {
+        ".composer-steps": {
+          "height": 81,
+          "width": 1201,
+          "x": 32,
+          "y": 328.28125
+        },
+        ".composer-summary": {
+          "height": 554.6875,
+          "width": 300,
+          "x": 933,
+          "y": 438.28125
+        },
+        ".field": {
+          "height": 0,
+          "width": 0,
+          "x": 0,
+          "y": 284
+        },
+        ".field-counter": null,
+        ".form-card": {
+          "height": 0,
+          "width": 0,
+          "x": 0,
+          "y": 284
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 2242
+      },
+      "sha256": "1759b3afeb774ce49917518942fc1bd690d761b5c0cddc74a23d787170818115",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S16",
+      "label": "Rekruter — etap 3 podgląd",
+      "file": "evidence/S16.png",
+      "url": "http://127.0.0.1:4174/create-job.html",
+      "mode": "full-page",
+      "regions": {
+        ".composer-actions": {
+          "height": 86,
+          "width": 1201,
+          "x": 32,
+          "y": 1175
+        },
+        ".composer-preview": {
+          "height": 1531.8125,
+          "width": 1201,
+          "x": 32,
+          "y": 567.78125
+        },
+        ".composer-steps": {
+          "height": 81,
+          "width": 1201,
+          "x": 32,
+          "y": 328.28125
+        },
+        ".preview-heading": {
+          "height": 96.5,
+          "width": 1201,
+          "x": 32,
+          "y": 446.28125
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 2427
+      },
+      "sha256": "460daf13402a165392c119c4883f4a2a15aa6008513a1003aa97dd255d073cfa",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S17",
+      "label": "Publikacja lokalna — potwierdzenie",
+      "file": "evidence/S17.png",
+      "url": "http://127.0.0.1:4174/create-job.html?published=local-42d32678-b4be-41e7-abdd-f2efedf3dadc",
+      "mode": "full-page",
+      "regions": {
+        ".creator-success": null,
+        ".publish-success": {
+          "height": 614.9375,
+          "width": 760,
+          "x": 252.5,
+          "y": 151
+        },
+        ".success-card": null
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 935
+      },
+      "sha256": "887915686dee0e191ec016e2265e0103aa2940b268b1d05842fbd0ace4229994",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S18",
+      "label": "Dialog o platformie i obszarach pracy",
+      "file": "evidence/S18.png",
+      "url": "http://127.0.0.1:4174/",
+      "mode": "viewport",
+      "regions": {
+        "#about-dialog": {
+          "height": 579.1875,
+          "width": 790,
+          "x": 245,
+          "y": 70.40625
+        },
+        "dialog[open]": {
+          "height": 579.1875,
+          "width": 790,
+          "x": 245,
+          "y": 70.40625
+        }
+      },
+      "viewport": {
+        "clientWidth": 1280,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1280,
+        "height": 720
+      },
+      "sha256": "acc9e6181f013c8f3a21a052fc4a1724f016f4374a8038e4d6909950616a6609",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S19",
+      "label": "Niedostępna oferta",
+      "file": "evidence/S19.png",
+      "url": "http://127.0.0.1:4174/job.html?id=unavailable",
+      "mode": "full-page",
+      "regions": {
+        ".empty-state": {
+          "height": 410.28125,
+          "width": 1201,
+          "x": 32,
+          "y": 170
+        },
+        ".job-unavailable": null
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 861
+      },
+      "sha256": "e33c25f911adf1f3670c92e909c654d8ff20f99bf983f0cb80a61c930b3bb7b0",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S20",
+      "label": "Zapisana oferta — przycisk i toast",
+      "file": "evidence/S20.png",
+      "url": "http://127.0.0.1:4174/",
+      "mode": "viewport",
+      "regions": {
+        ".job-card": {
+          "height": 168.1875,
+          "width": 964,
+          "x": 269,
+          "y": 336.8125
+        },
+        ".save-job": {
+          "height": 44,
+          "width": 44,
+          "x": 1173,
+          "y": 349.8125
+        },
+        ".toast": {
+          "height": 45.5,
+          "width": 364.1875,
+          "x": 450.40625,
+          "y": 662.2853393554688
+        }
+      },
+      "viewport": {
+        "clientWidth": 1265,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1265,
+        "height": 712
+      },
+      "sha256": "ea940f3f7040c1cb9acd26def2079aaca64f149da833827cec7ce3152b9bad2e",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    },
+    {
+      "id": "S21",
+      "label": "Aplikacja demonstracyjna — potwierdzenie",
+      "file": "evidence/S21.png",
+      "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+      "mode": "viewport",
+      "regions": {
+        "#application-dialog": {
+          "height": 503,
+          "width": 620,
+          "x": 330,
+          "y": 108.5
+        },
+        "#application-success": {
+          "height": 375,
+          "width": 554,
+          "x": 363,
+          "y": 205.5
+        }
+      },
+      "viewport": {
+        "clientWidth": 1280,
+        "dpr": 1,
+        "height": 720,
+        "width": 1280
+      },
+      "bitmap": {
+        "width": 1280,
+        "height": 720
+      },
+      "sha256": "25f85abc636736233cad74faf5fca0660f0429ce7a2ba20d3cb4b426969102f9",
+      "captured": "2026-11-13",
+      "originNote": "Odizolowany podgląd 4174; identyczny kod aplikacji. Dane scenariuszy są fikcyjne."
+    }
+  ],
+  "crops": {
+    "nav": {
+      "source": "S01",
+      "boxImagePixels": [
+        0,
+        0,
+        1265,
+        100
+      ],
+      "file": "evidence/crop-nav.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "back": {
+      "source": "S06",
+      "boxImagePixels": [
+        20,
+        91,
+        1245,
+        171
+      ],
+      "file": "evidence/crop-back.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "hero": {
+      "source": "S01",
+      "boxImagePixels": [
+        20,
+        115,
+        1245,
+        545
+      ],
+      "file": "evidence/crop-hero.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "actions": {
+      "source": "S06",
+      "boxImagePixels": [
+        905,
+        690,
+        1233,
+        910
+      ],
+      "file": "evidence/crop-actions.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "employer": {
+      "source": "S01",
+      "boxImagePixels": [
+        280,
+        825,
+        580,
+        904
+      ],
+      "file": "evidence/crop-employer.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "area": {
+      "source": "S18",
+      "boxImagePixels": [
+        275,
+        317,
+        1005,
+        507
+      ],
+      "file": "evidence/crop-area.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "field": {
+      "source": "S15",
+      "boxImagePixels": [
+        49,
+        595,
+        889,
+        885
+      ],
+      "file": "evidence/crop-field.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "select": {
+      "source": "S01",
+      "boxImagePixels": [
+        22,
+        1074,
+        247,
+        1247
+      ],
+      "file": "evidence/crop-select.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "choice": {
+      "source": "S11",
+      "boxImagePixels": [
+        49,
+        765,
+        889,
+        945
+      ],
+      "file": "evidence/crop-choice.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "file": {
+      "source": "S09",
+      "boxImagePixels": [
+        349,
+        428,
+        919,
+        589
+      ],
+      "file": "evidence/crop-file.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "search": {
+      "source": "S01",
+      "boxImagePixels": [
+        20,
+        560,
+        1245,
+        651
+      ],
+      "file": "evidence/crop-search.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "filter": {
+      "source": "S01",
+      "boxImagePixels": [
+        22,
+        668,
+        247,
+        1363
+      ],
+      "file": "evidence/crop-filter.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "criteria": {
+      "source": "S03",
+      "boxImagePixels": [
+        259,
+        765,
+        1243,
+        840
+      ],
+      "file": "evidence/crop-criteria.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "toolbar": {
+      "source": "S01",
+      "boxImagePixels": [
+        259,
+        665,
+        1243,
+        809
+      ],
+      "file": "evidence/crop-toolbar.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "jobcard": {
+      "source": "S01",
+      "boxImagePixels": [
+        259,
+        808,
+        1243,
+        1356
+      ],
+      "file": "evidence/crop-jobcard.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "facts": {
+      "source": "S06",
+      "boxImagePixels": [
+        22,
+        434,
+        868,
+        573
+      ],
+      "file": "evidence/crop-facts.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "content": {
+      "source": "S06",
+      "boxImagePixels": [
+        22,
+        590,
+        868,
+        1231
+      ],
+      "file": "evidence/crop-content.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "hiring": {
+      "source": "S06",
+      "boxImagePixels": [
+        22,
+        1760,
+        868,
+        2083
+      ],
+      "file": "evidence/crop-hiring.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "panel": {
+      "source": "S11",
+      "boxImagePixels": [
+        923,
+        428,
+        1243,
+        1003
+      ],
+      "file": "evidence/crop-panel.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "steps": {
+      "source": "S16",
+      "boxImagePixels": [
+        22,
+        318,
+        1243,
+        419
+      ],
+      "file": "evidence/crop-steps.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "feedback": {
+      "source": "S13",
+      "boxImagePixels": [
+        22,
+        420,
+        912,
+        820
+      ],
+      "file": "evidence/crop-feedback.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "dialog": {
+      "source": "S08",
+      "boxImagePixels": [
+        310,
+        4,
+        970,
+        716
+      ],
+      "file": "evidence/crop-dialog.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "empty": {
+      "source": "S04",
+      "boxImagePixels": [
+        259,
+        867,
+        1243,
+        1342
+      ],
+      "file": "evidence/crop-empty.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "group": {
+      "source": "S11",
+      "boxImagePixels": [
+        22,
+        428,
+        914,
+        781
+      ],
+      "file": "evidence/crop-group.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "published": {
+      "source": "S17",
+      "boxImagePixels": [
+        242,
+        141,
+        1022,
+        776
+      ],
+      "file": "evidence/crop-published.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "success": {
+      "source": "S21",
+      "boxImagePixels": [
+        310,
+        90,
+        970,
+        635
+      ],
+      "file": "evidence/crop-success.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "focus": {
+      "source": "S10",
+      "boxImagePixels": [
+        345,
+        270,
+        920,
+        430
+      ],
+      "file": "evidence/crop-focus.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "disabled": {
+      "source": "S14",
+      "boxImagePixels": [
+        49,
+        1348,
+        889,
+        1525
+      ],
+      "file": "evidence/crop-disabled.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "mobile": {
+      "source": "S02",
+      "boxImagePixels": [
+        0,
+        650,
+        375,
+        1430
+      ],
+      "file": "evidence/crop-mobile.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "preview": {
+      "source": "S16",
+      "boxImagePixels": [
+        22,
+        436,
+        1243,
+        1166
+      ],
+      "file": "evidence/crop-preview.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "candidatehero": {
+      "source": "S06",
+      "boxImagePixels": [
+        22,
+        160,
+        1243,
+        444
+      ],
+      "file": "evidence/crop-candidatehero.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "creatorintro": {
+      "source": "S11",
+      "boxImagePixels": [
+        22,
+        95,
+        1243,
+        320
+      ],
+      "file": "evidence/crop-creatorintro.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    },
+    "tags": {
+      "source": "S01",
+      "boxImagePixels": [
+        285,
+        932,
+        935,
+        976
+      ],
+      "file": "evidence/crop-tags.png",
+      "transformation": "Wyłącznie kadrowanie; bez retuszu i skalowania pliku."
+    }
+  },
+  "implementationSources": [
+    {
+      "id": "K01",
+      "file": "assets/tokens.css",
+      "sha256": "8eba0760e402b00f580a7f5173ca1d5ef74b34d1149b165ec7df3596396f2c38",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K02",
+      "file": "styles.css",
+      "sha256": "d90cb9175f97cc321b5a0d005394c56ad4c271c8becc7affb8fc6021d1938517",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K03",
+      "file": "icon-colors.css",
+      "sha256": "995af622517d220a3d1e1c44455d39f3895e1493f53c4162c922eb60f60da836",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K04",
+      "file": "job-pages.css",
+      "sha256": "b21e02f81bd8602dc13160cef23b904676634b382a75154fea7b6de8c10c4113",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K05",
+      "file": "icon-schemes.mjs",
+      "sha256": "a48e528975d1009ba3d7e9181044eb7b2b95d29961659fe8f94c01a2d451def8",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K06",
+      "file": "create-job.html",
+      "sha256": "30ace4f2c14fac4502ee5ed9c447c3b328cd479ace3e8c7b1a0fd268a93cb814",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K07",
+      "file": "create-job.js",
+      "sha256": "a7ace30e6e382be1457cde9d9960bcfb557717a5e67e82e30165f60a537eb2bb",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K08",
+      "file": "job.js",
+      "sha256": "761153e7a1281d5e99f15cd99f0653c52d8c3f08eb27bee04ae34b313929dfe4",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K09",
+      "file": "job-store.mjs",
+      "sha256": "43abe7acae864741969708c8334c14376e06514351cbfb5623174482a160b5f8",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K10",
+      "file": "job-view.mjs",
+      "sha256": "76e52d60e3d5ca055dde5f0d38f7076ff4871e58cfd66be04f73a3f02416f6a0",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K11",
+      "file": "app.js",
+      "sha256": "99d6635d48b612806800aa1cee96a0ccbb4c225c9a913a1ab898d326c0b70519",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K12",
+      "file": "jobs.mjs",
+      "sha256": "f41cab0a243bf533be50a2e362c9da4af152e24baa8d51b3ca3b79280bc74909",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K13",
+      "file": "index.html",
+      "sha256": "e1df2387f2a8257be22de8961d1685b17d5d875b0b25d99d78ecceab601469c1",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    },
+    {
+      "id": "K14",
+      "file": "job.html",
+      "sha256": "a38ace01d1b07e89cf0b9e08da2109037ef31ced76d7fb3d11648abdb8de205a",
+      "role": "Uzupełniająca specyfikacja implementacji; nie zastępuje obrazu ani zatwierdzenia standardu."
+    }
+  ],
+  "archivalImageInventory": [
+    {
+      "file": "qa/detail-desktop.png",
+      "bytes": 63241
+    },
+    {
+      "file": "qa/detail-mobile.png",
+      "bytes": 48271
+    },
+    {
+      "file": "qa/employer-logos/desktop-full.png",
+      "bytes": 320607
+    },
+    {
+      "file": "qa/employer-logos/mobile-full.png",
+      "bytes": 201433
+    },
+    {
+      "file": "qa/employer-logos/preview.jpg",
+      "bytes": 220470
+    },
+    {
+      "file": "qa/icon-directions/angular-hero-desktop.png",
+      "bytes": 90682
+    },
+    {
+      "file": "qa/icon-directions/angular-hero-mobile.png",
+      "bytes": 43811
+    },
+    {
+      "file": "qa/icon-directions/comparison-full.png",
+      "bytes": 334558
+    },
+    {
+      "file": "qa/icon-directions/comparison-mobile.png",
+      "bytes": 261806
+    },
+    {
+      "file": "qa/icon-directions/comparison-preview.jpg",
+      "bytes": 280732
+    },
+    {
+      "file": "qa/job-pages/candidate-desktop-preview.jpg",
+      "bytes": 87197
+    },
+    {
+      "file": "qa/job-pages/candidate-desktop-top.jpg",
+      "bytes": 189731
+    },
+    {
+      "file": "qa/job-pages/candidate-desktop.png",
+      "bytes": 203486
+    },
+    {
+      "file": "qa/job-pages/candidate-mobile-top.jpg",
+      "bytes": 97718
+    },
+    {
+      "file": "qa/job-pages/candidate-mobile.png",
+      "bytes": 158382
+    },
+    {
+      "file": "qa/job-pages/published-desktop.png",
+      "bytes": 39827
+    },
+    {
+      "file": "qa/job-pages/recruiter-desktop-preview.jpg",
+      "bytes": 82362
+    },
+    {
+      "file": "qa/job-pages/recruiter-desktop.png",
+      "bytes": 145404
+    },
+    {
+      "file": "qa/job-pages/recruiter-mobile-top.jpg",
+      "bytes": 90280
+    },
+    {
+      "file": "qa/job-pages/recruiter-mobile.png",
+      "bytes": 89872
+    },
+    {
+      "file": "qa/job-pages/recruiter-preview-desktop-top.jpg",
+      "bytes": 188027
+    },
+    {
+      "file": "qa/job-pages/recruiter-preview-desktop.png",
+      "bytes": 195557
+    },
+    {
+      "file": "qa/job-pages/screens-preview.jpg",
+      "bytes": 189103
+    },
+    {
+      "file": "qa/listing-desktop-preview.jpg",
+      "bytes": 268039
+    },
+    {
+      "file": "qa/listing-desktop.png",
+      "bytes": 327587
+    },
+    {
+      "file": "qa/listing-mobile-preview.jpg",
+      "bytes": 165523
+    },
+    {
+      "file": "qa/listing-mobile.png",
+      "bytes": 200176
+    },
+    {
+      "file": "qa/visual-refinement/desktop-wide.png",
+      "bytes": 311041
+    },
+    {
+      "file": "qa/visual-refinement/desktop.png",
+      "bytes": 113175
+    },
+    {
+      "file": "qa/visual-refinement/mobile.png",
+      "bytes": 201552
+    },
+    {
+      "file": "qa/visual-refinement/preview.jpg",
+      "bytes": 162659
+    }
+  ],
+  "coverage": "21 świeżych ekranów/stadiów bieżącego wariantu C; trzy główne szablony. Archiwalne QA zinwentaryzowane, lecz nie są podstawą kompletności v1."
+}

@@ -10,7 +10,7 @@ export function ApplicationOfferPreview({ job }: { job: JobWithCompany }) {
     <aside className="record-sheet application-offer" aria-labelledby="application-offer-title">
       <p className="application-eyebrow">Oferta, na którą aplikujesz</p>
       <div className="application-company">
-        <CompanyLogo company={job.company} />
+        <CompanyLogo company={job.company} area={job.category} />
         <span>{job.company.name}</span>
       </div>
       <h2 id="application-offer-title">{job.title}</h2>

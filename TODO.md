@@ -14,6 +14,14 @@ BRIEF.md describes the current scope. Historical milestones remain in Git histor
 - [x] Run ./scripts/verify and mobile/desktop/keyboard checks.
 - [x] Complete a separate review pass and record actual evidence in docs/tasks/frontend-only.md.
 
+## Current extensions
+
+- [x] Add the optional local OpenAI description/PR02-criteria gateway with server-only keys, shared schemas, human approval and deterministic tests. See docs/tasks/pr02-openai-integration.md. The completed frontend-migration entries above describe the earlier baseline.
+
+- [x] Implement the approved guided job composer with browser-local skill/question proposals, scoped recoverable drafts and preview/human publication approval. See docs/tasks/pr02-guided-local-simulation.md. The provider gateway remains disconnected from the current composer.
+
+- [x] Replace redundant composer approval checkboxes with Preview/Publish actions and add a local employer-only competency evidence hint with exact excerpts, follow-up prompts and a recorded synthetic walkthrough. See docs/tasks/pr02-evidence-insight-and-demo.md.
+
 ## Deliberate limitations
 
 - Human research, course release approval and publishing a participant URL remain separate activities; passing code checks does not establish these outcomes.

@@ -1,0 +1,106 @@
+{
+  "date": "2026-11-13",
+  "pages": {
+    "candidate": "job.html?id=forma-ai-product-designer",
+    "recruiter": "create-job.html"
+  },
+  "checks": [
+    {
+      "check": "Candidate save toggle",
+      "result": "passed"
+    },
+    {
+      "check": "Application errors and honest local-only completion",
+      "result": "passed"
+    },
+    {
+      "check": "Recruiter required fields, salary reversal and draft reload",
+      "result": "passed"
+    },
+    {
+      "check": "Description validation, external URL guard, shared candidate preview",
+      "result": "passed"
+    },
+    {
+      "check": "Publish locally and show explicit demo confirmation",
+      "result": "passed"
+    },
+    {
+      "check": "Published offer opens as candidate page with same data",
+      "result": "passed",
+      "href": "job.html?id=local-ef7d3526-f5af-43cd-8748-07339b785b65"
+    },
+    {
+      "check": "Published record in listing; new location; candidate return preserves filters",
+      "result": "passed"
+    },
+    {
+      "check": "Missing compensation is explicit",
+      "result": "passed"
+    },
+    {
+      "check": "390px candidate and application dialog; Escape close",
+      "result": "passed",
+      "applyVisible": "flex",
+      "client": 375,
+      "scroll": 375,
+      "width": 390
+    },
+    {
+      "check": "390px recruiter form",
+      "result": "passed",
+      "client": 375,
+      "scroll": 375,
+      "width": 390
+    },
+    {
+      "check": "320px recruiter and long candidate title",
+      "result": "passed",
+      "recruiterNarrow": {
+        "client": 305,
+        "scroll": 305,
+        "width": 320
+      },
+      "candidateNarrow": {
+        "client": 305,
+        "scroll": 305,
+        "titleHeight": 220.3125,
+        "width": 320
+      }
+    },
+    {
+      "check": "Final desktop recruiter",
+      "result": "passed",
+      "client": 1265,
+      "formVisible": true,
+      "scroll": 1265,
+      "step": "1",
+      "width": 1280
+    },
+    {
+      "check": "Final desktop candidate",
+      "result": "passed",
+      "client": 1265,
+      "imagesLoaded": true,
+      "scroll": 1265,
+      "width": 1280
+    }
+  ],
+  "logicTests": {
+    "command": "node --test qa/job-pages/data.test.mjs",
+    "passed": 7
+  },
+  "sourceChecks": {
+    "syntax": "npm run check passed",
+    "build": "npm run build passed",
+    "built_html_assets": "all referenced local assets exist"
+  },
+  "consoleErrors": {
+    "candidate": [],
+    "recruiter": []
+  },
+  "limitations": [
+    "Local prototype: no external recruitment backend.",
+    "Publishing persists an offer in this browser; candidate demo submissions are not stored or sent."
+  ]
+}

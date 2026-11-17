@@ -1,7 +1,17 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import {
+  cloneElement,
+  useId,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+  type ReactElement,
+} from "react";
 import { Link, Navigate, useNavigate, useParams, useSearchParams } from "react-router";
 import { CheckCircle2, FileText } from "lucide-react";
 import { ConfettiBurst, type ConfettiOrigin } from "@/components/confetti-burst";
+import { FormSection } from "@/components/form-section";
 import { BackLink } from "@/components/back-link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,13 +26,26 @@ import { CvAttachment } from "./cv-attachment";
 import { MatchScore } from "./match-score";
 import { RecruitingApplication } from "./recruiting-application";
 import { CandidateApplication } from "./candidate-application";
+import { CompetencyResponses, SavedCompetencyExamples } from "./competency-responses";
+import { competencySubmissionSchema, type CompetencyResponse } from "./competency";
 
-export function Field({ label, children }: { label: string; children: ReactNode }) {
+export function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactElement<{ id?: string; "aria-labelledby"?: string }>;
+}) {
+  const generatedId = useId();
+  const id = children.props.id ?? generatedId;
+  const labelId = `${generatedId}-label`;
   return (
-    <label className="field">
-      <span>{label}</span>
-      {children}
-    </label>
+    <div className="field">
+      <label id={labelId} htmlFor={id}>
+        {label}
+      </label>
+      {cloneElement(children, { id, "aria-labelledby": labelId })}
+    </div>
   );
 }
 export function PersonPicker() {
@@ -38,13 +61,28 @@ export function PersonPicker() {
   const safeNext = next && /^\/(?!\/)/.test(next) && !next.startsWith("/auth") ? next : null;
   return (
     <section className="prototype-section max-w-4xl">
-      <h1>Wybierz osobę</h1>
-      <p className="mt-4 mb-8 text-muted-foreground">
-        Wybierz profil, z którego chcesz korzystać w prototypie. Hasło nie jest potrzebne.
-      </p>
-      <div className="grid gap-5 sm:grid-cols-2">
+      <PageTitle
+        eyebrow="Prototyp / Wybór profilu"
+        description="Wybierz profil, z którego chcesz korzystać w prototypie. Hasło nie jest potrzebne."
+      >
+        Wybierz osobę
+      </PageTitle>
+      <div className="persona-grid">
         {people.map((person) => (
-          <article key={person.id} className="prototype-panel">
+          <article key={person.id} className="prototype-panel persona-card">
+            <span className="persona-avatar" aria-hidden="true">
+              {person.name
+                .split(" ")
+                .map((part) => part[0])
+                .join("")}
+            </span>
+            <span className="eyebrow mt-5">
+              {person.role === "candidate"
+                ? "Kandydat"
+                : person.role === "employer"
+                  ? "Pracodawca"
+                  : "Prowadzący"}
+            </span>
             <h2 className="text-xl">{person.name}</h2>
             <p className="my-4 text-muted-foreground">{person.headline}</p>
             <Button
@@ -81,6 +119,7 @@ export function RequireRole({
   if (role && person.role !== role)
     return (
       <Empty>
+        <h1 className="mb-4">Wybierz właściwy profil</h1>
         <p className="mb-4">
           Ten widok jest dostępny dla{" "}
           {role === "candidate" ? "kandydata" : role === "employer" ? "pracodawcy" : "prowadzącego"}
@@ -103,8 +142,16 @@ export function WorkspaceHome() {
   );
   return (
     <>
-      <PageTitle>Witaj, {person.name.split(" ")[0]}</PageTitle>
-      <div className="grid gap-5 sm:grid-cols-3">
+      <PageTitle
+        description={
+          candidate
+            ? "Twoje kolejne kroki, zapisane role i aplikacje — w jednym miejscu."
+            : "Twoje oferty, kandydaci i decyzje — w jednym miejscu."
+        }
+      >
+        Witaj, {person.name.split(" ")[0]}
+      </PageTitle>
+      <div className="metric-grid">
         {[
           ["Aplikacje", applications.length],
           [
@@ -120,12 +167,12 @@ export function WorkspaceHome() {
           ],
         ].map(([label, value]) => (
           <div className="prototype-panel" key={label}>
-            <p className="text-muted-foreground">{label}</p>
-            <strong className="mt-3 block text-3xl">{value}</strong>
+            <p className="metric-label">{label}</p>
+            <strong className="metric-number">{value}</strong>
           </div>
         ))}
       </div>
-      <div className="mt-8 flex flex-wrap gap-3">
+      <div className="workspace-actions">
         <Link className={buttonVariants()} to={candidate ? "/oferty" : "/app/kandydaci"}>
           {candidate ? "Przeglądaj oferty" : "Przejrzyj kandydatów"}
         </Link>
@@ -162,6 +209,11 @@ export function ProfilePage({ preview = false }: { preview?: boolean }) {
   return (
     <>
       <PageTitle
+        description={
+          preview
+            ? "Tak prezentuje się Twój profil w tym scenariuszu."
+            : "Opowiedz o sobie. Zmiany profilu nie zmieniają wysłanych aplikacji."
+        }
         action={
           <Link
             to={preview ? "/app/profil" : "/app/profil/podglad"}
@@ -181,18 +233,24 @@ export function ProfilePage({ preview = false }: { preview?: boolean }) {
         </div>
       ) : (
         <form onSubmit={save} className="prototype-panel prototype-form">
-          <Field label="Imię i nazwisko">
-            <Input name="name" required maxLength={200} defaultValue={person.name} />
-          </Field>
-          <Field label="Nagłówek zawodowy">
-            <Input name="headline" required maxLength={200} defaultValue={person.headline} />
-          </Field>
-          <Field label="Lokalizacja">
-            <Input name="location" required maxLength={200} defaultValue={person.location} />
-          </Field>
-          <Field label="O mnie">
-            <Textarea name="bio" maxLength={12000} defaultValue={person.bio} />
-          </Field>
+          <FormSection
+            index="01"
+            title="Poznajmy się"
+            description="Tożsamość i doświadczenie, które chcesz pokazać."
+          >
+            <Field label="Imię i nazwisko">
+              <Input name="name" required maxLength={200} defaultValue={person.name} />
+            </Field>
+            <Field label="Nagłówek zawodowy">
+              <Input name="headline" required maxLength={200} defaultValue={person.headline} />
+            </Field>
+            <Field label="Lokalizacja">
+              <Input name="location" required maxLength={200} defaultValue={person.location} />
+            </Field>
+            <Field label="O mnie">
+              <Textarea name="bio" maxLength={12000} defaultValue={person.bio} />
+            </Field>
+          </FormSection>
           <Button type="submit">Zapisz profil</Button>
           {message && <p role="status">{message}</p>}
         </form>
@@ -215,9 +273,15 @@ export function SavedPage() {
   );
   return (
     <>
-      <PageTitle>Zapisane oferty</PageTitle>
+      <PageTitle description="Role, do których chcesz wrócić. Zapisane osobno dla Twojego profilu.">
+        Zapisane oferty
+      </PageTitle>
       {jobs.length ? (
-        jobs.map((job) => <JobCard key={job.id} job={job} saved />)
+        <div className="tph-job-list">
+          {jobs.map((job) => (
+            <JobCard key={job.id} job={job} saved />
+          ))}
+        </div>
       ) : (
         <Empty>
           <p className="mb-4">Nie masz jeszcze zapisanych ofert.</p>
@@ -239,10 +303,14 @@ export function ApplyPage() {
   const notes = draft?.notes ?? "";
   const generated = draft?.generated ?? "";
   const [answer, setAnswer] = useState(draft?.answer ?? "");
+  const [responses, setResponses] = useState<CompetencyResponse[]>(
+    draft?.competencyResponses ?? [],
+  );
   const [consent, setConsent] = useState(false);
   const [message, setMessage] = useState("");
   const [attempted, setAttempted] = useState(false);
   const answerInput = useRef<HTMLTextAreaElement>(null);
+  const consentInput = useRef<HTMLSpanElement>(null);
   const sendButton = useRef<HTMLButtonElement>(null);
   const submittedOnce = useRef(false);
   const [submitted, setSubmitted] = useState(false);
@@ -273,15 +341,46 @@ export function ApplyPage() {
     e.preventDefault();
     if (submittedOnce.current) return;
     setAttempted(true);
-    if (answerLength < MIN_APPLICATION_ANSWER_LENGTH) {
+    if (job!.competencyCard) {
+      const parsed = competencySubmissionSchema.safeParse({
+        card: job!.competencyCard,
+        responses: responses.filter((response) =>
+          job!.competencyCard!.criteria.some((criterion) => criterion.id === response.criterionId),
+        ),
+      });
+      if (!parsed.success) {
+        const missing = job!.competencyCard.criteria.find(
+          (criterion) =>
+            !responses.some(
+              (response) =>
+                response.criterionId === criterion.id && response.example.trim().length >= 20,
+            ),
+        );
+        document.getElementById(`example-${missing?.id}`)?.focus();
+        return;
+      }
+    } else if (answerLength < MIN_APPLICATION_ANSWER_LENGTH) {
       answerInput.current?.focus();
       return;
     }
     if (!consent) {
-      document.getElementById("application-consent")?.focus();
+      consentInput.current?.focus();
       return;
     }
-    if (run({ type: "submit", jobId: job!.id, notes, generated, answer, consent })) {
+    if (
+      run({
+        type: "submit",
+        jobId: job!.id,
+        notes,
+        generated,
+        answer,
+        consent,
+        competencyRevision: job!.competencyCard?.approvedAt,
+        competencyResponses: responses.filter((response) =>
+          job!.competencyCard?.criteria.some((criterion) => criterion.id === response.criterionId),
+        ),
+      })
+    ) {
       submittedOnce.current = true;
       setSubmitted(true);
       if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -292,7 +391,7 @@ export function ApplyPage() {
     }
   }
   return (
-    <section className="pp-container application-page">
+    <section className="tph-container application-page">
       <BackLink to={`/oferty/${job.slug}`}>Wróć do oferty</BackLink>
       <header className="application-header">
         <h1>Aplikuj na ofertę</h1>
@@ -322,48 +421,73 @@ export function ApplyPage() {
               contextLabel="CV z Twojego profilu"
             />
           </section>
-          <section
-            className="application-form-section application-answer"
-            aria-label="Odpowiedź do aplikacji"
-          >
-            <Field label="Dlaczego pasujesz do tej roli?">
-              <Textarea
+          {job.competencyCard ? (
+            <>
+              {draft?.competencyRevision &&
+                draft.competencyRevision !== job.competencyCard.approvedAt && (
+                  <Notice>
+                    Karta kryteriów zmieniła się od zapisu szkicu. Sprawdź aktualne wymagania i
+                    swoje odpowiedzi.
+                  </Notice>
+                )}
+              <CompetencyResponses
+                card={job.competencyCard}
+                responses={responses}
+                attempted={attempted}
                 disabled={submitted}
-                ref={answerInput}
-                required
-                minLength={MIN_APPLICATION_ANSWER_LENGTH}
-                maxLength={12000}
-                aria-invalid={answerInvalid || undefined}
-                aria-describedby="application-answer-help"
-                value={answer}
-                onChange={(e) => {
-                  setAnswer(e.target.value);
+                onChange={(value) => {
+                  setResponses(value);
                   setConsent(false);
+                  setMessage("");
                 }}
               />
-            </Field>
-            <p
-              id="application-answer-help"
-              role={answerInvalid ? "alert" : undefined}
-              className={answerInvalid ? "error-message" : "text-sm text-muted-foreground"}
+            </>
+          ) : (
+            <section
+              className="application-form-section application-answer"
+              aria-label="Odpowiedź do aplikacji"
             >
-              {answerInvalid
-                ? `Odpowiedź jest za krótka. Wpisz co najmniej ${MIN_APPLICATION_ANSWER_LENGTH} znaków (obecnie: ${answerLength}).`
-                : `Minimum ${MIN_APPLICATION_ANSWER_LENGTH} znaków. Obecnie: ${answerLength}.`}
-            </p>
-          </section>
+              <SavedCompetencyExamples responses={responses} cardRemoved />
+              <Field label="Dlaczego pasujesz do tej roli?">
+                <Textarea
+                  disabled={submitted}
+                  ref={answerInput}
+                  required
+                  minLength={MIN_APPLICATION_ANSWER_LENGTH}
+                  maxLength={12000}
+                  aria-invalid={answerInvalid || undefined}
+                  aria-describedby="application-answer-help"
+                  value={answer}
+                  onChange={(e) => {
+                    setAnswer(e.target.value);
+                    setConsent(false);
+                  }}
+                />
+              </Field>
+              <p
+                id="application-answer-help"
+                role={answerInvalid ? "alert" : undefined}
+                className={answerInvalid ? "error-message" : "text-sm text-muted-foreground"}
+              >
+                {answerInvalid
+                  ? `Odpowiedź jest za krótka. Wpisz co najmniej ${MIN_APPLICATION_ANSWER_LENGTH} znaków (obecnie: ${answerLength}).`
+                  : `Minimum ${MIN_APPLICATION_ANSWER_LENGTH} znaków. Obecnie: ${answerLength}.`}
+              </p>
+            </section>
+          )}
           <div className="application-form-section application-submit">
-            <label className="application-consent">
+            <label className="checkbox-field application-consent">
               <Checkbox
                 id="application-consent"
+                ref={consentInput}
                 disabled={submitted}
                 checked={consent}
                 onCheckedChange={(v) => setConsent(v)}
                 aria-invalid={consentInvalid || undefined}
                 aria-describedby={consentInvalid ? "application-consent-error" : undefined}
-                aria-label="Zatwierdzam treść i przesłanie aplikacji"
+                aria-labelledby="application-consent-label"
               />
-              <span>
+              <span id="application-consent-label">
                 Zatwierdzam treść aplikacji i przesłanie profilu oraz przykładowego CV pracodawcy.
               </span>
             </label>
@@ -375,6 +499,7 @@ export function ApplyPage() {
             <div className="application-actions">
               <Button
                 ref={sendButton}
+                variant="lime"
                 type="submit"
                 disabled={submitted}
                 className="application-send"
@@ -387,7 +512,22 @@ export function ApplyPage() {
                 disabled={submitted}
                 variant="outline"
                 onClick={() => {
-                  if (run({ type: "draft", jobId: job.id, notes, generated, answer }))
+                  if (
+                    run({
+                      type: "draft",
+                      jobId: job.id,
+                      notes,
+                      generated,
+                      answer,
+                      ...(job.competencyCard || responses.length
+                        ? {
+                            competencyResponses: responses,
+                            competencyRevision:
+                              job.competencyCard?.approvedAt ?? draft?.competencyRevision,
+                          }
+                        : {}),
+                    })
+                  )
                     setMessage("Szkic został zapisany.");
                 }}
               >
@@ -424,9 +564,17 @@ export function ApplicationsPage({ employer = false }: { employer?: boolean }) {
   );
   return (
     <>
-      <PageTitle>{employer ? "Kandydaci" : "Moje aplikacje"}</PageTitle>
+      <PageTitle
+        description={
+          employer
+            ? "Materiały kandydatów i kolejne kroki w Twoich procesach."
+            : "Sprawdź status i wróć do materiałów, które wysłałeś."
+        }
+      >
+        {employer ? "Kandydaci" : "Moje aplikacje"}
+      </PageTitle>
       {params.has("wyslano") && (
-        <Notice>
+        <Notice tone="success">
           <CheckCircle2 className="inline size-5" /> Aplikacja została wysłana.
         </Notice>
       )}
@@ -440,7 +588,7 @@ export function ApplicationsPage({ employer = false }: { employer?: boolean }) {
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <Link
-                    className="text-xl font-semibold text-[var(--gui-link)]"
+                    className="work-list-title"
                     to={`${employer ? "/app/kandydaci" : "/app/aplikacje"}/${a.id}`}
                   >
                     {employer ? a.candidateName : a.jobTitle}
@@ -450,7 +598,9 @@ export function ApplicationsPage({ employer = false }: { employer?: boolean }) {
                       ? a.jobTitle
                       : state.companies.find((x) => x.id === a.companyId)?.name}
                   </p>
-                  <p>{stageLabels[a.stage]}</p>
+                  <p>
+                    <span className="status-tag">{stageLabels[a.stage]}</span>
+                  </p>
                 </div>
                 <MatchScore score={a.score} />
               </div>

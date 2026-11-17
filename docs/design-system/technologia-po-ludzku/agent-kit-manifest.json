@@ -1,0 +1,30 @@
+{
+  "name": "doroboty-agent-kit",
+  "version": "1.1.0",
+  "generatedAt": "2026-11-13T13:59:35.408661+00:00",
+  "entry": "agent-kit/design.md",
+  "examples": "ui-examples.html",
+  "longContent": "ui-long-content.html",
+  "documentation": "docs/design-system/v1.1/index.html",
+  "signatures": {
+    "agent-kit/design.md": "4027a191d26bd393758a6b17cd5d5dc4db0cb2b36979da571e9774b3ee14a99a",
+    "agent-kit/components.md": "2f457d6dee4c1b9d582590cca52b840cf169845c35dae79f43be87b64d07d39d",
+    "agent-kit/foundation.css": "f12630947e360d4fae21a8763ce25be18ab935a5b0d5120c263ca72e2d4e3490",
+    "listing-components.mjs": "1b2b7c54726229bbb488dfa7003a9f29573481d48b95ece169c6f96e2d494ea1",
+    "ui-examples.html": "fd479f016aa5deb1b538135ea650095ea048429a574440ee2c5fd6c4602a8057",
+    "ui-long-content.html": "4088be3f8e0ee6bbdd9502c83e2eedba4a24ac3884149c8d04fc83c6172ec1e6",
+    "styles.css": "d90cb9175f97cc321b5a0d005394c56ad4c271c8becc7affb8fc6021d1938517",
+    "job-pages.css": "b21e02f81bd8602dc13160cef23b904676634b382a75154fea7b6de8c10c4113",
+    "icon-colors.css": "995af622517d220a3d1e1c44455d39f3895e1493f53c4162c922eb60f60da836",
+    "assets/tokens.css": "3f8923c0a6a1fafef8843bc2f6ebc5a051b6d7d993b17a7162dbad00f98f71d0",
+    "agent-kit/host-profiles.json": "418ba1ada64e619abfcef75c65c2c9498c6942d60dd5e68666c7c45bab4347c7",
+    "agent-kit/host-profiles.css": "9933083dce25ec9d28fb1b775766b1d9f201cefe97623154a11c2827da5b52f4",
+    "ui-host-profiles.html": "6efab88ee97e88af7f39f52bbcb95c5c11d04e99d47172f23b7a2e1eff897221",
+    "docs/design-system/v1.1/index.html": "6052e5f07b50dc88683527a1858cf0f272452718166cfe24c6bcba65460a21ba",
+    "scripts/reference-files.mjs": "a6a8fe1baf1be30ac3aa13660b41cc5e1f8578add4a112c5957ae23043913836",
+    "agent-kit/verification-1.1.json": "7a69541503e3c31aa9db5a3e90b8b6bca7032368e7dba1ec6633b86a0aea5e81"
+  },
+  "hostProfiles": "agent-kit/host-profiles.json",
+  "profileExamples": "ui-host-profiles.html",
+  "approval": "User accepted PROPOSED-1.1.md on 2026-11-13"
+}

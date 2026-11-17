@@ -1,0 +1,14 @@
+DoRoboty.ai — Technologia po ludzku
+Dokumentacja dla designerów · v1 · do oceny · 13.11.2026
+
+Otwórz index.html w przeglądarce. Zachowaj obok katalog evidence.
+Dokument działa lokalnie; odsyłacze do W3C wymagają internetu.
+
+Zakres: 25 rodzin, każda z 11 obszarami dokumentacji, 21 źródeł
+wizualnych, 33 kadry i 14 uzupełniających źródeł implementacji.
+Atlas, statusy dowodów i otwarte kwestie są częścią pełnego HTML.
+
+manifest.json w evidence zawiera metrykę zrzutów i identyfikację
+wersji źródeł. verification.json opisuje sprawdzenie artefaktu.
+To dokumentacja do oceny, nie deklaracja zgodności produktu z WCAG
+ani pakiet implementacyjny komponentów.

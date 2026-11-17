@@ -96,8 +96,10 @@ export function SettingsPage() {
       <section className="prototype-panel prototype-form mt-6">
         <h2>O prototypie</h2>
         <p>
-          Wybór osoby zastępuje logowanie. Propozycje AI, Match Score i podsumowania odtwarzają
-          przygotowany scenariusz; nie oceniają kompetencji. Używaj przykładowych danych i CV.
+          Wybór osoby zastępuje logowanie. Match Score i podsumowania odtwarzają przygotowany
+          scenariusz. Formularz rekrutera proponuje umiejętności i pytania na podstawie opisu
+          stanowiska; rekruter samodzielnie je poprawia i zatwierdza. Używaj przykładowych danych i
+          CV.
         </p>
       </section>
       <ConfirmDialog
@@ -117,16 +119,27 @@ export function SettingsPage() {
 export function PrivacyPage() {
   return (
     <section className="prototype-section max-w-4xl">
-      <h1>Prywatność prototypu</h1>
+      <PageTitle
+        eyebrow="Informacje / Twoje dane"
+        description="Jak działa lokalny scenariusz i co możesz z nim zrobić."
+      >
+        Prywatność prototypu
+      </PageTitle>
       <div className="mt-6 space-y-5">
         <p>
           Ta wersja służy do ćwiczeń i testów interfejsu. Nie wpisuj prawdziwych danych osobowych
           ani poufnych informacji.
         </p>
         <p>
-          Profile, aplikacje i ustawienia pozostają w pamięci tej przeglądarki. Aplikacja nie wysyła
-          ich do bazy, dostawcy AI ani systemu analitycznego. Plik eksportu zawiera cały lokalny
-          scenariusz, w tym notatki.
+          Profile, CV, odpowiedzi kandydatów i ustawienia pozostają w tej przeglądarce. Plik
+          eksportu zawiera cały lokalny scenariusz, w tym notatki. Aplikacja nie przesyła tych
+          danych do bazy ani systemu analitycznego.
+        </p>
+        <p>
+          Propozycje umiejętności i pytań w formularzu oferty powstają w tej przeglądarce. Opis
+          stanowiska nie jest przesyłany do zewnętrznego dostawcy. Rekruter sprawdza i zatwierdza
+          treść; system nie ocenia kandydatów. Postęp formularza jest częścią lokalnego scenariusza
+          oraz jego eksportu i resetu.
         </p>
         <p>
           Możesz usunąć zmiany przyciskiem „Resetuj scenariusz” w ustawieniach lub wyczyścić dane

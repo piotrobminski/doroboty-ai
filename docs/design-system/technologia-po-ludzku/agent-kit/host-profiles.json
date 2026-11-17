@@ -1,0 +1,204 @@
+{
+  "name": "Technologia po ludzku",
+  "version": "1.1.0",
+  "approved": "2026-11-13",
+  "families": 25,
+  "approval": "User explicitly accepted PROPOSED-1.1.md on 2026-11-13.",
+  "tokens": {
+    "--tph-violet": "#7B2CBF",
+    "--tph-lime": "#C2F970",
+    "--tph-paper": "#F7F5ED",
+    "--tph-card": "#FFFEF9",
+    "--tph-ink": "#171B19",
+    "--tph-muted": "#596159",
+    "--tph-radius-card": "12px",
+    "--tph-radius-control": "8px",
+    "--tph-radius-field": "7px",
+    "--tph-radius-modal": "14px",
+    "--tph-radius-modal-mobile": "10px"
+  },
+  "type": {
+    "sans": "Arial, Helvetica, sans-serif",
+    "mono": "SFMono-Regular, Consolas, \"Liberation Mono\", monospace",
+    "taskTitle": {
+      "desktop": 43,
+      "max767": 34,
+      "weight": 700,
+      "lineHeight": 1.05
+    },
+    "recordTitle": {
+      "desktop": 43,
+      "max1100": 39,
+      "max600": 34,
+      "weight": 700,
+      "lineHeight": 1.08
+    },
+    "formSectionTitle": 24,
+    "recordReadingTitle": 24,
+    "bodyReading": {
+      "size": 16,
+      "lineHeight": 1.75
+    },
+    "cardTitle": {
+      "desktop": 21,
+      "max600": 20,
+      "weight": 700
+    }
+  },
+  "geometry": {
+    "cardRadius": 12,
+    "fieldRadius": 7,
+    "actionRadius": 8,
+    "modalRadius": 14,
+    "modalRadiusMax600": 10,
+    "fieldMinHeight": 46,
+    "actionMinHeight": 48,
+    "iconActionMinHeight": 44,
+    "comfortableTarget": 44,
+    "selectChevron": 16,
+    "selectChevronInset": 14,
+    "selectRightPadding": 42
+  },
+  "profiles": [
+    {
+      "id": "HP01",
+      "families": [
+        "c01"
+      ],
+      "name": "Public and persona workspace navigation",
+      "owner": "Shell",
+      "requirements": [
+        "Named Base UI public mobile modal with focus containment, Escape and trigger return.",
+        "Workspace mobile navigation is an expanded inline menu, with Escape return.",
+        "Role selection is a simulation."
+      ]
+    },
+    {
+      "id": "HP02",
+      "families": [
+        "c03"
+      ],
+      "name": "Task and submitted-record headers",
+      "owner": "PageTitle / ApplicationRecord",
+      "requirements": [
+        "One H1 with optional eyebrow, description and wrapping action.",
+        "Graphite header identifies the immutable submitted record.",
+        "Collage is restricted to discovery contexts."
+      ]
+    },
+    {
+      "id": "HP03",
+      "families": [
+        "c20",
+        "c25"
+      ],
+      "name": "Named groups within one form",
+      "owner": "FormSection / Field",
+      "requirements": [
+        "Semantic section with a unique heading ID.",
+        "Field has an explicit label/control association; prefilled text is excluded from its name.",
+        "Groups are not a simulated stepper.",
+        "Preserve source, generated and approved text separately."
+      ]
+    },
+    {
+      "id": "HP04",
+      "families": [
+        "c20",
+        "c25"
+      ],
+      "name": "Submitted materials and CV",
+      "owner": "RecordSheet / CvAttachment / ApplicationRecord",
+      "requirements": [
+        "Base UI owns actual tabs and keyboard behavior.",
+        "One surface contains snapshots, notes and actions.",
+        "Only the CV panel has file controls and a matching local preview.",
+        "Custom CV snapshots keep complete text."
+      ]
+    },
+    {
+      "id": "HP05",
+      "families": [
+        "c19"
+      ],
+      "name": "Recorded event history",
+      "owner": "ProcessTimeline",
+      "requirements": [
+        "Ordered actual events with machine-readable time.",
+        "Latest event has aria-current=step.",
+        "Candidate projection excludes employer notes.",
+        "Materials precede history on narrow screens."
+      ]
+    },
+    {
+      "id": "HP06",
+      "families": [
+        "c22",
+        "c24"
+      ],
+      "name": "Persistent feedback and recovery",
+      "owner": "Notice / Empty",
+      "requirements": [
+        "Info, success and warning are separate tones with text.",
+        "Errors identify repair and focus the affected field.",
+        "Import/reset remain confirmed; failures preserve data."
+      ]
+    }
+  ],
+  "hostExtensions": {
+    "MatchScore": {
+      "meaning": "Fixed scenario example; not hiring probability or an assessment.",
+      "bands": [
+        {
+          "min": 0,
+          "max": 39,
+          "name": "red",
+          "fill": "#FF6B79"
+        },
+        {
+          "min": 40,
+          "max": 59,
+          "name": "orange",
+          "fill": "#FFB15C"
+        },
+        {
+          "min": 60,
+          "max": 79,
+          "name": "yellow",
+          "fill": "#FFE45B"
+        },
+        {
+          "min": 80,
+          "max": 100,
+          "name": "green",
+          "fill": "#00C853"
+        }
+      ],
+      "text": "#171B19"
+    },
+    "SalaryFact": {
+      "currencies": [
+        "PLN",
+        "EUR"
+      ],
+      "periods": [
+        "month",
+        "year"
+      ],
+      "basis": [
+        "gross",
+        "net"
+      ],
+      "missing": "Never fabricate amounts."
+    },
+    "OfflineMap": {
+      "requests": "No remote tiles or geocoding.",
+      "fallback": "Complete links for all matching jobs."
+    }
+  },
+  "boundaries": [
+    "This package supplies anatomy and scoped styling, not React controllers.",
+    "Keep HashRouter, Zod, persona projections, local state and snapshots in the host.",
+    "Static record examples do not simulate functional tabs or recruiting actions."
+  ]
+}

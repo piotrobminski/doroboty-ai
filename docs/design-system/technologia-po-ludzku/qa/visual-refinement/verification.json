@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-13",
+  "checks": {
+    "filterResultCount": 2,
+    "selectStyles": [
+      {
+        "appearance": "none",
+        "backgroundPosition": "calc(100% - 14px) 50%",
+        "id": "level",
+        "paddingRight": "42px"
+      },
+      {
+        "appearance": "none",
+        "backgroundPosition": "calc(100% - 14px) 50%",
+        "id": "contract",
+        "paddingRight": "42px"
+      }
+    ],
+    "employerBackgrounds": [
+      "rgb(234, 236, 225)"
+    ],
+    "mobile": {
+      "clientWidth": 375,
+      "scrollWidth": 375,
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    "syntax": "npm run check passed",
+    "build": "npm run build passed"
+  },
+  "rendering": {
+    "wrapper": "transparent",
+    "bottomEdge": "CSS alpha mask",
+    "image": "assets/human-technology-hero-cutout.png"
+  },
+  "consoleErrors": [],
+  "asset": {
+    "path": "assets/human-technology-hero-cutout.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "has_transparency": true,
+    "sha256": "cc45c51aca625ca9ea0bb61a6276642b26bd9f44cb7fa671d1bdc9d230d17d78"
+  }
+}

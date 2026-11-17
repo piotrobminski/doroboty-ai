@@ -1,0 +1,27 @@
+/* Geometry for this documentation gallery only. Never import it into product screens. */
+.kit-jump { display: flex; flex-wrap: wrap; gap: 8px 23px; padding: 22px 0; border-block: 1px solid var(--tph-line); }
+.kit-jump a { font-size: 12px; min-height: 44px; display: inline-flex; align-items: center; text-underline-offset: 4px; }
+.kit-section { padding-top: 48px; margin-top: 16px; scroll-margin-top: 24px; }
+.kit-section > h2 { font-size: 34px; line-height: 1.12; letter-spacing: -.04em; margin: 15px 0 20px; }
+.kit-copy { max-width: 70ch; font-size: 15px; line-height: 1.75; color: var(--tph-muted); margin-bottom: 24px; }
+.kit-actions, .kit-areas { display: flex; flex-wrap: wrap; gap: 12px; margin-block: 20px; }
+.kit-caption { font-size: 12px; line-height: 1.75; color: var(--tph-muted); margin-block: 18px; max-width: 85ch; }
+.kit-code { margin-top: 25px; border: 1px solid var(--tph-line); padding: 0 18px; border-radius: 8px; }
+.kit-code summary { padding-block: 17px; cursor: pointer; font-size: 13px; }
+.kit-code pre { overflow: auto; font: 12px/1.7 var(--tph-font-mono); padding-bottom: 12px; }
+.kit-field-row { margin-top: 25px; }
+.kit-form-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 15px; padding-top: 20px; border-top: 1px solid var(--tph-line); }
+.kit-page-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+.kit-page-grid .form-card { margin-bottom: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.kit-page-grid h3 { font-size: 23px; letter-spacing: -.035em; line-height: 1.15; margin-block: 16px; }
+.kit-page-grid p { font-size: 13px; line-height: 1.75; color: var(--tph-muted); }
+.kit-page-grid .button { margin-top: auto; font-size: 12px; }
+#example-form { max-width: 900px; }
+#example-empty .job-list { margin-top: 20px; }
+@media (max-width:850px) { .kit-page-grid { grid-template-columns: minmax(0,1fr); } }
+@media (max-width:600px) {
+  .kit-section { padding-top: 29px; }
+  .kit-section > h2 { font-size: 28px; }
+  .kit-actions > .button { flex: 1 1 auto; }
+  .kit-jump { column-gap: 17px; padding-block: 13px; }
+}

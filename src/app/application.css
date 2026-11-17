@@ -6,7 +6,7 @@
   margin: 30px 0 34px;
 }
 .application-header h1 {
-  font-size: 64px;
+  font-size: 43px;
   line-height: 1.04;
   letter-spacing: -2px;
 }
@@ -74,11 +74,11 @@
 .application-pay {
   margin-top: 22px;
 }
-.application-pay .pp-salary-tag {
+.application-pay .tph-salary-tag {
   font-size: 20px;
   line-height: 1.4;
 }
-.application-pay .pp-salary-description {
+.application-pay .tph-salary-description {
   font-size: 12px;
   margin-top: 8px;
 }
@@ -87,7 +87,7 @@
   gap: 14px;
   padding-block: 22px;
   margin-top: 22px;
-  border-block: 1px solid var(--pp-line);
+  border-block: 1px solid var(--tph-line);
   font-size: 13px;
 }
 .application-offer-facts > div {
@@ -146,7 +146,7 @@
 }
 .application-description [data-job-description] h3 {
   font-size: 24px;
-  font-weight: 400;
+  font-weight: 700;
 }
 .application-form {
   display: grid;
@@ -167,7 +167,7 @@
   overflow-wrap: anywhere;
 }
 .application-form-section {
-  border-top: 1px solid var(--pp-line);
+  border-top: 1px solid var(--tph-line);
   padding-block: 24px;
 }
 .application-form-section h3 {
@@ -177,7 +177,7 @@
 .application-form-section > .cv-attachment {
   margin-top: 18px;
 }
-.application-answer .field > span {
+.application-answer .field > label {
   font-size: 15px;
 }
 .application-answer textarea {
@@ -191,18 +191,7 @@
   font-size: 12px;
   line-height: 1.6;
 }
-.application-consent {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 13px;
-  line-height: 1.7;
-  cursor: pointer;
-}
-.application-consent [role="checkbox"] {
-  margin-top: 3px;
-  flex-shrink: 0;
-}
+
 .application-submit {
   display: grid;
   gap: 20px;
@@ -230,13 +219,13 @@
 }
 @media (max-width: 1100px) {
   .application-header h1 {
-    font-size: 54px;
+    font-size: 39px;
   }
   .application-layout {
     gap: 24px;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
   }
-  .application-pay .pp-salary-tag {
+  .application-pay .tph-salary-tag {
     font-size: 18px;
   }
 }
@@ -248,7 +237,7 @@
     position: static;
   }
   .application-header h1 {
-    font-size: 47px;
+    font-size: 36px;
   }
 }
 @media (max-width: 600px) {
@@ -259,7 +248,7 @@
     margin-block: 24px 28px;
   }
   .application-header h1 {
-    font-size: 43px;
+    font-size: 34px;
     line-height: 1.06;
     letter-spacing: -1.5px;
   }
@@ -269,7 +258,7 @@
   .application-offer h2 {
     font-size: 26px;
   }
-  .application-pay .pp-salary-tag {
+  .application-pay .tph-salary-tag {
     font-size: 20px;
   }
   .application-form-intro {
@@ -298,4 +287,35 @@
 .application-actions .application-send:disabled {
   background: var(--gui-color-1);
   color: var(--gui-text);
+}
+
+/* Shared c08/c20/c25 roles with the host's real answer/consent workflow. */
+.application-eyebrow {
+  font: 10px/1.5 var(--tph-font-mono);
+  text-transform: uppercase;
+}
+.application-offer h2 {
+  font-size: 24px;
+  line-height: 1.15;
+}
+.application-header h1 {
+  letter-spacing: -0.045em;
+}
+.application-form-intro h2 {
+  font-size: 28px;
+}
+.application-form-section h3 {
+  font-size: 24px;
+}
+.application-answer .field > label {
+  font-size: 13px;
+}
+.application-actions .application-send:disabled {
+  background: var(--tph-lime);
+  color: var(--tph-ink);
+}
+@media (max-width: 600px) {
+  .application-answer textarea {
+    font-size: 16px;
+  }
 }

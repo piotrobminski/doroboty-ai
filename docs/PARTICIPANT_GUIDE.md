@@ -14,12 +14,20 @@ Open http://127.0.0.1:3001. If Node or registry access is blocked by your organi
 ## Try a complete flow
 
 1. Choose Anna Kowalska and browse offers.
-2. Save an offer, edit the profile and submit an approved application. Source notes and the editable proposal are separate.
+2. Save an offer, edit the profile and submit your own approved application answer.
 3. Choose Karolina Wiśniewska for BrightLabs and review its candidates.
 4. Record review, invitation, conversation and the next decision.
 5. Return to Anna and inspect the application history.
 
-Karolina and Tomasz see their respective companies in the interface; this is role simulation. All data is local and synthetic. CVs are prepared text examples, not real uploads. AI proposals and scores simulate the scenario.
+Karolina and Tomasz see their respective companies in the interface; this is role simulation. Scenario records remain local and synthetic. CVs are prepared text examples, not real uploads. Scores and summaries simulate the scenario. The guided recruiter form proposes skills/questions locally without contacting a provider; candidates write their own answers.
+
+## Guided recruiter form
+
+Use synthetic descriptions. In step one, enter the general description (minimum 30 characters), title and terms. Step two suggests skills and personal-contribution questions from that description. Edit, add/remove or skip questions, review each and continue to preview to confirm the review. Step three shows the offer and selected questions; clicking Publish confirms publication. These two actions replace the former approval checkboxes. No API key, credit balance or network connection is needed to prepare proposals. This simulates the experience, not model quality.
+
+The form saves progress per recruiter/offer; reload restores text and selected questions and requires approval again. Changing the description preserves your edits until you choose to retain/review them or confirm replacement. Export/import/reset includes partial forms. Candidates still write their own examples and materials; recruiters record the reason for each next step. In the employer Answer tab, the local AI-style hint summarizes textual evidence per requirement, quotes the response and suggests what to clarify. Review the full answer: it does not verify skills or facts and does not make the decision. CVs and linked materials are not analyzed.
+
+The earlier server gateway remains disconnected from the form. Existing keys stay private and unused by this workflow; see [technical setup](../README.md#optional-recruiter-ai).
 
 ## Save, share and recover
 
@@ -29,7 +37,7 @@ A URL shares the interface, not your local changes. To transfer a scenario, shar
 
 ## Static build
 
-Run npm run build. Serve dist/ through any static HTTP host. No provider account is needed for local development. Do not open index.html via file://; ES modules need HTTP. Hash links work without route rewrite configuration.
+Run npm run build. Serve dist/ through any static HTTP host. No provider account is needed for the complete guided local-proposal workflow. A plain static host does not include the optional disconnected OpenAI gateway. Do not open index.html via file://; ES modules need HTTP. Hash links work without route rewrite configuration.
 
 ## Verification
 

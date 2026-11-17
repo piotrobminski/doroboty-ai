@@ -1,0 +1,77 @@
+/* Technologia po ludzku. Opt-in variables; map into the host theme as needed.
+   The brand hierarchy is selected; other values are proposed starting points. */
+.tph-theme {
+  --tph-violet: #7B2CBF; /* Królewski fiolet */
+  --tph-lime: #C2F970;
+  --tph-paper: #F7F5ED;
+  --tph-card: #FFFEF9;
+  --tph-ink: #171B19;
+  --tph-muted: #596159;
+  --tph-violet-tint: #EEDFF8;
+  --tph-line: #CBD0C4;
+  --tph-control-border: #7B826F;
+  --tph-violet-border: #BFA0DC;
+
+  --tph-bg: var(--tph-paper);
+  --tph-surface: var(--tph-card);
+  --tph-text: var(--tph-ink);
+  --tph-text-secondary: var(--tph-muted);
+  --tph-brand: var(--tph-violet);
+  --tph-on-brand: var(--tph-card);
+  --tph-accent: var(--tph-lime);
+  --tph-on-accent: var(--tph-ink);
+  --tph-action-bg: var(--tph-ink);
+  --tph-action-text: var(--tph-card);
+  --tph-action-hover-bg: #30392F;
+  --tph-action-context-bg: var(--tph-lime);
+  --tph-action-context-text: var(--tph-ink);
+  --tph-selected-bg: var(--tph-violet-tint);
+  --tph-selected-text: var(--tph-ink);
+  --tph-selected-border: var(--tph-violet);
+  --tph-disabled-bg: #DDE0D7;
+  --tph-disabled-text: #596159;
+  --tph-disabled-border: #8C9484;
+  --tph-error: #A02E32;
+  --tph-error-bg: #FCECED;
+  --tph-success: #2D5F3B;
+  --tph-success-bg: #EAF2E5;
+  --tph-warning: #795519;
+  --tph-warning-bg: #FFF0D2;
+  --tph-info-bg: #E8EBE4;
+  --tph-focus: var(--tph-violet);
+  --tph-focus-on-dark: var(--tph-lime);
+  --tph-focus-width: 3px;
+  --tph-focus-offset: 3px;
+
+  --tph-font-sans: Arial, Helvetica, sans-serif;
+  --tph-font-mono: SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  --tph-text-body: 1rem;
+  --tph-leading-body: 1.5;
+  --tph-text-facts: .875rem;
+  --tph-text-small: .75rem;
+  --tph-text-title: 1.375rem;
+  --tph-text-hero: clamp(2.25rem, 5vw, 4rem);
+  --tph-leading-heading: 1.08;
+  --tph-leading-hero: 1.02;
+  --tph-tracking-hero: -.04em;
+  --tph-weight-heading: 700;
+
+  --tph-space-1: 4px;
+  --tph-space-2: 8px;
+  --tph-space-3: 12px;
+  --tph-space-4: 16px;
+  --tph-space-5: 20px;
+  --tph-space-6: 24px;
+  --tph-space-8: 32px;
+  --tph-space-10: 40px;
+  --tph-space-12: 48px;
+  --tph-radius-card: 12px;
+  --tph-radius-control: 8px;
+  --tph-radius-tag: 999px;
+  --tph-content-max: 1240px;
+  --tph-filter-width: 205px;
+  --tph-gutter-desktop: 32px;
+  --tph-gutter-mobile: 16px;
+  --tph-control-min: 44px;
+  --tph-reading-width: 65ch;
+}

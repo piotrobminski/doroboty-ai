@@ -1,0 +1,91 @@
+{
+  "version": "1.1.0",
+  "date": "2026-11-13",
+  "approval": "User explicitly accepted PROPOSED-1.1.md on 2026-11-13.",
+  "families": 25,
+  "profiles": 6,
+  "node": "v24.22.1",
+  "sourceChecks": {
+    "syntax": "passed",
+    "tests": {
+      "passed": 10,
+      "failed": 0
+    }
+  },
+  "portableBuildAndExport": [
+    {
+      "artifact": "dist",
+      "files": 177,
+      "content": "all source bytes match; export generation time is intentionally refreshed",
+      "signatures": "passed"
+    },
+    {
+      "artifact": "dist-agent-kit",
+      "files": 177,
+      "content": "all source bytes match; export generation time is intentionally refreshed",
+      "signatures": "passed"
+    }
+  ],
+  "browserChecks": {
+    "checks": [
+      {
+        "name": "profiles",
+        "width": 1280,
+        "status": 200,
+        "overflow": false,
+        "violations": []
+      },
+      {
+        "name": "documentation",
+        "width": 1280,
+        "status": 200,
+        "overflow": false,
+        "violations": []
+      },
+      {
+        "name": "profiles",
+        "width": 390,
+        "status": 200,
+        "overflow": false,
+        "violations": []
+      },
+      {
+        "name": "documentation",
+        "width": 390,
+        "status": 200,
+        "overflow": false,
+        "violations": []
+      },
+      {
+        "name": "profiles",
+        "width": 320,
+        "status": 200,
+        "overflow": false,
+        "violations": []
+      },
+      {
+        "name": "documentation",
+        "width": 320,
+        "status": 200,
+        "overflow": false,
+        "violations": []
+      }
+    ],
+    "saveToggle": {
+      "nameStable": true,
+      "saved": "true",
+      "persisted": "true"
+    },
+    "errors": []
+  },
+  "captures": [
+    "qa/host-profiles/profiles-1280.png",
+    "qa/host-profiles/profiles-390.png",
+    "qa/host-profiles/profiles-320.png"
+  ],
+  "review": "Separate source diff and rendered profile review completed; original v1 atlas/evidence retained.",
+  "limitations": [
+    "Static specimens do not replace actual Base UI interactions.",
+    "No full screen-reader audit, CI or deployment claimed."
+  ]
+}

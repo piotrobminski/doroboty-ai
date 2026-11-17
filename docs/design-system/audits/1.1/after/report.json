@@ -1,0 +1,1056 @@
+{
+  "date": "2026-11-13",
+  "phase": "after",
+  "referenceVersion": "1.1.0",
+  "referenceManifestSha256": "9f87a8a73869b91686f4e5db00042a7f60459b188b97d86a8b50c3b24caf2e3b",
+  "families": 25,
+  "profileCount": 6,
+  "widths": [1280, 390, 320],
+  "checks": [
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "discovery heading size",
+      "expected": 61.44,
+      "actual": 61.44,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "card title size",
+      "expected": 21,
+      "actual": 21,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "card radius",
+      "expected": 12,
+      "actual": 12,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "card weight",
+      "expected": 700,
+      "actual": 700,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "sans type",
+      "expected": "Arial, Helvetica, sans-serif",
+      "actual": "Arial, Helvetica, sans-serif",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "default action",
+      "expected": "rgb(23, 27, 25)",
+      "actual": "rgb(23, 27, 25)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "page reflow",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "--tph-violet",
+      "expected": "#7B2CBF",
+      "actual": "#7b2cbf",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "--tph-lime",
+      "expected": "#C2F970",
+      "actual": "#c2f970",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "--tph-paper",
+      "expected": "#F7F5ED",
+      "actual": "#f7f5ed",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "--tph-card",
+      "expected": "#FFFEF9",
+      "actual": "#fffef9",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "--tph-ink",
+      "expected": "#171B19",
+      "actual": "#171b19",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "--tph-muted",
+      "expected": "#596159",
+      "actual": "#596159",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "--tph-radius-card",
+      "expected": "12px",
+      "actual": "12px",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "--tph-radius-control",
+      "expected": "8px",
+      "actual": "8px",
+      "pass": true
+    },
+    {
+      "id": "DS11-03",
+      "width": 1280,
+      "role": "job articles named by their own headings",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "Build C marker background-color",
+      "expected": "rgb(238, 223, 248)",
+      "actual": "rgb(238, 223, 248)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "Build C marker color",
+      "expected": "rgb(89, 37, 138)",
+      "actual": "rgb(89, 37, 138)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "Apply C marker background-color",
+      "expected": "rgb(234, 242, 217)",
+      "actual": "rgb(234, 242, 217)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "Apply C marker color",
+      "expected": "rgb(64, 85, 42)",
+      "actual": "rgb(64, 85, 42)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "Lead C marker background-color",
+      "expected": "rgb(226, 235, 243)",
+      "actual": "rgb(226, 235, 243)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "Lead C marker color",
+      "expected": "rgb(54, 89, 113)",
+      "actual": "rgb(54, 89, 113)",
+      "pass": true
+    },
+    {
+      "id": "DS11-02",
+      "width": 1280,
+      "role": "human-readable remote criterion",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "DS11-02",
+      "width": 1280,
+      "role": "human-readable seniority criterion",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "HP02",
+      "width": 1280,
+      "role": "task title size",
+      "expected": 43,
+      "actual": 43,
+      "pass": true
+    },
+    {
+      "id": "HP02",
+      "width": 1280,
+      "role": "task title weight",
+      "expected": 700,
+      "actual": 700,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 1280,
+      "role": "field radius",
+      "expected": 7,
+      "actual": 7,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 1280,
+      "role": "field size",
+      "expected": 14,
+      "actual": 14,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 1280,
+      "role": "field min height",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 1280,
+      "role": "prefilled textarea accessible name",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "DS11-01",
+      "width": 1280,
+      "role": "checkbox label comfortable target",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "measurement": { "width": 622, "height": 44 }
+    },
+    {
+      "id": "HP03",
+      "width": 1280,
+      "role": "form group title size",
+      "expected": 24,
+      "actual": 24,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 1280,
+      "role": "select text inset",
+      "expected": 42,
+      "actual": 42,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 1280,
+      "role": "select chevron",
+      "expected": 16,
+      "actual": 16,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 1280,
+      "role": "select chevron inset",
+      "expected": 14,
+      "actual": 14,
+      "pass": true
+    },
+    {
+      "id": "HP02",
+      "width": 1280,
+      "role": "record title size",
+      "expected": 43,
+      "actual": 43,
+      "pass": true
+    },
+    {
+      "id": "HP04",
+      "width": 1280,
+      "role": "record reading title",
+      "expected": 24,
+      "actual": 24,
+      "pass": true
+    },
+    {
+      "id": "HP04",
+      "width": 1280,
+      "role": "record text",
+      "expected": 16,
+      "actual": 16,
+      "pass": true
+    },
+    {
+      "id": "HP04",
+      "width": 1280,
+      "role": "record line height",
+      "expected": 28,
+      "actual": 28,
+      "pass": true
+    },
+    {
+      "id": "HP05",
+      "width": 1280,
+      "role": "recorded current step",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "HP05",
+      "width": 1280,
+      "role": "mobile material order",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 1280,
+      "role": "contextual action",
+      "expected": "rgb(194, 249, 112)",
+      "actual": "rgb(194, 249, 112)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "discovery heading size",
+      "expected": 37.83,
+      "actual": 37.83,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "card title size",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "card radius",
+      "expected": 12,
+      "actual": 12,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "card weight",
+      "expected": 700,
+      "actual": 700,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "sans type",
+      "expected": "Arial, Helvetica, sans-serif",
+      "actual": "Arial, Helvetica, sans-serif",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "default action",
+      "expected": "rgb(23, 27, 25)",
+      "actual": "rgb(23, 27, 25)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "page reflow",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "--tph-violet",
+      "expected": "#7B2CBF",
+      "actual": "#7b2cbf",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "--tph-lime",
+      "expected": "#C2F970",
+      "actual": "#c2f970",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "--tph-paper",
+      "expected": "#F7F5ED",
+      "actual": "#f7f5ed",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "--tph-card",
+      "expected": "#FFFEF9",
+      "actual": "#fffef9",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "--tph-ink",
+      "expected": "#171B19",
+      "actual": "#171b19",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "--tph-muted",
+      "expected": "#596159",
+      "actual": "#596159",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "--tph-radius-card",
+      "expected": "12px",
+      "actual": "12px",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "--tph-radius-control",
+      "expected": "8px",
+      "actual": "8px",
+      "pass": true
+    },
+    {
+      "id": "DS11-03",
+      "width": 390,
+      "role": "job articles named by their own headings",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "Build C marker background-color",
+      "expected": "rgb(238, 223, 248)",
+      "actual": "rgb(238, 223, 248)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "Build C marker color",
+      "expected": "rgb(89, 37, 138)",
+      "actual": "rgb(89, 37, 138)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "Apply C marker background-color",
+      "expected": "rgb(234, 242, 217)",
+      "actual": "rgb(234, 242, 217)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "Apply C marker color",
+      "expected": "rgb(64, 85, 42)",
+      "actual": "rgb(64, 85, 42)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "Lead C marker background-color",
+      "expected": "rgb(226, 235, 243)",
+      "actual": "rgb(226, 235, 243)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "Lead C marker color",
+      "expected": "rgb(54, 89, 113)",
+      "actual": "rgb(54, 89, 113)",
+      "pass": true
+    },
+    {
+      "id": "DS11-02",
+      "width": 390,
+      "role": "human-readable remote criterion",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "DS11-02",
+      "width": 390,
+      "role": "human-readable seniority criterion",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "HP02",
+      "width": 390,
+      "role": "task title size",
+      "expected": 34,
+      "actual": 34,
+      "pass": true
+    },
+    {
+      "id": "HP02",
+      "width": 390,
+      "role": "task title weight",
+      "expected": 700,
+      "actual": 700,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 390,
+      "role": "field radius",
+      "expected": 7,
+      "actual": 7,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 390,
+      "role": "field size",
+      "expected": 16,
+      "actual": 16,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 390,
+      "role": "field min height",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 390,
+      "role": "prefilled textarea accessible name",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "DS11-01",
+      "width": 390,
+      "role": "checkbox label comfortable target",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "measurement": { "width": 308, "height": 44 }
+    },
+    {
+      "id": "HP03",
+      "width": 390,
+      "role": "form group title size",
+      "expected": 24,
+      "actual": 24,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 390,
+      "role": "select text inset",
+      "expected": 42,
+      "actual": 42,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 390,
+      "role": "select chevron",
+      "expected": 16,
+      "actual": 16,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 390,
+      "role": "select chevron inset",
+      "expected": 14,
+      "actual": 14,
+      "pass": true
+    },
+    {
+      "id": "HP02",
+      "width": 390,
+      "role": "record title size",
+      "expected": 34,
+      "actual": 34,
+      "pass": true
+    },
+    {
+      "id": "HP04",
+      "width": 390,
+      "role": "record reading title",
+      "expected": 24,
+      "actual": 24,
+      "pass": true
+    },
+    {
+      "id": "HP04",
+      "width": 390,
+      "role": "record text",
+      "expected": 16,
+      "actual": 16,
+      "pass": true
+    },
+    {
+      "id": "HP04",
+      "width": 390,
+      "role": "record line height",
+      "expected": 28,
+      "actual": 28,
+      "pass": true
+    },
+    {
+      "id": "HP05",
+      "width": 390,
+      "role": "recorded current step",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "HP05",
+      "width": 390,
+      "role": "mobile material order",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 390,
+      "role": "contextual action",
+      "expected": "rgb(194, 249, 112)",
+      "actual": "rgb(194, 249, 112)",
+      "pass": true
+    },
+    {
+      "id": "HP01",
+      "width": 390,
+      "role": "modal radius",
+      "expected": 10,
+      "actual": 10,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "discovery heading size",
+      "expected": 33,
+      "actual": 33,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "card title size",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "card radius",
+      "expected": 12,
+      "actual": 12,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "card weight",
+      "expected": 700,
+      "actual": 700,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "sans type",
+      "expected": "Arial, Helvetica, sans-serif",
+      "actual": "Arial, Helvetica, sans-serif",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "default action",
+      "expected": "rgb(23, 27, 25)",
+      "actual": "rgb(23, 27, 25)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "page reflow",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "--tph-violet",
+      "expected": "#7B2CBF",
+      "actual": "#7b2cbf",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "--tph-lime",
+      "expected": "#C2F970",
+      "actual": "#c2f970",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "--tph-paper",
+      "expected": "#F7F5ED",
+      "actual": "#f7f5ed",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "--tph-card",
+      "expected": "#FFFEF9",
+      "actual": "#fffef9",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "--tph-ink",
+      "expected": "#171B19",
+      "actual": "#171b19",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "--tph-muted",
+      "expected": "#596159",
+      "actual": "#596159",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "--tph-radius-card",
+      "expected": "12px",
+      "actual": "12px",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "--tph-radius-control",
+      "expected": "8px",
+      "actual": "8px",
+      "pass": true
+    },
+    {
+      "id": "DS11-03",
+      "width": 320,
+      "role": "job articles named by their own headings",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "Build C marker background-color",
+      "expected": "rgb(238, 223, 248)",
+      "actual": "rgb(238, 223, 248)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "Build C marker color",
+      "expected": "rgb(89, 37, 138)",
+      "actual": "rgb(89, 37, 138)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "Apply C marker background-color",
+      "expected": "rgb(234, 242, 217)",
+      "actual": "rgb(234, 242, 217)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "Apply C marker color",
+      "expected": "rgb(64, 85, 42)",
+      "actual": "rgb(64, 85, 42)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "Lead C marker background-color",
+      "expected": "rgb(226, 235, 243)",
+      "actual": "rgb(226, 235, 243)",
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "Lead C marker color",
+      "expected": "rgb(54, 89, 113)",
+      "actual": "rgb(54, 89, 113)",
+      "pass": true
+    },
+    {
+      "id": "DS11-02",
+      "width": 320,
+      "role": "human-readable remote criterion",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "DS11-02",
+      "width": 320,
+      "role": "human-readable seniority criterion",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "HP02",
+      "width": 320,
+      "role": "task title size",
+      "expected": 34,
+      "actual": 34,
+      "pass": true
+    },
+    {
+      "id": "HP02",
+      "width": 320,
+      "role": "task title weight",
+      "expected": 700,
+      "actual": 700,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 320,
+      "role": "field radius",
+      "expected": 7,
+      "actual": 7,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 320,
+      "role": "field size",
+      "expected": 16,
+      "actual": 16,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 320,
+      "role": "field min height",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 320,
+      "role": "prefilled textarea accessible name",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "DS11-01",
+      "width": 320,
+      "role": "checkbox label comfortable target",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "measurement": { "width": 254, "height": 44 }
+    },
+    {
+      "id": "HP03",
+      "width": 320,
+      "role": "form group title size",
+      "expected": 24,
+      "actual": 24,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 320,
+      "role": "select text inset",
+      "expected": 42,
+      "actual": 42,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 320,
+      "role": "select chevron",
+      "expected": 16,
+      "actual": 16,
+      "pass": true
+    },
+    {
+      "id": "HP03",
+      "width": 320,
+      "role": "select chevron inset",
+      "expected": 14,
+      "actual": 14,
+      "pass": true
+    },
+    {
+      "id": "HP02",
+      "width": 320,
+      "role": "record title size",
+      "expected": 34,
+      "actual": 34,
+      "pass": true
+    },
+    {
+      "id": "HP04",
+      "width": 320,
+      "role": "record reading title",
+      "expected": 24,
+      "actual": 24,
+      "pass": true
+    },
+    {
+      "id": "HP04",
+      "width": 320,
+      "role": "record text",
+      "expected": 16,
+      "actual": 16,
+      "pass": true
+    },
+    {
+      "id": "HP04",
+      "width": 320,
+      "role": "record line height",
+      "expected": 28,
+      "actual": 28,
+      "pass": true
+    },
+    {
+      "id": "HP05",
+      "width": 320,
+      "role": "recorded current step",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "HP05",
+      "width": 320,
+      "role": "mobile material order",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "id": "BASE",
+      "width": 320,
+      "role": "contextual action",
+      "expected": "rgb(194, 249, 112)",
+      "actual": "rgb(194, 249, 112)",
+      "pass": true
+    },
+    {
+      "id": "HP01",
+      "width": 320,
+      "role": "modal radius",
+      "expected": 10,
+      "actual": 10,
+      "pass": true
+    }
+  ],
+  "sourceSamples": [
+    { "width": 1280, "heroSize": 61.44, "cardSize": 21, "cardRadius": 12 },
+    { "width": 390, "heroSize": 37.83, "cardSize": 20, "cardRadius": 12 },
+    { "width": 320, "heroSize": 33, "cardSize": 20, "cardRadius": 12 }
+  ],
+  "findings": [],
+  "accessibility": [
+    { "name": "listing", "width": 1280, "violations": [] },
+    { "name": "employer editor", "width": 1280, "violations": [] },
+    { "name": "candidate record", "width": 1280, "violations": [] },
+    { "name": "listing", "width": 390, "violations": [] },
+    { "name": "employer editor", "width": 390, "violations": [] },
+    { "name": "candidate record", "width": 390, "violations": [] },
+    { "name": "listing", "width": 320, "violations": [] },
+    { "name": "employer editor", "width": 320, "violations": [] },
+    { "name": "candidate record", "width": 320, "violations": [] }
+  ],
+  "runtimeErrors": []
+}

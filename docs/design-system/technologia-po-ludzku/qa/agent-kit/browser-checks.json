@@ -1,0 +1,36 @@
+[
+  {
+    "check": "Dialog po I08: Tab/Shift+Tab zawijają focus, Escape zamyka i przywraca wywołanie",
+    "result": "pass",
+    "detail": {
+      "a2": "dialog-note",
+      "c2": "Zamknij przykład dialogu",
+      "reverse2": "Wróć do przykładów",
+      "back2": "open-demo-dialog"
+    }
+  },
+  {
+    "check": "Walidacja pustego formularza, odwrócony zakres, wyłączenie widełek, UoP i praca zdalna bez miasta",
+    "result": "pass"
+  },
+  {
+    "check": "Podgląd etapu3 i puste zapisane → przywrócenie4 kart, focus na pierwszym linku",
+    "result": "pass"
+  },
+  {
+    "check": "Listing po wydzieleniu komponentów: filtr Build+zdalne, zapis,0 wyników i przywrócenie listy",
+    "result": "pass",
+    "detail": {
+      "listingSaved": "true",
+      "listingRecovery": 13
+    }
+  },
+  {
+    "check": "Bieżący etap3: dwa poprzednie ukończone, focus klawiatury limonkowy3px na graficie",
+    "result": "pass"
+  },
+  {
+    "check": "Galeria: stała nazwa zakładki, zaznaczenie i odznaczenie z zachowaniem focusu",
+    "result": "pass"
+  }
+]
