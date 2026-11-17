@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Technologia po ludzku — redesign review</title
+  ><style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #f7f5ed;
+      color: #171b19;
+      font:
+        16px/1.6 Arial,
+        Helvetica,
+        sans-serif;
+    }
+    main {
+      max-width: 1380px;
+      margin: auto;
+      padding: 40px 24px;
+    }
+    header {
+      border-top: 4px solid #7b2cbf;
+      padding-block: 24px;
+    }
+    h1 {
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -0.045em;
+    }
+    h2 {
+      font-size: 28px;
+      line-height: 1.15;
+    }
+    p {
+      max-width: 80ch;
+      color: #596159;
+    }
+    a {
+      color: #7b2cbf;
+    }
+    section {
+      border-top: 1px solid #cbd0c4;
+      margin-top: 40px;
+      padding-top: 24px;
+    }
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+    figure {
+      margin: 16px 0;
+      min-width: 0;
+    }
+    figcaption {
+      font:
+        11px/1.6 Consolas,
+        monospace;
+      margin-bottom: 10px;
+      overflow-wrap: anywhere;
+    }
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid #cbd0c4;
+      border-radius: 12px;
+    }
+    figure a {
+      display: block;
+      max-height: 780px;
+      overflow: auto;
+      border-radius: 12px;
+    }
+    :focus-visible {
+      outline: 3px solid #7b2cbf;
+      outline-offset: 3px;
+    }
+    @media (max-width: 700px) {
+      .pair {
+        grid-template-columns: 1fr;
+      }
+      .gallery {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+  <main>
+    <header>
+      <p>13 NOVEMBER 2026 / LOCAL REVIEW EVIDENCE</p>
+      <h1>One system.<br />One working application.</h1>
+      <p>
+        Technologia po ludzku across public, candidate, employer and operator routes. Select a
+        capture to inspect the complete image. This gallery records the local synthetic scenario; it
+        is not a deployment, human acceptance or full accessibility audit.
+      </p>
+      <p>
+        <a href="../PROPOSED-1.1.md">Read the proposed 1.1 profiles</a> ·
+        <a href="../redesign-verification.json">Verification record</a>
+      </p>
+    </header>
+    <section>
+      <h2>Discovery / desktop</h2>
+      <p>
+        Shared source anatomy and type; host keeps its own employers, jobs, salary basis and URL
+        filters.
+      </p>
+      <div class="pair">
+        <figure>
+          <figcaption>Immutable reference / current render</figcaption>
+          <a href="source-listing-1280.png"
+            ><img src="source-listing-1280.png" alt="Reference: Discovery / desktop" loading="lazy"
+          /></a>
+        </figure>
+        <figure>
+          <figcaption>React host / synthetic scenario</figcaption>
+          <a href="listing-1280.png"
+            ><img src="listing-1280.png" alt="Host: Discovery / desktop" loading="lazy"
+          /></a>
+        </figure>
+      </div>
+    </section>
+    <section>
+      <h2>Discovery / mobile</h2>
+      <p>
+        Visible search, inline area choices and additional facets; Base UI supplies the host select
+        semantics.
+      </p>
+      <div class="pair">
+        <figure>
+          <figcaption>Immutable reference / current render</figcaption>
+          <a href="source-listing-390.png"
+            ><img src="source-listing-390.png" alt="Reference: Discovery / mobile" loading="lazy"
+          /></a>
+        </figure>
+        <figure>
+          <figcaption>React host / synthetic scenario</figcaption>
+          <a href="listing-390.png"
+            ><img src="listing-390.png" alt="Host: Discovery / mobile" loading="lazy"
+          /></a>
+        </figure>
+      </div>
+    </section>
+    <section>
+      <h2>Candidate offer</h2>
+      <p>
+        Graphite role band and contextual lime action. Existing host facts, summary and complete
+        description remain.
+      </p>
+      <div class="pair">
+        <figure>
+          <figcaption>Immutable reference / current render</figcaption>
+          <a href="source-offer-1280.png"
+            ><img src="source-offer-1280.png" alt="Reference: Candidate offer" loading="lazy"
+          /></a>
+        </figure>
+        <figure>
+          <figcaption>React host / synthetic scenario</figcaption>
+          <a href="offer-1280.png"
+            ><img src="offer-1280.png" alt="Host: Candidate offer" loading="lazy"
+          /></a>
+        </figure>
+      </div>
+    </section>
+    <section>
+      <h2>Recruiter task</h2>
+      <p>
+        Host preserves its functional single-page form and approved/source text separation; three
+        named groups replace a copied demo stepper.
+      </p>
+      <div class="pair">
+        <figure>
+          <figcaption>Immutable reference / current render</figcaption>
+          <a href="source-recruiter-1280.png"
+            ><img src="source-recruiter-1280.png" alt="Reference: Recruiter task" loading="lazy"
+          /></a>
+        </figure>
+        <figure>
+          <figcaption>React host / synthetic scenario</figcaption>
+          <a href="new-job-1280.png"
+            ><img src="new-job-1280.png" alt="Host: Recruiter task" loading="lazy"
+          /></a>
+        </figure>
+      </div>
+    </section>
+    <section>
+      <h2>Shared host profiles</h2>
+      <div class="gallery">
+        <figure>
+          <figcaption>listing-320</figcaption>
+          <a href="listing-320.png"
+            ><img src="listing-320.png" alt="listing-320" loading="lazy"
+          /></a>
+        </figure>
+        <figure>
+          <figcaption>offer-390</figcaption>
+          <a href="offer-390.png"><img src="offer-390.png" alt="offer-390" loading="lazy" /></a>
+        </figure>
+        <figure>
+          <figcaption>new-job-390</figcaption>
+          <a href="new-job-390.png"
+            ><img src="new-job-390.png" alt="new-job-390" loading="lazy"
+          /></a>
+        </figure>
+        <figure>
+          <figcaption>employer-record-1280</figcaption>
+          <a href="employer-record-1280.png"
+            ><img src="employer-record-1280.png" alt="employer-record-1280" loading="lazy"
+          /></a>
+        </figure>
+        <figure>
+          <figcaption>candidate-home-1280</figcaption>
+          <a href="candidate-home-1280.png"
+            ><img src="candidate-home-1280.png" alt="candidate-home-1280" loading="lazy"
+          /></a>
+        </figure>
+        <figure>
+          <figcaption>profile-390</figcaption>
+          <a href="profile-390.png"
+            ><img src="profile-390.png" alt="profile-390" loading="lazy"
+          /></a>
+        </figure>
+        <figure>
+          <figcaption>apply-390</figcaption>
+          <a href="apply-390.png"><img src="apply-390.png" alt="apply-390" loading="lazy" /></a>
+        </figure>
+        <figure>
+          <figcaption>company-390</figcaption>
+          <a href="company-390.png"
+            ><img src="company-390.png" alt="company-390" loading="lazy"
+          /></a>
+        </figure>
+      </div>
+    </section>
+  </main>
+</html>

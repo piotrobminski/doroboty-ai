@@ -2,6 +2,15 @@ import { z } from "zod";
 import marketplace from "./data/marketplace.json" with { type: "json" };
 import people from "./data/people.json" with { type: "json" };
 import type { JobWithCompany } from "@/features/jobs/types";
+import { jobEditorDraftSchema, type JobEditorDraft } from "./job-editor-state";
+
+import {
+  competencyCardSchema,
+  competencySubmissionSchema,
+  draftResponsesSchema,
+  decisionReasonSchema,
+  type CompetencyResponse,
+} from "./competency";
 
 const id = z
   .string()
@@ -51,9 +60,18 @@ export const jobSchema = z
     publishedAt: z.iso.datetime(),
     expiryAt: z.iso.datetime(),
     verificationStatus: z.enum(["unverified", "editorial", "employer_verified"]),
+    competencyCard: competencyCardSchema.optional(),
     sourceBrief: text.optional(),
     generatedDescription: text.optional(),
+    generatedDescriptionModel: z.string().trim().min(1).max(100).optional(),
   })
+  .refine(
+    (job) => !job.competencyCard || job.competencyCard.sourceDescription === job.description,
+    {
+      path: ["competencyCard"],
+      message: "Karta wymaga zatwierdzenia dla aktualnego opisu oferty.",
+    },
+  )
   .refine(
     (job) =>
       job.salaryMin === undefined || job.salaryMax === undefined || job.salaryMin <= job.salaryMax,
@@ -113,6 +131,7 @@ const applicationSchema = z.object({
   candidateName: shortText,
   cv: text.min(20),
   answer: text.min(MIN_APPLICATION_ANSWER_LENGTH),
+  competency: competencySubmissionSchema.optional(),
   sourceNotes: text,
   generatedAnswer: text,
   score: z.number().int().min(0).max(100),
@@ -129,6 +148,8 @@ const draftSchema = z.object({
   notes: text,
   generated: text,
   answer: text,
+  competencyResponses: draftResponsesSchema.optional(),
+  competencyRevision: z.string().max(100).optional(),
 });
 export const stateSchema = z
   .object({
@@ -140,6 +161,10 @@ export const stateSchema = z
     applications: z.array(applicationSchema).max(2000),
     saved: z.array(z.object({ candidateId: id, jobId: id })).max(5000),
     drafts: z.array(draftSchema).max(1000),
+    employerDrafts: z
+      .array(z.object({ employerId: id, jobId: id.optional(), value: jobEditorDraftSchema }))
+      .max(1000)
+      .optional(),
   })
   .superRefine((s, ctx) => {
     const problem = (message: string) => ctx.addIssue({ code: "custom", message });
@@ -153,13 +178,37 @@ export const stateSchema = z
       problem("Duplicate slugs");
     const companyIds = new Set(s.companies.map((x) => x.id));
     const jobs = new Map(s.jobs.map((x) => [x.id, x]));
+    const draftKeys = new Set<string>();
+    for (const draft of s.employerDrafts ?? []) {
+      const owner = s.people.find((person) => person.id === draft.employerId);
+      const key = `${draft.employerId}/${draft.jobId ?? ""}`;
+      if (
+        draftKeys.has(key) ||
+        owner?.role !== "employer" ||
+        (draft.jobId && jobs.get(draft.jobId)?.companyId !== owner.companyId)
+      )
+        problem("Invalid employer draft owner or duplicate draft");
+      draftKeys.add(key);
+    }
     const candidates = new Set(s.people.filter((x) => x.role === "candidate").map((x) => x.id));
     if (s.activePersonId !== null && !s.people.some((x) => x.id === s.activePersonId))
       problem("Unknown active person");
     for (const p of s.people)
       if (p.role === "employer" && (!p.companyId || !companyIds.has(p.companyId)))
         problem("Unknown employer company");
-    for (const j of s.jobs) if (!companyIds.has(j.companyId)) problem("Unknown job company");
+    for (const j of s.jobs) {
+      if (!companyIds.has(j.companyId)) problem("Unknown job company");
+      if (
+        j.competencyCard &&
+        !s.people.some(
+          (p) =>
+            p.id === j.competencyCard!.approvedBy &&
+            p.role === "employer" &&
+            p.companyId === j.companyId,
+        )
+      )
+        problem("Invalid competency approver");
+    }
     const keys = new Set<string>();
     for (const a of s.applications) {
       const key = `${a.candidateId}:${a.jobId}`;
@@ -170,6 +219,26 @@ export const stateSchema = z
       )
         problem("Invalid application reference");
       keys.add(key);
+      if (
+        a.competency &&
+        !s.people.some(
+          (p) =>
+            p.id === a.competency!.card.approvedBy &&
+            p.role === "employer" &&
+            p.companyId === a.companyId,
+        )
+      )
+        problem("Invalid submitted competency approver");
+      if (
+        a.competency &&
+        a.events.some(
+          (event, index) =>
+            index > 0 &&
+            event.stage !== "withdrawn" &&
+            !decisionReasonSchema.safeParse(event.note).success,
+        )
+      )
+        problem("Missing competency decision reason");
       if (a.events[0]?.stage !== "submitted" || a.events.at(-1)?.stage !== a.stage)
         problem("Invalid application history");
       for (let i = 1; i < a.events.length; i++) {
@@ -201,7 +270,15 @@ export type Action =
   | { type: "select_person"; id: string | null }
   | { type: "profile"; value: z.infer<typeof profileSchema> }
   | { type: "toggle_saved"; jobId: string }
-  | { type: "draft"; jobId: string; notes: string; generated: string; answer: string }
+  | {
+      type: "draft";
+      jobId: string;
+      notes: string;
+      generated: string;
+      answer: string;
+      competencyResponses?: CompetencyResponse[];
+      competencyRevision?: string;
+    }
   | {
       type: "submit";
       jobId: string;
@@ -209,10 +286,13 @@ export type Action =
       generated: string;
       answer: string;
       consent: boolean;
+      competencyResponses?: CompetencyResponse[];
+      competencyRevision?: string;
     }
   | { type: "stage"; applicationId: string; stage: Stage; note: string }
   | { type: "withdraw"; applicationId: string }
   | { type: "publish"; job: z.infer<typeof jobSchema> }
+  | { type: "job_editor_draft"; jobId?: string; value: JobEditorDraft }
   | { type: "company"; name: string; description: string };
 
 export function initialState(): State {
@@ -298,6 +378,15 @@ export function transition(
     if (!action.consent) fail("Zatwierdź treść i zgodę na przesłanie aplikacji.");
     if (s.applications.some((x) => x.candidateId === p.id && x.jobId === job.id))
       fail("Aplikacja na tę ofertę została już wysłana.");
+    let competency;
+    if (job.competencyCard) {
+      if (action.competencyRevision !== job.competencyCard.approvedAt)
+        fail("Karta kryteriów zmieniła się. Otwórz ponownie formularz i sprawdź odpowiedzi.");
+      competency = competencySubmissionSchema.parse({
+        card: job.competencyCard,
+        responses: action.competencyResponses ?? [],
+      });
+    }
     s.applications.push(
       applicationSchema.parse({
         id: newId,
@@ -307,7 +396,8 @@ export function transition(
         jobTitle: job.title,
         candidateName: p.name,
         cv: p.cv,
-        answer: action.answer,
+        answer: competency ? competency.responses[0].example : action.answer,
+        competency,
         sourceNotes: action.notes,
         generatedAnswer: action.generated,
         score: p.exampleScore,
@@ -332,18 +422,36 @@ export function transition(
       const p = employer();
       if (application.companyId !== p.companyId || !nextStages[application.stage].includes(stage))
         fail("Ta zmiana etapu nie jest dostępna.");
+      if (application.competency && !decisionReasonSchema.safeParse(action.note).success)
+        fail("Uzasadnij następny krok, odnosząc się do wymagań i odpowiedzi (minimum 20 znaków).");
     }
     application.stage = stage;
     application.events.push({ stage, at: now, note: action.type === "stage" ? action.note : "" });
+  } else if (action.type === "job_editor_draft") {
+    const p = employer();
+    if (action.jobId && s.jobs.find((job) => job.id === action.jobId)?.companyId !== p.companyId)
+      fail("Wybierz ofertę własnej firmy.");
+    const value = jobEditorDraftSchema.parse(action.value);
+    s.employerDrafts = (s.employerDrafts ?? []).filter(
+      (draft) => !(draft.employerId === p.id && draft.jobId === action.jobId),
+    );
+    s.employerDrafts.push({ employerId: p.id, jobId: action.jobId, value });
   } else if (action.type === "publish") {
     const p = employer();
     const job = jobSchema.parse(action.job);
     if (job.companyId !== p.companyId) fail("Wybierz ofertę własnej firmy.");
+    if (job.competencyCard && job.competencyCard.approvedBy !== p.id)
+      fail("Zatwierdź kartę kryteriów jako bieżący rekruter.");
     const index = s.jobs.findIndex((x) => x.id === job.id);
     if (index >= 0) {
       if (s.jobs[index].companyId !== p.companyId) fail("Nie można zmienić tej oferty.");
       s.jobs[index] = job;
     } else s.jobs.unshift(job);
+    if (s.employerDrafts)
+      s.employerDrafts = s.employerDrafts.filter(
+        (draft) =>
+          !(draft.employerId === p.id && (draft.jobId === job.id || (!draft.jobId && index < 0))),
+      );
   } else if (action.type === "company") {
     const p = employer();
     Object.assign(

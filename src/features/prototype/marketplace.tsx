@@ -1,13 +1,13 @@
 import { Link, useLocation, useParams, useSearchParams } from "react-router";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { ArrowUpRight, Users, MapPin, BriefcaseBusiness, Bookmark } from "lucide-react";
+import { ArrowUpRight, ChevronDown, MapPin, BriefcaseBusiness, Bookmark } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Search, ArrowRight, Monitor, X } from "lucide-react";
 import { BackLink } from "@/components/back-link";
-import { ResponsivePanel } from "@/components/responsive-panel";
+import { DiscoveryHero } from "@/features/public/discovery-hero";
+import { AreaLabel } from "@/features/jobs/area-label";
+import { categoryLabels, functionLabels } from "@/features/jobs/presentation";
 import { SalaryFact } from "@/features/jobs/salary-fact";
-import { functionLabels } from "@/features/jobs/presentation";
-import peopleArt from "../../../docs/design-system/agent-kit/assets/people.png";
 import { CompanyLogo } from "@/features/jobs/company-logo";
 import { JobCard } from "@/features/jobs/job-card";
 import { JobFiltersForm } from "@/features/jobs/job-filters";
@@ -15,17 +15,23 @@ import { JobPagination } from "@/features/jobs/job-pagination";
 import { JobDescription } from "@/features/jobs/job-description";
 import { filterJobs, parseJobFilters } from "@/features/jobs/filters";
 import { paginateJobs, jobListingHref } from "@/features/jobs/pagination";
-import {
-  categoryLabels,
-  remoteLabels,
-  seniorityLabels,
-  contractLabels,
-} from "@/features/jobs/presentation";
+import { remoteLabels, seniorityLabels, contractLabels } from "@/features/jobs/presentation";
 import type { JobWithCompany } from "@/features/jobs/types";
 import { usePrototype } from "./store";
 import { currentPerson, publishedJobs } from "./model";
 import { NotFound } from "./shell";
 import { cn } from "@/lib/utils";
+
+const facetLabels: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  category: categoryLabels,
+  function: functionLabels,
+  remote: remoteLabels,
+  seniority: seniorityLabels,
+  contract: contractLabels,
+};
+function activeFilterLabel(key: string, value: string | number) {
+  return facetLabels[key]?.[String(value)] ?? String(value);
+}
 
 function LocalMap({ jobs }: { jobs: JobWithCompany[] }) {
   const [selected, setSelected] = useState<string | null>(null);
@@ -151,35 +157,32 @@ export function JobsPage() {
   const locations = [...new Set(all.flatMap((x) => x.locations))];
   return (
     <>
-      <section className="pp-intro-section">
-        <div className="pp-container">
-          <div className="pp-intro-grid">
-            <div className="pp-intro-copy">
-              <h1>
+      <section className="tph-intro-section">
+        <div className="tph-container">
+          <DiscoveryHero
+            eyebrow="Oferty pracy / Build · Apply · Lead"
+            title={
+              <>
                 Dobra robota.
                 <br />
-                <span>Z AI w środku.</span>
-              </h1>
-              <p>
-                Dla ludzi, którzy tworzą, wdrażają i rozwijają AI.
-                <br />
-                Znajdź rolę, w której zrobisz coś dobrego.
-              </p>
-            </div>
-            <img
-              className="pp-people-art"
-              src={peopleArt}
-              alt="Dwie osoby pracujące razem z laptopem"
-            />
-          </div>
+                <span className="text-highlight">Z AI w środku.</span>
+              </>
+            }
+          >
+            <p>
+              Dla ludzi, którzy tworzą, wdrażają i rozwijają AI.
+              <br />
+              Znajdź rolę, w której zrobisz coś dobrego.
+            </p>
+          </DiscoveryHero>
           <form
             key={`${filters.query ?? ""}:${filters.location ?? ""}`}
-            className="pp-search-form"
+            className="tph-search-form"
             onSubmit={search}
           >
-            <label className="pp-search-field">
+            <label className="tph-search-field">
               <span>
-                <Search className="pp-icon" />
+                <Search className="tph-icon" />
               </span>
               <span className="sr-only">Szukaj ofert</span>
               <input
@@ -190,9 +193,9 @@ export function JobsPage() {
                 placeholder="Stanowisko, firma lub słowo kluczowe"
               />
             </label>
-            <label className="pp-location-field">
+            <label className="tph-location-field">
               <span>
-                <MapPin className="pp-icon" />
+                <MapPin className="tph-icon" />
               </span>
               <select
                 name="location"
@@ -207,11 +210,16 @@ export function JobsPage() {
                 )}
               </select>
             </label>
-            <Button type="submit" className="pp-search-submit">
-              Szukaj <ArrowRight className="pp-icon" />
+            <Button type="submit" className="tph-search-submit">
+              Szukaj <ArrowRight className="tph-icon" />
             </Button>
           </form>
-          <div className="pp-category-tabs" aria-label="Kategorie ofert">
+        </div>
+      </section>
+      <section className="tph-container tph-board-layout">
+        <aside className="tph-filter-position" aria-label="Filtry ofert">
+          <p className="eyebrow filter-kicker">Obszar pracy</p>
+          <div className="tph-category-tabs" aria-label="Kategorie ofert">
             {(
               [
                 ["", "Wszystkie oferty", ""],
@@ -222,7 +230,10 @@ export function JobsPage() {
             ).map(([key, label, description]) => (
               <button
                 key={key}
-                className={cn("pp-category-tab", (filters.category ?? "") === key && "pp-selected")}
+                className={cn(
+                  "tph-category-tab",
+                  (filters.category ?? "") === key && "tph-selected",
+                )}
                 aria-pressed={(filters.category ?? "") === key}
                 onClick={() => change("category", key)}
               >
@@ -230,43 +241,52 @@ export function JobsPage() {
                   <b>{label}</b>
                   <small>{description}</small>
                 </span>
-                <span className="pp-category-count">
+                <span className="tph-category-count">
                   {filterJobs(all, { ...filters, category: key || undefined }).length}
                 </span>
               </button>
             ))}
           </div>
-        </div>
-      </section>
-      <section className="pp-container pp-board-layout">
-        <div className="pp-filter-position">
-          <ResponsivePanel
-            title="Filtry"
-            description="Wyniki zmieniają się od razu. W każdej grupie wybierz jeden warunek."
-            resultCount={jobs.length}
-          >
+
+          <details className="additional-filters" open>
+            <summary>
+              Więcej filtrów <ChevronDown size={18} aria-hidden="true" />
+            </summary>
             <JobFiltersForm filters={filters} onChange={change} onReset={reset} />
-          </ResponsivePanel>
-        </div>
-        <div className="pp-results-column">
-          <div className="pp-results-heading">
-            <div className="pp-results-title">
+          </details>
+          <div className="sidebar-note">
+            <p className="eyebrow">Ludzie × Technologia</p>
+            <p>
+              Dobra praca
+              <br />
+              zaczyna się
+              <br />
+              od człowieka.
+            </p>
+            <Link className="text-link" to="/metodologia">
+              Poznaj nasze kryteria <ArrowUpRight />
+            </Link>
+          </div>
+        </aside>
+        <div className="tph-results-column">
+          <div className="tph-results-heading">
+            <div className="tph-results-title">
               <h2 ref={resultsHeading} tabIndex={-1}>
                 Oferty pracy
               </h2>
               <span role="status">{jobs.length}</span>
             </div>
-            <div className="pp-results-controls">
-              <span className="pp-sort-label">Najnowsze</span>
+            <div className="tph-results-controls">
+              <span className="tph-sort-label">Najnowsze</span>
               <Link
-                className="pp-view-link"
+                className="tph-view-link"
                 aria-current={view === "list" ? "page" : undefined}
                 to={jobListingHref(filters)}
               >
                 Lista
               </Link>
               <Link
-                className="pp-view-link"
+                className="tph-view-link"
                 aria-current={view === "map" ? "page" : undefined}
                 to={jobListingHref(filters, 1, "map")}
               >
@@ -274,25 +294,26 @@ export function JobsPage() {
               </Link>
             </div>
           </div>
+          <p className="results-context">Przykładowe role w prototypie · Build / Apply / Lead</p>
           {Object.entries(filters).some(([k, v]) => k !== "page" && v) && (
-            <div className="pp-active-filters">
+            <div className="tph-active-filters">
               {Object.entries(filters)
                 .filter(([k, v]) => k !== "page" && v)
                 .map(([key, value]) => (
                   <button
-                    className="pp-filter-chip"
+                    className="tph-filter-chip"
                     key={key}
-                    aria-label={`Usuń filtr: ${value}`}
+                    aria-label={`Usuń filtr: ${activeFilterLabel(key, value)}`}
                     ref={(element) => {
                       if (element) chipButtons.current.set(key, element);
                       else chipButtons.current.delete(key);
                     }}
                     onClick={() => removeFilter(key)}
                   >
-                    {String(value)} <X className="pp-icon" />
+                    {activeFilterLabel(key, value)} <X className="tph-icon" />
                   </button>
                 ))}
-              <button className="pp-text-button" onClick={reset}>
+              <button className="tph-text-button" onClick={reset}>
                 Wyczyść
               </button>
             </div>
@@ -302,7 +323,7 @@ export function JobsPage() {
               <LocalMap jobs={jobs} />
             ) : (
               <>
-                <div className="pp-job-list">
+                <div className="tph-job-list">
                   {pagination.items.map((job) => (
                     <JobCard key={job.id} job={job} saved={savedIds?.has(job.id)} />
                   ))}
@@ -311,9 +332,9 @@ export function JobsPage() {
               </>
             )
           ) : (
-            <div className="pp-empty-state">
-              <span className="pp-empty-mark">
-                <Search className="pp-icon" />
+            <div className="tph-empty-state">
+              <span className="tph-empty-mark">
+                <Search className="tph-icon" />
               </span>
               <h3>Brak ofert dla tych filtrów</h3>
               <p>Wyczyść część kryteriów i spróbuj ponownie.</p>
@@ -354,56 +375,56 @@ export function JobPage() {
     .sort((a, b) => Number(b.category === job.category) - Number(a.category === job.category))
     .slice(0, 3);
   return (
-    <article className="pp-offer-page pp-container pp-offer-main">
-      <nav className="pp-offer-breadcrumb" aria-label="Powrót do ofert">
+    <article className="tph-offer-page tph-container tph-offer-main">
+      <nav className="tph-offer-breadcrumb" aria-label="Powrót do ofert">
         <BackLink to="/oferty">Wróć do ofert</BackLink>
         <span>{job.company.name}</span>
       </nav>
-      <div className="pp-offer-grid">
-        <header className="pp-offer-hero">
-          <div className="pp-offer-identity">
-            <CompanyLogo company={job.company} />
+      <div className="tph-offer-grid">
+        <header className="tph-offer-hero">
+          <div className="tph-offer-identity">
+            <CompanyLogo company={job.company} area={job.category} />
             <div>
-              <Link className="pp-offer-company-link" to={`/firmy/${job.company.slug}`}>
+              <Link className="tph-offer-company-link" to={`/firmy/${job.company.slug}`}>
                 {job.company.name}
-                <ArrowUpRight className="pp-icon" />
+                <ArrowUpRight className="tph-icon" />
               </Link>
-              <p className="pp-offer-date">
+              <p className="tph-offer-date">
                 Opublikowano {new Intl.DateTimeFormat("pl-PL").format(new Date(job.publishedAt))}
               </p>
             </div>
-            <span className="pp-offer-category">{categoryLabels[job.category]}</span>
+            <AreaLabel area={job.category} />
           </div>
           <h1>{job.title}</h1>
-          <div className="pp-offer-key-facts">
+          <div className="tph-offer-key-facts">
             <span>
-              <MapPin className="pp-icon" />
+              <MapPin className="tph-icon" />
               {job.locations.join(" / ")}
             </span>
             <span>
-              <Monitor className="pp-icon" />
+              <Monitor className="tph-icon" />
               {remoteLabels[job.remoteStatus]}
             </span>
             <span>
-              <BriefcaseBusiness className="pp-icon" />
+              <BriefcaseBusiness className="tph-icon" />
               {seniorityLabels[job.seniority]}
             </span>
           </div>
-          <div className="pp-offer-skill-row">
+          <div className="tph-offer-skill-row">
             <span>{functionLabels[job.function]}</span>
           </div>
-          <div className="pp-offer-hero-bottom">
+          <div className="tph-offer-hero-bottom">
             <span>{job.summary}</span>
           </div>
         </header>
-        <aside className="pp-offer-sidebar">
-          <div className="pp-offer-action-card">
-            <div className="pp-offer-pay">
-              <p className="pp-offer-eyebrow">Wynagrodzenie</p>
+        <aside className="tph-offer-sidebar">
+          <div className="tph-offer-action-card">
+            <div className="tph-offer-pay">
+              <p className="tph-offer-eyebrow">Wynagrodzenie</p>
               <SalaryFact job={job} />
             </div>
             <h2 className="sr-only">Konkrety</h2>
-            <dl className="pp-offer-terms">
+            <dl className="tph-offer-terms">
               {[
                 ["Forma współpracy", contractLabels[job.contract]],
                 ["Tryb pracy", remoteLabels[job.remoteStatus]],
@@ -416,11 +437,11 @@ export function JobPage() {
                 </div>
               ))}
             </dl>
-            <div className="pp-offer-actions">
+            <div className="tph-offer-actions">
               {person?.role === "candidate" ? (
                 <>
                   <Link
-                    className={buttonVariants()}
+                    className={buttonVariants({ variant: "lime" })}
                     to={submitted ? `/app/aplikacje/${submitted.id}` : `/aplikuj/${job.slug}`}
                   >
                     {submitted ? "Zobacz swoją aplikację" : "Aplikuj"}
@@ -438,10 +459,10 @@ export function JobPage() {
                 </>
               ) : !person ? (
                 <Link
-                  className={buttonVariants()}
+                  className={buttonVariants({ variant: "lime" })}
                   to={`/auth/sign-in?audience=candidate&next=${encodeURIComponent(`/aplikuj/${job.slug}`)}`}
                 >
-                  Wybierz osobę i aplikuj
+                  Zaloguj się i aplikuj
                 </Link>
               ) : (
                 <p>Aplikacje są dostępne z profilu kandydata.</p>
@@ -450,27 +471,27 @@ export function JobPage() {
             </div>
           </div>
         </aside>
-        <div className="pp-offer-description">
-          <nav className="pp-offer-section-nav" aria-label="Sekcje oferty">
+        <div className="tph-offer-description">
+          <nav className="tph-offer-section-nav" aria-label="Sekcje oferty">
             <Link to={{ pathname: `/oferty/${job.slug}`, hash: "#role" }}>O roli</Link>
             <Link to={{ pathname: `/oferty/${job.slug}`, hash: "#employer" }}>O firmie</Link>
           </nav>
-          <div className="pp-offer-reading">
-            <section id="role" tabIndex={-1} className="pp-offer-section">
+          <div className="tph-offer-reading">
+            <section id="role" tabIndex={-1} className="tph-offer-section">
               <h2>O roli</h2>
               <JobDescription description={job.description} />
             </section>
           </div>
         </div>
-        <section className="pp-offer-employer" id="employer" tabIndex={-1}>
-          <div className="pp-employer-top">
-            <CompanyLogo company={job.company} />
+        <section className="tph-offer-employer" id="employer" tabIndex={-1}>
+          <div className="tph-employer-top">
+            <CompanyLogo company={job.company} area={job.category} />
             <div>
-              <p className="pp-offer-eyebrow">Poznaj firmę</p>
+              <p className="tph-offer-eyebrow">Poznaj firmę</p>
               <h2>{job.company.name}</h2>
             </div>
           </div>
-          <div className="pp-employer-copy">
+          <div className="tph-employer-copy">
             <div>
               <p>{job.company.description}</p>
               <Link
@@ -480,19 +501,18 @@ export function JobPage() {
                 Oferty tej firmy <ArrowRight />
               </Link>
             </div>
-            <img src={peopleArt} alt="" />
           </div>
         </section>
       </div>
       {related.length > 0 && (
-        <section className="pp-offer-related">
-          <div className="pp-offer-related-heading">
+        <section className="tph-offer-related">
+          <div className="tph-offer-related-heading">
             <h2>Może też Cię zainteresować</h2>
             <Link to="/oferty">
-              Wszystkie oferty <ArrowRight className="pp-icon" />
+              Wszystkie oferty <ArrowRight className="tph-icon" />
             </Link>
           </div>
-          <div className="pp-job-list">
+          <div className="tph-job-list">
             {related.map((x) => (
               <JobCard key={x.id} job={x} />
             ))}
@@ -510,9 +530,10 @@ export function CompanyPage() {
   if (!company) return <NotFound />;
   const jobs = publishedJobs(state).filter((x) => x.companyId === company.id);
   return (
-    <article className="mx-auto max-w-[1360px] px-5 py-14 lg:px-8 lg:py-20">
-      <div className="grid gap-8 pb-12 shadow-[var(--gui-divider-bottom-shadow)] lg:grid-cols-[1fr_320px]">
-        <div>
+    <article className="tph-container company-page">
+      <div className="company-layout">
+        <div className="company-intro">
+          <p className="eyebrow">Firma / Scenariusz przykładowy</p>
           <CompanyLogo company={company} size="large" />
           <h1 className="mt-3 text-4xl font-semibold tracking-[var(--gui-tracking-s)] sm:text-5xl">
             {company.name}
@@ -522,21 +543,17 @@ export function CompanyPage() {
             {company.description}
           </p>
         </div>
-        <dl className="h-fit rounded-xl bg-muted/35 p-6 text-sm">
-          <div className="flex gap-2">
-            <MapPin className="size-5" />
-            <div>
+        <aside className="prototype-panel company-facts" aria-label="Informacje o firmie">
+          <dl>
+            <div className="flex gap-2">
               <dt className="font-medium">Lokalizacja</dt>
               <dd className="mt-1 text-muted-foreground">{company.location}</dd>
             </div>
-          </div>
-          <div className="mt-5 flex gap-2">
-            <Users className="size-5" />
-            <div>
+            <div className="mt-5 flex gap-2">
               <dt className="font-medium">Wielkość</dt>
               <dd className="mt-1 text-muted-foreground">{company.sizeLabel}</dd>
             </div>
-          </div>
+          </dl>
           {/^https?:\/\//i.test(company.websiteUrl) && (
             <a
               className="mt-6 inline-flex items-center gap-2 font-medium text-[var(--gui-link)] hover:underline"
@@ -547,18 +564,23 @@ export function CompanyPage() {
               Strona firmy <ArrowUpRight className="size-4" />
             </a>
           )}
-        </dl>
+        </aside>
       </div>
       <section className="py-12">
         <h2 className="text-2xl font-semibold">Otwarte role</h2>
         {jobs.length > 0 ? (
-          <div className="mt-7 pp-job-list">
+          <div className="mt-7 tph-job-list">
             {jobs.map((job) => (
               <JobCard key={job.id} job={job} />
             ))}
           </div>
         ) : (
-          <p className="mt-5 text-lg">Ta firma nie ma teraz aktywnych ofert.</p>
+          <div className="mt-6">
+            <p>Ta firma nie ma teraz aktywnych ofert.</p>
+            <Link className="text-link mt-4" to="/oferty">
+              Przeglądaj wszystkie oferty <ArrowRight />
+            </Link>
+          </div>
         )}
       </section>
     </article>

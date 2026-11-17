@@ -1,0 +1,820 @@
+[
+  {
+    "id": "S01",
+    "label": "Listing — desktop, wariant C",
+    "file": "evidence/S01.png",
+    "url": "http://127.0.0.1:4174/",
+    "mode": "full-page",
+    "regions": {
+      "#icon-legend": {
+        "height": 18,
+        "width": 964,
+        "x": 269,
+        "y": 780.8125
+      },
+      ".additional-filters": {
+        "height": 331,
+        "width": 205,
+        "x": 32,
+        "y": 1020.96875
+      },
+      ".card-top": {
+        "height": 49.1875,
+        "width": 916,
+        "x": 293,
+        "y": 838.8125
+      },
+      ".category-list": {
+        "height": 283,
+        "width": 205,
+        "x": 32,
+        "y": 715.96875
+      },
+      ".hero": {
+        "height": 415.96875,
+        "width": 1201,
+        "x": 32,
+        "y": 123
+      },
+      ".job-card": {
+        "height": 168.1875,
+        "width": 964,
+        "x": 269,
+        "y": 816.8125
+      },
+      ".job-card:nth-child(2)": {
+        "height": 168.1875,
+        "width": 964,
+        "x": 269,
+        "y": 997
+      },
+      ".job-card:nth-child(3)": {
+        "height": 168.1875,
+        "width": 964,
+        "x": 269,
+        "y": 1177.1875
+      },
+      ".results-heading": {
+        "height": 55.34375,
+        "width": 964,
+        "x": 269,
+        "y": 675.96875
+      },
+      ".results-meta": {
+        "height": 16.5,
+        "width": 964,
+        "x": 269,
+        "y": 748.3125
+      },
+      ".search-bar": {
+        "height": 69,
+        "width": 1201,
+        "x": 32,
+        "y": 570.96875
+      },
+      ".sidebar": {
+        "height": 2397.09375,
+        "width": 205,
+        "x": 32,
+        "y": 675.96875
+      },
+      ".site-footer": {
+        "height": 101,
+        "width": 1265,
+        "x": 0,
+        "y": 3141.0625
+      },
+      ".site-header": {
+        "height": 91,
+        "width": 1265,
+        "x": 0,
+        "y": 0
+      },
+      ".tag-list": {
+        "height": 24.5,
+        "width": 340.046875,
+        "x": 293,
+        "y": 941.5
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S03",
+    "label": "Listing — Build i praca zdalna",
+    "file": "evidence/S03.png",
+    "url": "http://127.0.0.1:4174/?category=Build&remote=1",
+    "mode": "full-page",
+    "regions": {
+      "#active-filters": {
+        "height": 44,
+        "width": 964,
+        "x": 269,
+        "y": 780.8125
+      },
+      ".category-list": {
+        "height": 283,
+        "width": 205,
+        "x": 32,
+        "y": 715.96875
+      },
+      ".job-card": {
+        "height": 168.1875,
+        "width": 964,
+        "x": 269,
+        "y": 876.8125
+      },
+      ".results-heading": {
+        "height": 55.34375,
+        "width": 964,
+        "x": 269,
+        "y": 675.96875
+      },
+      ".results-meta": {
+        "height": 16.5,
+        "width": 964,
+        "x": 269,
+        "y": 748.3125
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S04",
+    "label": "Listing — pusty wynik z zachowanymi kryteriami",
+    "file": "evidence/S04.png",
+    "url": "http://127.0.0.1:4174/?q=Brak+takiej+roli&category=Build&remote=1",
+    "mode": "full-page",
+    "regions": {
+      "#active-filters": {
+        "height": 44,
+        "width": 964,
+        "x": 269,
+        "y": 780.8125
+      },
+      ".empty-state": {
+        "height": 454.875,
+        "width": 964,
+        "x": 269,
+        "y": 876.8125
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S05",
+    "label": "Zapisane — stan pusty",
+    "file": "evidence/S05.png",
+    "url": "http://127.0.0.1:4174/?savedOnly=1",
+    "mode": "full-page",
+    "regions": {
+      "#saved-view": {
+        "height": 44,
+        "width": 131.59375,
+        "x": 1101.40625,
+        "y": 23
+      },
+      ".empty-state": {
+        "height": 454.875,
+        "width": 964,
+        "x": 269,
+        "y": 816.8125
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S02",
+    "label": "Listing — mobile 390",
+    "file": "evidence/S02.png",
+    "url": "http://127.0.0.1:4174/",
+    "mode": "full-page",
+    "regions": {
+      ".additional-filters": {
+        "height": 56,
+        "width": 339,
+        "x": 18,
+        "y": 893.46875
+      },
+      ".category-list": {
+        "height": 44,
+        "width": 339,
+        "x": 18,
+        "y": 841.46875
+      },
+      ".hero": {
+        "height": 564.46875,
+        "width": 339,
+        "x": 18,
+        "y": 75
+      },
+      ".job-card": {
+        "height": 215,
+        "width": 339,
+        "x": 18,
+        "y": 1204.015625
+      },
+      ".search-bar": {
+        "height": 119,
+        "width": 339,
+        "x": 18,
+        "y": 663.46875
+      },
+      ".site-header": {
+        "height": 75,
+        "width": 375,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "viewport": {
+      "clientWidth": 375,
+      "dpr": 1,
+      "height": 844,
+      "width": 390
+    }
+  },
+  {
+    "id": "S06",
+    "label": "Oferta kandydata — desktop",
+    "file": "evidence/S06.png",
+    "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+    "mode": "full-page",
+    "regions": {
+      ".ai-context": {
+        "height": 121,
+        "width": 826,
+        "x": 32,
+        "y": 799.234375
+      },
+      ".application-card": {
+        "height": 526,
+        "width": 328,
+        "x": 905,
+        "y": 464.171875
+      },
+      ".hiring-process": {
+        "height": 303.1875,
+        "width": 826,
+        "x": 32,
+        "y": 1769.796875
+      },
+      ".offer-breadcrumb": {
+        "height": 79,
+        "width": 1201,
+        "x": 32,
+        "y": 91
+      },
+      ".offer-company-about": {
+        "height": 208,
+        "width": 826,
+        "x": 32,
+        "y": 2109.984375
+      },
+      ".offer-facts": {
+        "height": 129.1875,
+        "width": 826,
+        "x": 32,
+        "y": 434.171875
+      },
+      ".offer-hero": {
+        "height": 264.171875,
+        "width": 1201,
+        "x": 32,
+        "y": 170
+      },
+      ".offer-section": {
+        "height": 171.875,
+        "width": 826,
+        "x": 32,
+        "y": 600.359375
+      },
+      ".offer-skills": {
+        "height": 92.5,
+        "width": 826,
+        "x": 32,
+        "y": 1640.296875
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S07",
+    "label": "Oferta kandydata — mobile 390",
+    "file": "evidence/S07.png",
+    "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+    "mode": "full-page",
+    "regions": {
+      ".application-card": {
+        "height": 519.59375,
+        "width": 339,
+        "x": 18,
+        "y": 2757.140625
+      },
+      ".offer-facts": {
+        "height": 203.375,
+        "width": 339,
+        "x": 18,
+        "y": 513.9375
+      },
+      ".offer-hero": {
+        "height": 376.9375,
+        "width": 339,
+        "x": 18,
+        "y": 137
+      }
+    },
+    "viewport": {
+      "clientWidth": 375,
+      "dpr": 1,
+      "height": 844,
+      "width": 390
+    }
+  },
+  {
+    "id": "S08",
+    "label": "Dialog aplikacji — formularz",
+    "file": "evidence/S08.png",
+    "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+    "mode": "viewport",
+    "regions": {
+      "#application-dialog": {
+        "height": 672,
+        "width": 620,
+        "x": 330,
+        "y": 24
+      },
+      ".application-form": null
+    },
+    "viewport": {
+      "clientWidth": 1280,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S09",
+    "label": "Dialog aplikacji — plik i dolna część",
+    "file": "evidence/S09.png",
+    "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+    "mode": "viewport",
+    "regions": {
+      "#application-dialog": {
+        "height": 672,
+        "width": 620,
+        "x": 330,
+        "y": 24
+      },
+      ".file-field": {
+        "height": 96.59375,
+        "width": 539,
+        "x": 363,
+        "y": 457.734375
+      }
+    },
+    "viewport": {
+      "clientWidth": 1280,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S10",
+    "label": "Dialog aplikacji — błędy wymaganych danych",
+    "file": "evidence/S10.png",
+    "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+    "mode": "viewport",
+    "regions": {
+      "#application-dialog": {
+        "height": 672,
+        "width": 620,
+        "x": 330,
+        "y": 24
+      }
+    },
+    "viewport": {
+      "clientWidth": 1280,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S11",
+    "label": "Rekruter — etap 1 desktop",
+    "file": "evidence/S11.png",
+    "url": "http://127.0.0.1:4174/create-job.html",
+    "mode": "full-page",
+    "regions": {
+      ".area-picker": {
+        "height": 159.5,
+        "width": 814,
+        "x": 61,
+        "y": 773.1875
+      },
+      ".composer-actions": {
+        "height": 57,
+        "width": 872,
+        "x": 32,
+        "y": 1669.6875
+      },
+      ".composer-steps": {
+        "height": 81,
+        "width": 1201,
+        "x": 32,
+        "y": 328.28125
+      },
+      ".composer-summary": {
+        "height": 554.6875,
+        "width": 300,
+        "x": 933,
+        "y": 438.28125
+      },
+      ".creator-intro": {
+        "height": 237.28125,
+        "width": 1201,
+        "x": 32,
+        "y": 91
+      },
+      ".field-grid": {
+        "height": 96.5,
+        "width": 814,
+        "x": 61,
+        "y": 957.6875
+      },
+      ".form-card": {
+        "height": 741.40625,
+        "width": 872,
+        "x": 32,
+        "y": 438.28125
+      },
+      ".salary-inputs": {
+        "height": 96.5,
+        "width": 814,
+        "x": 61,
+        "y": 1373.09375
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S12",
+    "label": "Rekruter — etap 1 mobile 390",
+    "file": "evidence/S12.png",
+    "url": "http://127.0.0.1:4174/create-job.html",
+    "mode": "full-page",
+    "regions": {
+      ".area-picker": {
+        "height": 173.5,
+        "width": 303,
+        "x": 36,
+        "y": 774.28125
+      },
+      ".composer-actions": {
+        "height": 57,
+        "width": 339,
+        "x": 18,
+        "y": 1894.46875
+      },
+      ".composer-steps": {
+        "height": 79,
+        "width": 339,
+        "x": 18,
+        "y": 346.59375
+      },
+      ".creator-intro": {
+        "height": 271.59375,
+        "width": 339,
+        "x": 18,
+        "y": 75
+      },
+      ".form-card": {
+        "height": 939.1875,
+        "width": 339,
+        "x": 18,
+        "y": 447.59375
+      }
+    },
+    "viewport": {
+      "clientWidth": 375,
+      "dpr": 1,
+      "height": 844,
+      "width": 390
+    }
+  },
+  {
+    "id": "S14",
+    "label": "Rekruter — wyłączone widełki",
+    "file": "evidence/S14.png",
+    "url": "http://127.0.0.1:4174/create-job.html",
+    "mode": "full-page",
+    "regions": {
+      ".area-picker": {
+        "height": 159.5,
+        "width": 814,
+        "x": 61,
+        "y": 773.1875
+      },
+      ".salary-inputs": {
+        "height": 96.5,
+        "width": 814,
+        "x": 61,
+        "y": 1373.09375
+      },
+      ".salary-undisclosed": {
+        "height": 44,
+        "width": 814,
+        "x": 61,
+        "y": 1463.59375
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S15",
+    "label": "Rekruter — etap 2 z treścią",
+    "file": "evidence/S15.png",
+    "url": "http://127.0.0.1:4174/create-job.html",
+    "mode": "full-page",
+    "regions": {
+      ".composer-steps": {
+        "height": 81,
+        "width": 1201,
+        "x": 32,
+        "y": 328.28125
+      },
+      ".composer-summary": {
+        "height": 554.6875,
+        "width": 300,
+        "x": 933,
+        "y": 438.28125
+      },
+      ".field": {
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 284
+      },
+      ".field-counter": null,
+      ".form-card": {
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 284
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S16",
+    "label": "Rekruter — etap 3 podgląd",
+    "file": "evidence/S16.png",
+    "url": "http://127.0.0.1:4174/create-job.html",
+    "mode": "full-page",
+    "regions": {
+      ".composer-actions": {
+        "height": 86,
+        "width": 1201,
+        "x": 32,
+        "y": 1175
+      },
+      ".composer-preview": {
+        "height": 1531.8125,
+        "width": 1201,
+        "x": 32,
+        "y": 567.78125
+      },
+      ".composer-steps": {
+        "height": 81,
+        "width": 1201,
+        "x": 32,
+        "y": 328.28125
+      },
+      ".preview-heading": {
+        "height": 96.5,
+        "width": 1201,
+        "x": 32,
+        "y": 446.28125
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S17",
+    "label": "Publikacja lokalna — potwierdzenie",
+    "file": "evidence/S17.png",
+    "url": "http://127.0.0.1:4174/create-job.html?published=local-42d32678-b4be-41e7-abdd-f2efedf3dadc",
+    "mode": "full-page",
+    "regions": {
+      ".creator-success": null,
+      ".publish-success": {
+        "height": 614.9375,
+        "width": 760,
+        "x": 252.5,
+        "y": 151
+      },
+      ".success-card": null
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S18",
+    "label": "Dialog o platformie i obszarach pracy",
+    "file": "evidence/S18.png",
+    "url": "http://127.0.0.1:4174/",
+    "mode": "viewport",
+    "regions": {
+      "#about-dialog": {
+        "height": 579.1875,
+        "width": 790,
+        "x": 245,
+        "y": 70.40625
+      },
+      "dialog[open]": {
+        "height": 579.1875,
+        "width": 790,
+        "x": 245,
+        "y": 70.40625
+      }
+    },
+    "viewport": {
+      "clientWidth": 1280,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S19",
+    "label": "Niedostępna oferta",
+    "file": "evidence/S19.png",
+    "url": "http://127.0.0.1:4174/job.html?id=unavailable",
+    "mode": "full-page",
+    "regions": {
+      ".empty-state": {
+        "height": 410.28125,
+        "width": 1201,
+        "x": 32,
+        "y": 170
+      },
+      ".job-unavailable": null
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S20",
+    "label": "Zapisana oferta — przycisk i toast",
+    "file": "evidence/S20.png",
+    "url": "http://127.0.0.1:4174/",
+    "mode": "viewport",
+    "regions": {
+      ".job-card": {
+        "height": 168.1875,
+        "width": 964,
+        "x": 269,
+        "y": 336.8125
+      },
+      ".save-job": {
+        "height": 44,
+        "width": 44,
+        "x": 1173,
+        "y": 349.8125
+      },
+      ".toast": {
+        "height": 45.5,
+        "width": 364.1875,
+        "x": 450.40625,
+        "y": 662.2853393554688
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S21",
+    "label": "Aplikacja demonstracyjna — potwierdzenie",
+    "file": "evidence/S21.png",
+    "url": "http://127.0.0.1:4174/job.html?id=forma-ai-product-designer",
+    "mode": "viewport",
+    "regions": {
+      "#application-dialog": {
+        "height": 503,
+        "width": 620,
+        "x": 330,
+        "y": 108.5
+      },
+      "#application-success": {
+        "height": 375,
+        "width": 554,
+        "x": 363,
+        "y": 205.5
+      }
+    },
+    "viewport": {
+      "clientWidth": 1280,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "id": "S13",
+    "label": "Rekruter — błędy po próbie przejścia do opisu",
+    "file": "evidence/S13.png",
+    "url": "http://127.0.0.1:4174/create-job.html",
+    "mode": "full-page",
+    "regions": {
+      "#form-error-summary": {
+        "height": 52.796875,
+        "width": 872,
+        "x": 32,
+        "y": 438.28125
+      },
+      "#title": {
+        "height": 47,
+        "width": 814,
+        "x": 61,
+        "y": 680.484375
+      },
+      ".field-error": {
+        "height": 18,
+        "width": 814,
+        "x": 61,
+        "y": 733.484375
+      },
+      ".form-card": {
+        "height": 789.40625,
+        "width": 872,
+        "x": 32,
+        "y": 511.078125
+      }
+    },
+    "viewport": {
+      "clientWidth": 1265,
+      "dpr": 1,
+      "height": 720,
+      "width": 1280
+    }
+  }
+]

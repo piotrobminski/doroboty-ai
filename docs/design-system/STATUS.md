@@ -1,42 +1,39 @@
-# Design-system integration status
+# Design-system adoption status — November 13, 2026
 
-This is a receiving-application snapshot as of November 2, 2026. The immutable reference remains Poster People v1.0.0 (67 files). User-requested host implementation/documentation does not imply a new source-kit release, publishing or approval of every application screen.
+## Runtime implementation
 
-Engineering task paths below refer to the full development repository and are deliberately not distributed in participant packages. All current component contracts and open findings are self-contained in this directory; task history and ignored screenshots are optional supporting evidence.
+The whole application now uses **Technologia po ludzku 1.1** through a shared React/Base UI adaptation. Public discovery/list/map/job/company/information/persona routes, candidate and employer workspaces, application/CV records, settings/recovery, unavailable states and operator materials use the same tokens, typography, controls and surfaces.
 
-## Implemented work and evidence
+Runtime source: [tokens](../../tokens.css), [foundation](../../src/app/design-system.css), [marketplace](../../src/app/marketplace.css), [workspace](../../src/app/workspace.css), [application](../../src/app/application.css) and [records](../../src/app/records.css). The implementation keeps HashRouter, scenario data/enums, Zod operations, local persistence/import/export, human approval, persona projections and immutable application/CV snapshots. MatchScore remains an explicitly documented scenario extension.
 
-| Area                   | Implemented contract                                                                                                           | Engineering evidence                                                        |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| Employer process view  | One reading sheet, actual event margin, integrated note/actions, proper terminal states and focus.                             | Process implementation (`docs/tasks/candidate-process-view.md`)             |
-| CV-only reading        | No CV in Answer; CV tab contains local file actions and framed native PDF; custom imports retain complete text.                | CV preview (`docs/tasks/candidate-process-cv-preview.md`)                   |
-| Heading hierarchy      | Application answer, submitted CV and recruiter note are H3, 26px/400; hidden sheet H2 preserves the outline.                   | Heading checks and follow-up (`docs/tasks/candidate-sheet-heading-size.md`) |
-| Scenario score         | Shared tag below the name and in role lists/details; red/orange/yellow/vivid-green ranges; removed visible exemplary caption.  | Score colors and contrast (`docs/tasks/match-score-colors.md`)              |
-| Action feedback        | Shared enabled-action pointer/color hover, preserved selected contrast and disabled states.                                    | Hover audit (`docs/tasks/interactive-hover-states.md`)                      |
-| Return links           | Shared BackLink anatomy and aligned public entry spacing; valid hash targets and keyboard activation.                          | Return links (`docs/tasks/shared-back-links.md`)                            |
-| Offer/application flow | Apply/Save separation; real offer context next to the form, in-place complete description, integrated CV row and mobile order. | Application redesign (`docs/tasks/application-page-redesign.md`)            |
-| Submit celebration     | Success-only button-origin burst; duplicate guard, textual feedback, cleanup and reduced-motion path.                          | Confetti implementation (`docs/tasks/application-submit-confetti.md`)       |
+Shared additions are DiscoveryHero, FormSection and the AreaIcon/AreaLabel exports. Existing PageTitle, controls, CompanyLogo, JobCard, SalaryFact, BackLink, Notice/Empty, RecordSheet, CvAttachment and ProcessTimeline remain their single owners. The old mobile-only ResponsivePanel has been replaced with inline native disclosure plus existing Base UI facet selects. No source controllers, string HTML renderers or source fixture store are mounted in React.
 
-Read the current [host catalog](HOST-COMPONENTS.md), [record APIs](RECORDS.md) and [acceptance checklist](VERIFICATION.md) before extending these patterns. Historical tasks describe their own state at the time; the current component contracts supersede earlier permanent-CV-row or always-pink-score choices.
+## Source package and approval boundary
 
-Candidate submitted detail now also uses the shared ApplicationRecord composition, with owner-filtered stage/date history, CV-only snapshot preview and focused two-step withdrawal. Repository-only execution evidence: `docs/tasks/candidate-submitted-record-redesign.md`. This does not resolve the company-page audit below.
+The complete 177-file [Technologia po ludzku reference](technologia-po-ludzku/) and 67-file [historical kit](agent-kit/) remain byte-preserved against their manifests. Runtime Geist Serif and legacy illustration imports have been removed. The approved angular-alpha collage is resolved by Vite; fonts use system sans/mono stacks.
 
-## Open company-page findings
+The user **accepted** the [1.1 specification](PROPOSED-1.1.md) on 2026-11-13. The new package is frozen with six profiles within the existing 25 families. The preserved v1 manifest plus archived changed-file originals reconstruct all 168 original file hashes. See the [release and audit task](../tasks/design-system-1.1-release-and-audit.md); the application audit follows the reference release.
 
-The Northstar Health audit (`docs/tasks/northstar-company-design-audit.md`) was read-only. The following findings are **open**, not fixed by the later confetti work or this documentation update:
+## Previously open company findings
 
-| ID    | Remaining issue                                                                                                 |
-| ----- | --------------------------------------------------------------------------------------------------------------- |
-| NH-01 | Invalid definition-list structure; targeted Axe scan reports serious `definition-list` and `dlitem` violations. |
-| NH-02 | Company information surface lacks the expected white fill and visible ink contour.                              |
-| NH-03 | Header identity fallback lacks a visible contour and uses the older large treatment.                            |
-| NH-04 | Company cards omit save toggles even for an active candidate because the saved state is not supplied.           |
-| NH-05 | Company/profile footer lacks the demonstrative-data context present in C08/C12.                                 |
+| ID    | Current implementation / evidence                                                                                                                                  |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| NH-01 | Grouped dl/dt/dd facts; website navigation outside dl. Dedicated DOM assertion and route accessibility check.                                                      |
+| NH-02 | Source-derived paper/card/line roles and 12px surface; company screenshots at 1280/390/320px.                                                                      |
+| NH-03 | Shared neutral CompanyLogo, genuine local marks and initials/error fallback; separate C markers on job cards. Long/missing-data case includes a broken local logo. |
+| NH-04 | Candidate save action/state is resolved inside the single JobCard across company/home/related/list/saved callers. Dedicated save/reload/cross-route regression.    |
+| NH-05 | Synthetic-company context and honest empty-company copy with a working return to all jobs; populated and empty-company screenshots.                                |
 
-The full company-page layout is not a canonical v1 screen. Container alignment, contextual BackLink and richer empty-state recovery are documented host recommendations; do not convert them into invented source requirements. The audit does not require the compact source profile's H2 size or illustration on every full company page.
+These are implemented and locally tested findings; user design acceptance remains separate. The original audits retain their dated evidence.
 
-## Evidence boundaries
+## Verification evidence
 
-The latest completed implementation gate, including the shared candidate record, ran 27 unit tests and 34 Chromium journeys, plus formatting, source-kit integrity/six kit tests, lint, types, packet and static build. Those counts are dated execution evidence, not a permanent acceptance guarantee or a claim about future changes. The current task records its own execution separately.
+The [redesign task](../tasks/technologia-po-ludzku-app-redesign.md) records actual commands, results, source/host comparison and separate review. The [portable verification record](redesign-verification.json) contains the final gate result and limitations. Representative captures are in [redesign-evidence/](redesign-evidence/index.html); the full local matrix is generated under artifacts/technologia-po-ludzku/ by [the route checks](../../tests/e2e/design-system.spec.ts).
 
-A green gate does not close NH-01: the existing general accessibility journeys do not scan that company-page structure. Add targeted company accessibility/save regressions when fixing it. The older audit (`docs/tasks/poster-people-design-system-audit.md`), re-audit (`docs/tasks/poster-people-design-system-reaudit.md`) and subsequent task evidence remain historical records; do not erase them or infer a new closure from a documentation edit. Ignored artifacts support local review but are not the sole portable specification.
+The prior [installation record](installation-verification.json) remains historical: its missing-browser failure describes that installation, not the current redesign. Neither the original kit checks nor a green automated gate establishes a full assistive-technology audit, human research result, CI result, publishing or source-release approval.
+
+## 1.1 compliance audit
+
+The separate audit follows the frozen reference release. Read [the audit report](audits/1.1/AUDIT.md) for measured before/after findings, family coverage and actual remaining limitations. Its evidence is separate from the original redesign delivery.
+
+The completed 1.1 audit closed three findings through existing shared owners. All 128 focused measurements and the full gate (44 browser tests, 27 host units, 10 reference tests) pass. See [final audit verification](audits/1.1/verification.json). The reference hash stayed fixed throughout the application corrections.

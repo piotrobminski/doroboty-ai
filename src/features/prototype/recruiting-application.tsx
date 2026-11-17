@@ -4,10 +4,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { ApplicationRecord } from "./application-record";
 import { nextStages, stageLabels, type Application } from "./model";
 import { usePrototype } from "./store";
+import { decisionReasonSchema } from "./competency";
+import { CompetencyInsightPanel } from "./competency-insight-panel";
 
 export function RecruitingApplication({ application }: { application: Application }) {
   const { state, run } = usePrototype();
   const [note, setNote] = useState("");
+  const [error, setError] = useState("");
+  const noteRef = useRef<HTMLTextAreaElement>(null);
   const [announcement, setAnnouncement] = useState("");
   const statusRef = useRef<HTMLSpanElement>(null);
   const pendingFocus = useRef(false);
@@ -29,16 +33,32 @@ export function RecruitingApplication({ application }: { application: Applicatio
         audience="employer"
         history={application.events}
         statusRef={statusRef}
+        answerSupport={
+          application.competency ? (
+            <CompetencyInsightPanel competency={application.competency} />
+          ) : undefined
+        }
         footer={
           availableStages.length > 0 ? (
             <>
-              <p className="record-caption">Notatka zapisze się w historii po zmianie etapu.</p>
+              <p className="record-caption">
+                {application.competency
+                  ? "Uzasadnienie jest wymagane (minimum 20 znaków) i zapisze się w historii po zmianie etapu."
+                  : "Notatka zapisze się w historii po zmianie etapu."}
+              </p>
               <div className="record-actions">
                 {availableStages.map((stage) => (
                   <Button
                     key={stage}
                     variant={stage === "rejected" ? "outline" : "default"}
                     onClick={() => {
+                      if (application.competency && !decisionReasonSchema.safeParse(note).success) {
+                        setError(
+                          "Uzasadnij następny krok, odnosząc się do wymagań i odpowiedzi (minimum 20 znaków).",
+                        );
+                        noteRef.current?.focus();
+                        return;
+                      }
                       if (run({ type: "stage", applicationId: application.id, stage, note })) {
                         setNote("");
                         setAnnouncement(`Zapisano etap: ${stageLabels[stage]}.`);
@@ -61,21 +81,39 @@ export function RecruitingApplication({ application }: { application: Applicatio
         {availableStages.length > 0 ? (
           <>
             <h3>
-              <label htmlFor="recruiting-note">Notatka rekrutacyjna</label>
+              <label htmlFor="recruiting-note">
+                {application.competency ? "Uzasadnienie następnego kroku" : "Notatka rekrutacyjna"}
+              </label>
             </h3>
             <p className="record-caption" id="recruiting-note-hint">
               Widoczna tylko pracodawcy w tym scenariuszu.
             </p>
             <Textarea
               id="recruiting-note"
-              aria-label="Notatka rekrutacyjna (widoczna pracodawcy)"
-              aria-describedby="recruiting-note-hint"
+              ref={noteRef}
+              aria-label={
+                application.competency
+                  ? "Uzasadnienie następnego kroku"
+                  : "Notatka rekrutacyjna (widoczna pracodawcy)"
+              }
+              aria-invalid={!!error || undefined}
+              aria-describedby={
+                error ? "recruiting-note-hint recruiting-note-error" : "recruiting-note-hint"
+              }
               maxLength={12000}
               rows={4}
               value={note}
-              onChange={(event) => setNote(event.target.value)}
+              onChange={(event) => {
+                setNote(event.target.value);
+                setError("");
+              }}
               placeholder="Co warto sprawdzić w rozmowie?"
             />
+            {error && (
+              <p id="recruiting-note-error" role="alert" className="error-message">
+                {error}
+              </p>
+            )}
           </>
         ) : null}
       </ApplicationRecord>

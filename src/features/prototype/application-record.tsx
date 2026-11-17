@@ -6,6 +6,8 @@ import { CvAttachment } from "./cv-attachment";
 import { MatchScore } from "./match-score";
 import { stageLabels, type Application, type Stage } from "./model";
 
+import { CompetencyComparison } from "./competency-responses";
+
 type RecordEvent = { stage: Stage; at: string; note?: string };
 const dateFormat = new Intl.DateTimeFormat("pl-PL", {
   dateStyle: "medium",
@@ -21,10 +23,19 @@ export function ApplicationRecord({
   statusRef,
   children,
   footer,
+  answerSupport,
 }: {
   application: Pick<
     Application,
-    "candidateId" | "candidateName" | "jobTitle" | "stage" | "answer" | "cv" | "score" | "summary"
+    | "candidateId"
+    | "candidateName"
+    | "jobTitle"
+    | "stage"
+    | "answer"
+    | "cv"
+    | "score"
+    | "summary"
+    | "competency"
   >;
   companyName: string;
   audience: "candidate" | "employer";
@@ -32,6 +43,7 @@ export function ApplicationRecord({
   statusRef?: Ref<HTMLSpanElement>;
   children?: ReactNode;
   footer?: ReactNode;
+  answerSupport?: ReactNode;
 }) {
   const candidate = audience === "candidate";
   const title = candidate ? application.jobTitle : application.candidateName;
@@ -71,7 +83,12 @@ export function ApplicationRecord({
             {
               value: "answer",
               label: "Odpowiedź",
-              content: (
+              content: application.competency ? (
+                <>
+                  {answerSupport}
+                  <CompetencyComparison competency={application.competency} />
+                </>
+              ) : (
                 <>
                   <h3>Przesłana aplikacja</h3>
                   <p>{application.answer}</p>

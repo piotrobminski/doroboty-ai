@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-13",
+  "branch": "main",
+  "referenceVersion": "1.1.0",
+  "referenceFiles": 177,
+  "sourceFamilies": 25,
+  "compositionProfiles": 6,
+  "referenceManifestSha256": "9f87a8a73869b91686f4e5db00042a7f60459b188b97d86a8b50c3b24caf2e3b",
+  "originalV1ReconstructedFiles": 168,
+  "legacyInventoryFiles": 67,
+  "sourceChangedDuringApplicationAudit": false,
+  "findings": {
+    "before": 3,
+    "closed": 3,
+    "openInTestedScope": 0
+  },
+  "measurements": {
+    "passed": 128,
+    "failed": 0,
+    "widths": [1280, 390, 320]
+  },
+  "focusedAxeViewWidthCombinations": 9,
+  "focusedAxeViolations": 0,
+  "routeRoleStates": 38,
+  "routeViews": 114,
+  "fullGate": {
+    "command": "./scripts/verify",
+    "exitCode": 0,
+    "node": "v24.22.1",
+    "hostUnitTests": 27,
+    "referenceTests": 10,
+    "browserTests": 44,
+    "browserWorkers": 7,
+    "browserDurationSeconds": 15.1,
+    "baselineJourneys": 120,
+    "format": "passed",
+    "lint": "passed",
+    "types": "passed",
+    "referenceIntegrity": "passed",
+    "build": "passed"
+  },
+  "sourcePackageValidation": {
+    "portableBuildFiles": 177,
+    "portableExportFiles": 177,
+    "zipContentHashes": "all 177 match frozen source",
+    "embeddedSignatures": "all 16 pass",
+    "sourceBrowserWidths": [1280, 390, 320],
+    "sourceBrowserAxeViolations": 0
+  },
+  "review": "Separate release diff and application shared-fix review completed. Domain model, routes, persistence/store and fixture bytes unchanged.",
+  "buildWarnings": [
+    "Nonfatal Zod PURE-comment annotation notices",
+    "Existing main-JS chunk size advisory above 500 kB"
+  ],
+  "limitations": [
+    "No manual screen-reader session or physical-device audit",
+    "No complete WCAG certification",
+    "No CI, deployment or recruiting effectiveness claimed"
+  ]
+}

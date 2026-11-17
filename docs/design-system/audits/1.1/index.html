@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Design system 1.1 — application audit</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f7f5ed;
+        color: #171b19;
+        font:
+          16px/1.6 Arial,
+          Helvetica,
+          sans-serif;
+      }
+      main {
+        max-width: 1380px;
+        margin: auto;
+        padding: 40px 24px;
+      }
+      header {
+        border-top: 4px solid #7b2cbf;
+        padding-block: 24px;
+      }
+      h1 {
+        font-size: clamp(32px, 4vw, 52px);
+        line-height: 1.08;
+        letter-spacing: -0.045em;
+        max-width: 20ch;
+      }
+      h2 {
+        font-size: 28px;
+        line-height: 1.15;
+      }
+      p {
+        color: #596159;
+        max-width: 85ch;
+      }
+      a {
+        color: #7b2cbf;
+      }
+      section {
+        border-top: 1px solid #cbd0c4;
+        margin-top: 36px;
+        padding-top: 24px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 20px;
+      }
+      figure {
+        margin: 16px 0;
+        min-width: 0;
+      }
+      figcaption,
+      .meta {
+        font:
+          11px/1.6 Consolas,
+          monospace;
+        overflow-wrap: anywhere;
+        margin-bottom: 10px;
+      }
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid #cbd0c4;
+        border-radius: 12px;
+      }
+      figure a {
+        display: block;
+        max-height: 700px;
+        overflow: auto;
+        border-radius: 12px;
+      }
+      .findings {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .finding {
+        border: 1px solid #cbd0c4;
+        border-radius: 12px;
+        background: #fffef9;
+        padding: 22px;
+      }
+      .finding h3 {
+        font-size: 20px;
+        line-height: 1.2;
+      }
+      .finding p {
+        font-size: 14px;
+      }
+      .status {
+        display: inline-block;
+        background: #eaf2e5;
+        color: #2d5f3b;
+        border: 1px solid #2d5f3b;
+        border-radius: 5px;
+        padding: 3px 8px;
+        font:
+          11px/1.6 Consolas,
+          monospace;
+      }
+      :focus-visible {
+        outline: 3px solid #7b2cbf;
+        outline-offset: 3px;
+      }
+      @media (max-width: 700px) {
+        .pair,
+        .findings {
+          grid-template-columns: 1fr;
+        }
+        .gallery {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="meta">13 NOVEMBER 2026 / MAIN / FROZEN REFERENCE 1.1.0</p>
+        <h1>Three findings.<br />Three shared corrections.</h1>
+        <p>
+          The application was measured after releasing the accepted 1.1 package. All 128 focused
+          measurements now pass against the same reference hash. No focused axe violations or
+          runtime errors remain. The complete report maps all 25 families and documents approved
+          host variations.
+        </p>
+        <p>
+          <a href="AUDIT.md">Read the audit report</a> ·
+          <a href="before/report.json">Before measurements</a> ·
+          <a href="after/report.json">After measurements</a>
+        </p>
+        <p class="meta" id="gate-result">
+          Full regression gate passed: 44 browser tests, 27 host unit tests, 10 reference tests;
+          baseline, formatting, lint, types, build and reference integrity passed.
+        </p>
+      </header>
+      <div class="findings">
+        <article class="finding">
+          <span class="status">DS11-01 · CLOSED</span>
+          <h3>Comfortable consent targets</h3>
+          <p>
+            24px label height at desktop/390px became a shared 44px minimum at all three widths.
+            This is a design-system target; no AA minimum violation was claimed.
+          </p>
+        </article>
+        <article class="finding">
+          <span class="status">DS11-02 · CLOSED</span>
+          <h3>Canonical filter labels</h3>
+          <p>
+            remote/senior are now Zdalnie/Senior in visible chips and accessible removal names,
+            while URL values and keyboard recovery stay intact.
+          </p>
+        </article>
+        <article class="finding">
+          <span class="status">DS11-03 · CLOSED</span>
+          <h3>Named shared job cards</h3>
+          <p>
+            Every JobCard article is associated with its own unique title heading, including shared
+            callers and save-state changes.
+          </p>
+        </article>
+      </div>
+      <section>
+        <h2>Readable filter criteria</h2>
+        <p>
+          Persisted enum values stay in the URL; visible labels and removal names now use canonical
+          presentation text.
+        </p>
+        <div class="pair">
+          <figure>
+            <figcaption>Before correction</figcaption>
+            <a href="before/criteria-390.png"
+              ><img
+                src="before/criteria-390.png"
+                alt="Readable filter criteria: first comparison"
+                loading="lazy"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>Verified host / after correction</figcaption>
+            <a href="after/criteria-390.png"
+              ><img
+                src="after/criteria-390.png"
+                alt="Readable filter criteria: host result"
+                loading="lazy"
+            /></a>
+          </figure>
+        </div>
+      </section>
+      <section>
+        <h2>Source / host listing</h2>
+        <p>
+          Same measured discovery/card type, C marker color roles and calm card geometry. Host
+          records and richer salary facts remain authoritative.
+        </p>
+        <div class="pair">
+          <figure>
+            <figcaption>Frozen 1.1 reference</figcaption>
+            <a href="after/source-listing-1280.png"
+              ><img
+                src="after/source-listing-1280.png"
+                alt="Source / host listing: first comparison"
+                loading="lazy"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>Verified host / after correction</figcaption>
+            <a href="after/listing-1280.png"
+              ><img
+                src="after/listing-1280.png"
+                alt="Source / host listing: host result"
+                loading="lazy"
+            /></a>
+          </figure>
+        </div>
+      </section>
+      <section>
+        <h2>Approved profiles / host form</h2>
+        <p>
+          The 1.1 composition gallery defines reusable groups and record surfaces. The host keeps
+          its own single-page form and actual approvals.
+        </p>
+        <div class="pair">
+          <figure>
+            <figcaption>Frozen 1.1 reference</figcaption>
+            <a href="after/source-profiles-1280.png"
+              ><img
+                src="after/source-profiles-1280.png"
+                alt="Approved profiles / host form: first comparison"
+                loading="lazy"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>Verified host / after correction</figcaption>
+            <a href="after/editor-1280.png"
+              ><img
+                src="after/editor-1280.png"
+                alt="Approved profiles / host form: host result"
+                loading="lazy"
+            /></a>
+          </figure>
+        </div>
+      </section>
+      <section>
+        <h2>Responsive host profiles</h2>
+        <div class="gallery">
+          <figure>
+            <figcaption>listing-320</figcaption>
+            <a href="after/listing-320.png"
+              ><img src="after/listing-320.png" alt="listing-320" loading="lazy"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>editor-390</figcaption>
+            <a href="after/editor-390.png"
+              ><img src="after/editor-390.png" alt="editor-390" loading="lazy"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>record-320</figcaption>
+            <a href="after/record-320.png"
+              ><img src="after/record-320.png" alt="record-320" loading="lazy"
+            /></a>
+          </figure>
+          <figure>
+            <figcaption>profile-390</figcaption>
+            <a href="after/profile-390.png"
+              ><img src="after/profile-390.png" alt="profile-390" loading="lazy"
+            /></a>
+          </figure>
+        </div>
+      </section>
+      <section>
+        <h2>Evidence boundary</h2>
+        <p>
+          38 route/person/state combinations are checked at 1280/390/320px. Desktop route axe checks
+          and focused source/host measurements supplement keyboard, error, recovery, snapshot and
+          long/missing-data journeys. No manual screen-reader session, physical-device test,
+          complete WCAG certification, CI or deployment is claimed.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

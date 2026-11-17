@@ -1,19 +1,23 @@
 # DoRoboty.ai — AIPH3 prototype
 
-A frontend-only job marketplace for participants to extend and test. Built with React, TypeScript and Vite, using Base UI components. The required visual direction for new and changed screens is the accepted Poster People design system.
+A browser-local job marketplace for participants to extend and test, with local recruiter-question proposals and an optional, disconnected OpenAI gateway. Built with React, TypeScript and Vite, using Base UI components. The required visual direction for new and changed screens is the accepted **Technologia po ludzku** design system.
 
 ## Design system — start here for UI work
 
-Read [project integration instructions](docs/design-system/README.md), [host implementation rules](docs/design-system/IMPLEMENTATION.md) and [application acceptance checklist](docs/design-system/VERIFICATION.md), then [design.md](docs/design-system/agent-kit/design.md), [component API](docs/design-system/agent-kit/components/API.md) and the relevant [human documentation](docs/design-system/agent-kit/reference/index.html). The complete 67-file kit is stored under docs/design-system/agent-kit, including reusable CSS/JS, component states, listing/offer examples, screenshots, Geist Serif with license and illustration. No other chat or global skill is required.
+**Build all new and changed screens from Technologia po ludzku.** Start with [project integration](docs/design-system/README.md), [host mapping](docs/design-system/IMPLEMENTATION.md), [existing owners](docs/design-system/HOST-COMPONENTS.md) and [acceptance checklist](docs/design-system/VERIFICATION.md), then [design.md](docs/design-system/technologia-po-ludzku/agent-kit/design.md), [component contract](docs/design-system/technologia-po-ludzku/agent-kit/components.md) and the [25-family human documentation](docs/design-system/technologia-po-ludzku/docs/design-system/v1/index.html).
+
+The complete 177-file 1.1 agent package is checked in at docs/design-system/technologia-po-ludzku/: original source styles/modules, assets, illustration/logo examples, runnable screens, source screenshots and verification. No other chat or global skill is required. The required direction is Królewski fiolet #7B2CBF, secondary lime #C2F970, warm paper/graphite, sans typography and the alpha/angular human collage. Company and area markers have separate meanings.
 
 ```sh
 npm run design-system:check
 npm run design-system:dev
 ```
 
-With Node 24, the first command verifies the preserved kit and examples; the second serves a separate local preview at http://127.0.0.1:8952/. No kit installation is needed. The main app uses port 3001 as below.
+Use Node 24; no installation inside the kit is needed. The preview serves at http://127.0.0.1:8952/ui-examples.html. Also inspect /ui-long-content.html, /, /job.html?id=forma-ai-product-designer and /create-job.html. Use `UI_KIT_PORT=8953` for a conflict. Main product development remains port 3001.
 
-Build UI from this system, adapting its anatomy and visual roles into the existing React/Base UI components and host tokens. Preserve application behavior and hash routing; do not replace product state with the standalone demo fixtures/controllers. The application has a host adaptation. For every UI task, compare the affected anatomy, type roles, state and keyboard behavior with the reference; passing kit checks alone does not establish visual acceptance. See the integration guide for exact reading order, assets, React mapping, responsive rules and verification. AGENTS.md and CLAUDE.md enforce the same direction.
+Adapt the reference into the existing React/Base UI components and host tokens while preserving hash routing and application behavior. Do not paste the vanilla controllers, global reset or fixture state into React. The current React host implements the new system; the old Poster People kit is retained for compatibility/history, not as an alternative new-screen target. Root AGENTS.md, CLAUDE.md and GUI.md enforce the same instruction.
+
+[Integration status](docs/design-system/STATUS.md) records the whole-application migration and the accepted 1.1 release and separate application audit. Each UI task still needs actual source/host comparison, relevant state/keyboard checks and `./scripts/verify`.
 
 ## Run
 
@@ -24,9 +28,23 @@ npm ci
 npm run dev
 ```
 
-Open http://127.0.0.1:3001. No environment file, account, database or additional service is required. Package installation requires access to the npm registry.
+Open http://127.0.0.1:3001. Manual recruiting workflows need no environment file, provider account, database or additional service. Package installation requires access to the npm registry.
 
-Select Anna or Marek as a candidate, Karolina or Tomasz as an employer, or the instructor. Publish a job, apply, switch person and record the employer decision. Changes survive reload in this browser; settings provide export, import and reset. AI and scores simulate prepared scenarios. Use example CVs only.
+Select Anna or Marek as a candidate, Karolina or Tomasz as an employer, or the instructor. Publish a job, apply, switch person and record the employer decision. Changes survive reload in this browser; settings provide export, import and reset. Scores and summaries remain fixed scenario examples. The guided job composer proposes questions locally, with no API key or credits. Use synthetic descriptions and example CVs only.
+
+## Guided recruiter proposals
+
+Create an offer in three steps: describe the role and terms; review suggested skills/questions; preview and approve publication. Local templates use the actual description and show source excerpts. Edit, add/remove or skip questions. Moving to preview confirms their review; clicking Publish approves the offer. There are no additional approval checkboxes. No API key, credits or network access is needed, including with a static build. These proposals simulate the experience; they do not demonstrate model quality or assess candidates.
+
+Partial forms are stored per recruiter and offer within the scenario. Reload restores text and selection, requiring review again. Export/import/reset includes these drafts. Existing source briefs, generated descriptions and model provenance are preserved on edit without being presented as new approved content.
+
+For submitted competency-question applications, the employer sees an automatic local evidence hint in the Answer tab: requirement-by-requirement statuses, exact answer excerpts and follow-up questions. It compares the submitted text, not verified ability, and leaves the next-step decision/reason with the recruiter. It does not analyze CVs, open materials, rank people or change the fixed scenario MatchScore. No provider request is made.
+
+## Optional recruiter AI
+
+The existing server-only `/api/recruiter-ai` gateway remains available for future integration, but the current form never calls it, even when a key is configured. Keep an existing `.env.local` private. Do not paste keys into chat, browser fields, source or a `VITE_*` variable. [.env.example](.env.example) contains empty/sample values only. OPENAI_API_KEY and optional OPENAI_MODEL (default gpt-5-mini) are read only by Vite's Node middleware in local dev/preview; no key enters dist/ or participant packages.
+
+The gateway accepts bounded loopback/same-origin job-text requests and validates structured output. It is not a public authenticated service. Reconnecting a provider to the UI requires an explicit product change and transfer disclosure; local proposal generation has no paid fallback.
 
 ## Build and verify
 
@@ -36,6 +54,12 @@ npm run preview
 ./scripts/verify
 ```
 
-The static output is dist/. Browser checks require an already provisioned Playwright Chromium; starting the app never installs it. See [participant guide](docs/PARTICIPANT_GUIDE.md), [architecture](docs/architecture.md), [current features](FEATURES.md) and [case protocol](docs/case/CASE_PROTOCOL.md).
+For parallel local work, set `PROTOTYPE_TEST_PORT` to an unused port when running checks (default 3106). The browser origin and local AI-origin checks use that same port.
+
+The static output is dist/. Automated browser checks explicitly disable the real key and exercise the local proposals, including offline behavior; server tests inject a fake provider. They make no paid API calls. Browser checks require an already provisioned Playwright Chromium; starting the app never installs it. See [participant guide](docs/PARTICIPANT_GUIDE.md), [architecture](docs/architecture.md), [current features](FEATURES.md) and [case protocol](docs/case/CASE_PROTOCOL.md).
 
 To distribute a baseline participant package, run npm run package:participant -- /absolute/output/directory. This excludes Git history and instructor source material. Never distribute this repository’s history as a stage-safe packet.
+
+For an already provisioned alternative Chromium, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/absolute/path/to/executable` when running `./scripts/verify`. The default continues to use Playwright's provisioned browser; this option never downloads or installs browsers.
+
+The [1.1 documentation](docs/design-system/technologia-po-ludzku/docs/design-system/v1.1/index.html) and [profile gallery](docs/design-system/technologia-po-ludzku/ui-host-profiles.html) are part of the frozen reference. With the local app and reference servers running, `npm run audit:design-system -- after` reproduces the source/host measurements using an already provisioned Chromium.

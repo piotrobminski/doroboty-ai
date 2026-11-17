@@ -1,64 +1,70 @@
+import { useId } from "react";
 import { Link } from "react-router";
-import { ArrowUpRight, Bookmark, MapPin, Monitor } from "lucide-react";
+import { Bookmark, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePrototype } from "@/features/prototype/store";
+import { currentPerson } from "@/features/prototype/model";
 import type { JobWithCompany } from "./types";
-import { categoryLabels, functionLabels, remoteLabels, seniorityLabels } from "./presentation";
+import { functionLabels, remoteLabels, seniorityLabels } from "./presentation";
 import { CompanyLogo } from "./company-logo";
 import { SalaryFact } from "./salary-fact";
+import { AreaLabel } from "./area-label";
 export function JobCard({ job, saved }: { job: JobWithCompany; saved?: boolean }) {
-  const { run } = usePrototype();
+  const { state, run } = usePrototype();
+  const headingId = useId();
+  const person = currentPerson(state);
+  const savedState =
+    person?.role === "candidate"
+      ? (saved ??
+        state.saved.some((item) => item.candidateId === person.id && item.jobId === job.id))
+      : undefined;
   return (
-    <article className="pp-job-card">
-      <CompanyLogo company={job.company} />
-      <div className="pp-job-main">
-        <div className="pp-job-topline">
-          <Link className="pp-job-company" to={`/firmy/${job.company.slug}`}>
-            {job.company.name}
-          </Link>
-          <span className="pp-separator">/</span>
-          <span className="pp-job-category">{categoryLabels[job.category]}</span>
+    <article className="tph-job-card" aria-labelledby={headingId}>
+      <div className="tph-card-top">
+        <CompanyLogo company={job.company} area={job.category} />
+        <div className="tph-job-main">
+          <div className="tph-job-topline">
+            <Link className="tph-job-company" to={`/firmy/${job.company.slug}`}>
+              {job.company.name}
+            </Link>
+            <AreaLabel area={job.category} />
+          </div>
+          <h3 className="tph-job-title" id={headingId}>
+            <Link to={`/oferty/${job.slug}`}>{job.title}</Link>
+          </h3>
         </div>
-        <h3 className="pp-job-title">
-          <Link to={`/oferty/${job.slug}`}>{job.title}</Link>
-        </h3>
-        <div className="pp-job-facts">
-          <span>
-            <MapPin className="pp-icon" />
-            {job.locations.join(" / ")}
-          </span>
-          <span>
-            <Monitor className="pp-icon" />
-            {remoteLabels[job.remoteStatus]}
-          </span>
-          <span>{seniorityLabels[job.seniority]}</span>
-        </div>
-        <div className="pp-job-tags">
-          <span>{functionLabels[job.function]}</span>
-        </div>
+        {savedState !== undefined && (
+          <Button
+            className="tph-save-button"
+            variant="ghost"
+            size="icon"
+            aria-label={`Zapisz ofertę: ${job.title}`}
+            aria-pressed={savedState}
+            onClick={() => run({ type: "toggle_saved", jobId: job.id })}
+          >
+            <Bookmark aria-hidden="true" />
+          </Button>
+        )}
       </div>
-      <div className="pp-job-side">
-        <div className="pp-job-side-top">
-          <span className="pp-job-age">
-            {new Intl.DateTimeFormat("pl-PL").format(new Date(job.publishedAt))}
-          </span>
-          {saved !== undefined && (
-            <Button
-              className="pp-save-button"
-              variant="ghost"
-              size="icon-sm"
-              aria-label={`Zapisz ofertę: ${job.title}`}
-              aria-pressed={saved}
-              onClick={() => run({ type: "toggle_saved", jobId: job.id })}
-            >
-              <Bookmark className="pp-icon" />
-            </Button>
-          )}
+      <div className="tph-card-facts">
+        <div className="tph-job-facts">
+          <MapPin className="tph-icon" aria-hidden="true" />
+          <span>{job.locations.join(" / ")}</span>
+          <span aria-hidden="true">·</span>
+          <span>{remoteLabels[job.remoteStatus]}</span>
         </div>
         <SalaryFact job={job} />
-        <Link className="pp-detail-button" to={`/oferty/${job.slug}`}>
-          Zobacz rolę <ArrowUpRight className="pp-icon" />
-        </Link>
+      </div>
+      <div className="tph-card-bottom">
+        <div className="tph-job-tags">
+          <span>{seniorityLabels[job.seniority]}</span>
+          <span>{functionLabels[job.function]}</span>
+        </div>
+        <time className="tph-job-age" dateTime={job.publishedAt}>
+          {new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "short" }).format(
+            new Date(job.publishedAt),
+          )}
+        </time>
       </div>
     </article>
   );

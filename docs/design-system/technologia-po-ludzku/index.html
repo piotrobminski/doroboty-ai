@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F7F5ED">
+  <meta name="description" content="Buduj AI. Wykorzystuj ją w pracy. Prowadź zmianę. Znajdź swój kierunek z DoRoboty.ai — demonstracyjny listing ofert pracy.">
+  <title>DoRoboty.ai — Twoja praca. Nowa inteligencja.</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="icon-colors.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body class="tph-theme">
+  <a class="skip-link" href="#offers">Przejdź do ofert</a>
+  <header class="site-header">
+    <div class="header-inner shell">
+      <a class="wordmark" href="./" aria-label="DoRoboty.ai — strona główna">doRoboty<span>.ai</span><span class="brand-arrow" aria-hidden="true">↗</span></a>
+      <nav class="main-nav" aria-label="Nawigacja główna">
+        <a href="#offers" class="nav-link active" id="offers-link">Oferty pracy</a>
+        <button class="nav-link" id="about-button" type="button">O platformie <span aria-hidden="true">↗</span></button>
+      </nav>
+      <a class="button button-outline listing-create-link" href="create-job.html">Dodaj ofertę ↗</a>
+      <button class="saved-nav" id="saved-view" type="button" aria-pressed="false" aria-label="Zapisane oferty: 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 4.5h12v16L12 16l-6 4.5z"/></svg>
+        <span>Zapisane</span><span class="saved-count" id="saved-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="signal-dot" aria-hidden="true"></span>Ludzie × technologia</p>
+        <h1 id="hero-title">Twoja praca.<br>Nowa <span class="highlight">inteligencja.</span></h1>
+        <p class="hero-description">Buduj AI. Wykorzystuj ją w pracy.<br>Prowadź zmianę. Znajdź miejsce dla siebie.</p>
+        <a class="button button-dark hero-action" href="#offers">Znajdź swoją rolę <span aria-hidden="true">↘</span></a>
+        <div class="hero-footnote"><span class="small-cross" aria-hidden="true">+</span><span>Różne talenty. Wspólny kierunek.</span></div>
+      </div>
+      <div class="hero-art">
+        <img src="assets/human-technology-hero-angular.png" width="1536" height="1024" alt="" fetchpriority="high">
+        <span class="art-caption"><span aria-hidden="true">↗</span> Przyszłość ma ludzką twarz.</span>
+      </div>
+    </section>
+
+    <section class="opportunities" id="offers" aria-labelledby="results-title">
+      <form class="search-bar" id="search-form" role="search" aria-label="Wyszukaj ofertę pracy">
+        <div class="search-keyword">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+          <label class="sr-only" for="query">Stanowisko, umiejętność lub firma</label>
+          <input id="query" name="q" type="search" placeholder="Stanowisko, umiejętność lub firma" autocomplete="off">
+        </div>
+        <div class="search-location">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M19 10c0 5-7 10-7 10S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.3"/></svg>
+          <label class="sr-only" for="location">Lokalizacja</label>
+          <select id="location" name="location"><option value="">Cała Polska</option><option>Warszawa</option><option>Kraków</option><option>Wrocław</option><option>Poznań</option><option>Gdańsk</option></select>
+        </div>
+        <button class="button button-dark search-submit" type="submit">Szukaj ofert <span aria-hidden="true">↗</span></button>
+      </form>
+
+      <div class="listing-layout">
+        <aside class="sidebar" aria-label="Filtry ofert">
+          <div class="filter-heading"><h2 class="eyebrow">Obszar pracy</h2><button id="reset-filters" class="text-button" type="button" hidden>Wyczyść</button></div>
+          <div class="category-list" role="group" aria-label="Obszar pracy z AI">
+            <button class="category-button selected" data-category="all" aria-pressed="true" type="button"><span class="category-copy"><strong>Wszystkie obszary</strong></span><span class="category-count" data-count="all">12</span></button>
+            <button class="category-button" data-category="Build" aria-pressed="false" type="button"><span class="category-copy"><strong><span class="category-symbol" aria-hidden="true">⌘</span> Build</strong><small>Buduj AI</small></span><span class="category-count" data-count="Build">5</span></button>
+            <button class="category-button" data-category="Apply" aria-pressed="false" type="button"><span class="category-copy"><strong><span class="category-symbol" aria-hidden="true">✳</span> Apply</strong><small>Używaj AI w pracy</small></span><span class="category-count" data-count="Apply">4</span></button>
+            <button class="category-button" data-category="Lead" aria-pressed="false" type="button"><span class="category-copy"><strong><span class="category-symbol" aria-hidden="true">↗</span> Lead</strong><small>Prowadź zmianę</small></span><span class="category-count" data-count="Lead">3</span></button>
+          </div>
+
+          <details class="additional-filters" open>
+            <summary>Więcej filtrów <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></summary>
+            <div class="facet-fields">
+              <div class="facet"><label for="level">Doświadczenie</label><select id="level"><option value="">Każdy poziom</option><option>Junior</option><option>Mid</option><option>Senior</option><option>Lead</option></select></div>
+              <div class="facet"><label for="contract">Typ umowy</label><select id="contract"><option value="">Wszystkie umowy</option><option>B2B</option><option value="UoP">Umowa o pracę</option></select></div>
+              <label class="checkbox-field"><input id="remote" type="checkbox"><span>Tylko praca zdalna</span></label>
+              <label class="checkbox-field"><input id="salary" type="checkbox"><span>Tylko z widełkami</span></label>
+            </div>
+          </details>
+
+          <div class="sidebar-note">
+            <p class="eyebrow">Wspólny mianownik</p>
+            <p class="sidebar-note-title">Technologia.<br>Po ludzku.</p>
+            <svg viewBox="0 0 180 100" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="31" width="35" height="35" rx="5"/><rect x="73" y="12" width="35" height="35" rx="5"/><rect x="132" y="50" width="35" height="35" rx="5"/><path d="M49 49H61V30H73M108 30H120V67H132"/><circle cx="31" cy="49" r="4"/><circle cx="91" cy="30" r="4"/><circle cx="149" cy="67" r="4"/></svg>
+            <p>Nie musisz tworzyć AI,<br>żeby tworzyć z nią przyszłość.</p>
+            <button class="sidebar-about" type="button" data-open-about>Poznaj trzy obszary <span aria-hidden="true">↗</span></button>
+          </div>
+        </aside>
+
+        <div class="results">
+          <div class="results-heading">
+            <div><p class="eyebrow results-kicker">Twój następny krok</p><h2 id="results-title">Znajdź swój kierunek.</h2></div>
+            <div class="results-sort"><label for="sort">Sortuj:</label><select id="sort"><option value="newest">Najnowsze</option><option value="salary">Najwyższa pensja</option></select></div>
+          </div>
+          <div class="results-meta"><p id="result-count" role="status" aria-live="polite" aria-atomic="true">12 przykładowych ofert</p><span class="demo-mark"><span aria-hidden="true"></span>Wersja demo</span></div>
+          <div class="active-filters" id="active-filters" aria-label="Aktywne filtry" hidden></div>
+          <div class="icon-legend" id="icon-legend" aria-label="Znaczenie kolorów ikon" hidden></div>
+          <div class="job-list" id="job-list"></div>
+          <noscript><p class="noscript-note">Włącz JavaScript, aby zobaczyć i filtrować przykładowe oferty pracy.</p></noscript>
+          <div class="results-end" id="results-end"><span aria-hidden="true">↗</span><p>To wszystkie oferty na ten moment.<br><strong>Dobry kierunek zaczyna się od pierwszego kroku.</strong></p><a href="#offers" aria-label="Wróć na początek listy ofert">Do góry ↑</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer shell"><a href="./" class="wordmark footer-wordmark" aria-label="DoRoboty.ai — strona główna">doRoboty<span>.ai</span><span class="brand-arrow" aria-hidden="true">↗</span></a><p>Praca zmienia się. Ty nadajesz kierunek.</p><button class="nav-link footer-about" type="button" data-open-about>O platformie ↗</button><a class="nav-link" href="create-job.html">Dodaj ofertę ↗</a><small>Wersja demonstracyjna. Oferty bazowe i firmy są fikcyjne.</small></footer>
+
+  <dialog id="about-dialog" class="about-dialog" aria-labelledby="about-title">
+    <div class="dialog-topline"><p class="eyebrow">DoRoboty.ai / Ludzie × technologia</p><button class="icon-button dialog-close" data-close-about type="button" aria-label="Zamknij informacje o platformie">×</button></div>
+    <div class="about-content"><h2 id="about-title">AI potrzebuje<br>różnych <span>talentów.</span></h2><p>Nie tylko inżynierów. Łączymy trzy sposoby pracy z AI, żeby łatwiej było znaleźć rolę, w której wykorzystasz swoje mocne strony.</p><div class="about-categories"><article><span aria-hidden="true">⌘</span><h3>Build</h3><p>Buduj, integruj i rozwijaj systemy AI. Dla osób, które tworzą technologię.</p></article><article><span aria-hidden="true">✳</span><h3>Apply</h3><p>Korzystaj z AI w projektowaniu, marketingu, analizie i codziennej pracy.</p></article><article><span aria-hidden="true">↗</span><h3>Lead</h3><p>Prowadź inicjatywy AI, rozwijaj zespoły i nadawaj kierunek zmianom.</p></article></div><button class="button button-dark" data-close-about type="button">Znajdź swój kierunek <span aria-hidden="true">↘</span></button></div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

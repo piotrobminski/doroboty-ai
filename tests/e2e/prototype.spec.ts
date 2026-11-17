@@ -1,11 +1,11 @@
-import { test, expect, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { TEST_ORIGIN, test, expect, seedScenario, scenario, choosePerson } from "./fixtures";
 import AxeBuilder from "@axe-core/playwright";
 import { initialState } from "../../src/features/prototype/model";
 import { STORAGE_KEY } from "../../src/features/prototype/storage";
 import { readFile } from "node:fs/promises";
 async function choose(page: Page, name: string) {
-  await page.goto("/#/auth/sign-in");
-  await page.getByRole("button", { name: `Wejdź jako ${name}`, exact: true }).click();
+  await choosePerson(page, name);
 }
 async function application(page: Page) {
   await choose(page, "Anna Kowalska");
@@ -28,7 +28,7 @@ for (const [name, filename] of [
   }) => {
     const external: string[] = [];
     page.on("request", (request) => {
-      if (!request.url().startsWith("http://127.0.0.1:3106")) external.push(request.url());
+      if (!request.url().startsWith(TEST_ORIGIN)) external.push(request.url());
     });
     await choose(page, name);
     await page.goto("/#/app/profil");
@@ -89,7 +89,7 @@ test("published job → saved offer/draft → submitted application → employer
   const errors: string[] = [];
   page.on("request", (r) => {
     if (
-      !r.url().startsWith("http://127.0.0.1:3106") &&
+      !r.url().startsWith(TEST_ORIGIN) &&
       !r.url().startsWith("data:") &&
       !r.url().startsWith("blob:")
     )
@@ -100,11 +100,11 @@ test("published job → saved offer/draft → submitted application → employer
   await page.getByRole("link", { name: "Dodaj ofertę", exact: true }).click();
   await page.getByLabel("Nazwa stanowiska").fill("Product Designer do automatyzacji");
   await page
-    .getByLabel("Brief — kogo szukasz i do jakiego zadania?")
+    .getByLabel("Ogólny opis stanowiska", { exact: true })
     .fill("Szukamy osoby do badań z klientami, prototypowania i wdrażania automatyzacji obsługi.");
-  await page.getByRole("button", { name: "Przygotuj opis z AI" }).click();
-  await page.getByRole("button", { name: "Użyj propozycji" }).click();
-  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Dalej: umiejętności i pytania →", exact: true }).click();
+  await page.getByRole("button", { name: "Zrezygnuj z dodatkowych pytań", exact: true }).click();
+  await page.getByRole("button", { name: "Przejdź do podglądu →", exact: true }).click();
   await page.getByRole("button", { name: "Opublikuj ofertę" }).click();
   await expect(
     page.getByRole("link", { name: "Product Designer do automatyzacji", exact: true }),
@@ -126,9 +126,11 @@ test("published job → saved offer/draft → submitted application → employer
   await answer.fill(draftAnswer);
   await page.getByRole("button", { name: "Zapisz szkic" }).click();
   await expect(page.getByRole("status")).toHaveText("Szkic został zapisany.");
-  expect(
-    await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).drafts.at(-1), STORAGE_KEY),
-  ).toMatchObject({ notes: "", generated: "", answer: draftAnswer });
+  expect((await scenario(page)).drafts.at(-1)).toMatchObject({
+    notes: "",
+    generated: "",
+    answer: draftAnswer,
+  });
   await page.reload();
   await expect(answer).toHaveValue(draftAnswer);
   await page.getByRole("checkbox").check();
@@ -289,7 +291,7 @@ test("mobile navigation, light-only appearance and keyboard person selection", a
   await page.reload();
   await expect(page.getByRole("combobox", { name: "Motyw" })).toHaveCount(0);
   await expect(page.locator("html")).not.toHaveClass(/dark/);
-  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(244, 244, 240)");
+  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(247, 245, 237)");
   await page.screenshot({ path: "artifacts/settings-mobile-light.png", fullPage: true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
@@ -402,12 +404,7 @@ for (const width of [1440, 375]) {
     await page.keyboard.press("Tab");
     await page.keyboard.press("Enter");
     await expect(page.getByRole("status")).toHaveText("Szkic został zapisany.");
-    expect(
-      await page.evaluate(
-        (key) => JSON.parse(localStorage.getItem(key)!).drafts.at(-1),
-        STORAGE_KEY,
-      ),
-    ).toEqual({ ...draft, answer: editedAnswer });
+    expect((await scenario(page)).drafts.at(-1)).toEqual({ ...draft, answer: editedAnswer });
     await page.reload();
     await expect(answer).toHaveValue(editedAnswer);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
@@ -423,12 +420,7 @@ for (const width of [1440, 375]) {
     await page.keyboard.press("Tab");
     await page.keyboard.press("Enter");
     await expect(page.getByText("Aplikacja została wysłana.", { exact: false })).toBeVisible();
-    expect(
-      await page.evaluate(
-        (key) => JSON.parse(localStorage.getItem(key)!).applications.at(-1),
-        STORAGE_KEY,
-      ),
-    ).toMatchObject({
+    expect((await scenario(page)).applications.at(-1)).toMatchObject({
       sourceNotes: draft.notes,
       generatedAnswer: draft.generated,
       answer: editedAnswer,
@@ -448,30 +440,27 @@ test("legacy dark preference keeps scenario data and renders the light interface
   const legacy = { ...initialState(), activePersonId: "candidate-anna", theme: "dark" };
   legacy.people[0].bio = "Zachowaj mój profil";
   await page.goto("/");
-  await page.evaluate(({ key, raw }) => localStorage.setItem(key, raw), {
-    key: STORAGE_KEY,
-    raw: JSON.stringify(legacy),
-  });
+  await seedScenario(page, legacy);
   await page.reload();
   await page.goto("/#/app/profil");
   await expect(page.getByRole("textbox", { name: "O mnie", exact: true })).toHaveValue(
     "Zachowaj mój profil",
   );
   await expect(page.locator("html")).not.toHaveClass(/dark/);
-  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(244, 244, 240)");
+  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(247, 245, 237)");
   await page.getByRole("button", { name: "Zapisz profil", exact: true }).click();
-  expect(
-    await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).theme, STORAGE_KEY),
-  ).toBeUndefined();
+  expect(await page.evaluate(() => document.documentElement.classList.contains("dark"))).toBe(
+    false,
+  );
 });
 
-test("Poster People offer keeps desktop conditions/actions and places them before mobile reading", async ({
+test("Technologia po ludzku offer keeps desktop conditions/actions and places them before mobile reading", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await choose(page, "Anna Kowalska");
   await page.goto("/#/oferty/ai-product-manager");
-  const article = page.locator(".pp-offer-page");
+  const article = page.locator(".tph-offer-page");
   const hero = article.locator("header");
   await expect(hero).toContainText(
     "Poprowadź produkt od problemu operacyjnego do mierzalnego wdrożenia AI.",
@@ -484,7 +473,7 @@ test("Poster People offer keeps desktop conditions/actions and places them befor
   const heroBox = await hero.boundingBox();
   const descriptionBox = await description.boundingBox();
   const factsBox = await facts.boundingBox();
-  expect(heroBox!.width).toBeLessThanOrEqual(1024);
+  expect(heroBox!.width).toBeGreaterThan(factsBox!.width);
   expect(factsBox!.x).toBeGreaterThan(descriptionBox!.x + descriptionBox!.width);
   const apply = article.getByRole("link", { name: "Aplikuj", exact: true });
   const applyBox = await apply.boundingBox();
@@ -534,26 +523,28 @@ test("restored company and public navigation keep their structure across screen 
   await page.screenshot({ path: "artifacts/original-list-layout-desktop.png", fullPage: true });
 });
 
-test("mobile search stays visible and filter dialog restores focus", async ({ page }) => {
+test("mobile search and inline filter disclosure retain URL state and keyboard focus", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/#/oferty");
   const input = page.getByRole("textbox", { name: "Szukaj ofert", exact: true });
   await expect(input).toBeVisible();
   await input.fill("Product");
   await page.getByRole("button", { name: "Szukaj", exact: true }).click();
-  await expect(page).toHaveURL(/query=Product/);
-  const trigger = page.getByRole("button", { name: "Filtry", exact: true });
-  await trigger.click();
-  const dialog = page.getByRole("dialog", { name: "Filtry", exact: true });
-  await dialog.getByRole("checkbox", { name: "Zdalnie", exact: true }).click();
-  await expect(dialog.getByRole("checkbox", { name: "Zdalnie", exact: true })).toBeChecked();
-  await page.keyboard.press("Escape");
-  await expect(trigger).toBeFocused();
+  const remote = page.getByRole("combobox", { name: "Tryb pracy", exact: true });
+  await remote.click();
+  await page.getByRole("option", { name: "Zdalnie", exact: true }).click();
+  await expect(remote).toContainText("Zdalnie");
   await expect(page).toHaveURL(/remote=remote/);
-  await trigger.click();
-  await dialog.getByRole("button", { name: /Pokaż \d+ ofert/ }).click();
-  await expect(trigger).toBeFocused();
-  await page.getByRole("button", { name: "Wyczyść", exact: true }).click();
+  const disclosure = page.locator(".additional-filters > summary");
+  await disclosure.focus();
+  await page.keyboard.press("Enter");
+  await expect(remote).toBeHidden();
+  await expect(disclosure).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(remote).toContainText("Zdalnie");
+  await page.getByRole("button", { name: "Wyczyść", exact: true }).first().click();
   await expect(input).toHaveValue("");
   await expect(page).toHaveURL(/#\/oferty$/);
   await page.goBack();
@@ -565,45 +556,51 @@ test("desktop reset synchronizes search, category and facets with the URL", asyn
   const input = page.getByRole("textbox", { name: "Szukaj ofert", exact: true });
   await input.fill("Product");
   await page.getByRole("button", { name: "Szukaj", exact: true }).click();
-  await page.getByRole("checkbox", { name: "Zdalnie", exact: true }).click();
-  await expect(page.getByRole("checkbox", { name: "Zdalnie", exact: true })).toBeChecked();
+  await page.getByRole("combobox", { name: "Tryb pracy", exact: true }).click();
+  await page.getByRole("option", { name: "Zdalnie", exact: true }).click();
+  await expect(page.getByRole("combobox", { name: "Tryb pracy", exact: true })).toContainText(
+    "Zdalnie",
+  );
   await page.getByRole("button", { name: "Wyczyść", exact: true }).first().click();
   await expect(input).toHaveValue("");
-  await expect(page.getByRole("checkbox", { name: "Zdalnie", exact: true })).not.toBeChecked();
+  await expect(page.getByRole("combobox", { name: "Tryb pracy", exact: true })).toContainText(
+    "Wszystkie",
+  );
   await expect(page.getByRole("button", { name: /Wszystkie oferty/ })).toHaveAttribute(
     "aria-pressed",
     "true",
   );
 });
 
-test("canonical marketplace typography and search geometry match Poster People breakpoints", async ({
+test("marketplace typography and geometry follow source roles at all reference widths", async ({
   page,
 }) => {
   for (const [width, title, card] of [
-    [1280, "72px", "28px"],
-    [1100, "58px", "26px"],
-    [850, "52px", "28px"],
-    [390, "43px", "26px"],
+    [1280, "61.44px", "21px"],
+    [1100, "52.8px", "21px"],
+    [850, "40.8px", "21px"],
+    [390, "37.83px", "20px"],
+    [320, "33px", "20px"],
   ] as const) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/#/oferty");
-    await expect(page.locator(".pp-intro-copy h1")).toHaveCSS("font-size", title);
-    await expect(page.locator(".pp-job-title").first()).toHaveCSS("font-size", card);
+    await expect(page.locator(".discovery-copy h1")).toHaveCSS("font-size", title);
+    await expect(page.locator(".tph-job-title").first()).toHaveCSS("font-size", card);
+    await expect(page.locator(".tph-job-title").first()).toHaveCSS("font-weight", "700");
     await expect(page.getByRole("textbox", { name: "Szukaj ofert", exact: true })).toBeVisible();
-    if (width === 1280) {
-      expect((await page.locator(".pp-search-form").boundingBox())!.width).toBe(1200);
-      await expect(page.locator(".pp-salary-tag").first()).toHaveCSS("font-size", "15px");
-    }
+    if (width === 1280)
+      expect((await page.locator(".tph-search-form").boundingBox())!.width).toBe(1216);
   }
-  for (const [width, title, salary] of [
-    [1280, "64px", "24px"],
-    [850, "46px", "20px"],
-    [390, "47px", "25px"],
+  for (const [width, title] of [
+    [1280, "52.48px"],
+    [850, "34.85px"],
+    [390, "34px"],
   ] as const) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/#/oferty/ai-product-manager");
-    await expect(page.locator(".pp-offer-hero h1")).toHaveCSS("font-size", title);
-    await expect(page.locator(".pp-offer-pay .pp-salary-tag")).toHaveCSS("font-size", salary);
+    await expect(page.locator(".tph-offer-hero h1")).toHaveCSS("font-size", title);
+    await expect(page.locator(".tph-offer-hero")).toHaveCSS("background-color", "rgb(23, 27, 25)");
+    await expect(page.locator(".tph-offer-pay .tph-salary-tag")).toHaveCSS("font-size", "21px");
   }
 });
 
@@ -621,7 +618,7 @@ test("offer section links survive copied URLs and restore section focus through 
   await expect(page).toHaveURL(/#\/oferty\/ai-product-manager#employer$/);
   const copied = await context.newPage();
   await copied.goto(destination);
-  await expect(copied.locator(".pp-offer-hero h1")).toHaveText("AI Product Manager");
+  await expect(copied.locator(".tph-offer-hero h1")).toHaveText("AI Product Manager");
   await expect(copied.locator("#employer")).toBeFocused();
   expect((await copied.locator("#employer").boundingBox())!.y).toBeLessThan(50);
   await copied.close();
@@ -637,7 +634,7 @@ for (const width of [1280, 390])
   test(`keyboard chip removal keeps a logical focus successor at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/#/oferty?query=Product&remote=remote");
-    const remote = page.getByRole("button", { name: "Usuń filtr: remote", exact: true });
+    const remote = page.getByRole("button", { name: "Usuń filtr: Zdalnie", exact: true });
     await remote.focus();
     await page.keyboard.press("Enter");
     const query = page.getByRole("button", { name: "Usuń filtr: Product", exact: true });
@@ -648,39 +645,34 @@ for (const width of [1280, 390])
     await expect(page.getByRole("textbox", { name: "Szukaj ofert", exact: true })).toHaveValue("");
   });
 
-test("homepage surfaces and marketplace action type roles match the shared reference", async ({
-  page,
-}) => {
+test("shared surfaces and action roles use the new source foundation", async ({ page }) => {
   await page.goto("/#/");
   const cards = page.locator("main article.prototype-panel");
   await expect(cards).toHaveCount(3);
   for (const card of await cards.all()) {
-    await expect(card).toHaveCSS("border-radius", "24px");
-    await expect(card).toHaveCSS("box-shadow", /rgb\(24, 24, 24\).*1px inset/);
+    await expect(card).toHaveCSS("border-radius", "12px");
+    await expect(card).toHaveCSS("border-top-color", "rgb(203, 208, 196)");
+    await expect(card).toHaveCSS("background-color", "rgb(255, 254, 249)");
   }
-  for (const [width, searchSize, offerSize, payLine] of [
-    [1280, "14px", "14px", "34.8px"],
-    [1100, "14px", "13px", "31.9px"],
-    [850, "12px", "12px", "29px"],
-    [700, "12px", "14px", "36.25px"],
-    [600, "12px", "14px", "33.75px"],
-    [390, "12px", "14px", "33.75px"],
+  for (const [width, searchSize] of [
+    [1280, "14px"],
+    [1100, "14px"],
+    [850, "14px"],
+    [700, "14px"],
+    [600, "12px"],
+    [390, "12px"],
   ] as const) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/#/oferty");
     const search = page.getByRole("button", { name: "Szukaj", exact: true });
     await expect(search).toHaveCSS("font-size", searchSize);
     await expect(search).toHaveCSS("font-weight", "600");
-    await expect(search).toHaveCSS("letter-spacing", "normal");
-    await expect(search).toHaveCSS("line-height", `${parseInt(searchSize) * 1.5}px`);
-    await expect(search).toHaveCSS("border-top-width", "1px");
-    await expect(search).toHaveCSS("box-shadow", "none");
+    await expect(search).toHaveCSS("background-color", "rgb(23, 27, 25)");
     await page.goto("/#/oferty/ai-product-manager");
-    const action = page.locator(".pp-offer-actions a").first();
-    await expect(action).toHaveCSS("font-size", offerSize);
-    await expect(action).toHaveCSS("font-weight", "600");
-    await expect(action).toHaveCSS("line-height", `${parseInt(offerSize) * 1.5}px`);
-    await expect(page.locator(".pp-offer-pay .pp-salary-tag")).toHaveCSS("line-height", payLine);
+    const action = page.locator(".tph-offer-actions a").first();
+    await expect(action).toHaveCSS("font-size", "14px");
+    await expect(action).toHaveCSS("background-color", "rgb(194, 249, 112)");
+    await expect(action).toHaveCSS("color", "rgb(23, 27, 25)");
   }
 });
 
@@ -757,10 +749,7 @@ test("process sheet renders custom snapshots and long content on narrow screens"
   record.answer =
     "Długa polska odpowiedź z wieloma przykładami. ".repeat(60) + "DługiWyraz".repeat(60);
   await page.goto("/");
-  await page.evaluate(({ key, raw }) => localStorage.setItem(key, raw), {
-    key: STORAGE_KEY,
-    raw: JSON.stringify(state),
-  });
+  await seedScenario(page, state);
   await page.reload();
   await choose(page, "Karolina Wiśniewska");
   await page.goto("/#/app/kandydaci/application-example");
@@ -800,7 +789,7 @@ for (const width of [1280, 390]) {
     await page.setViewportSize({ width, height: 1000 });
     await choose(page, "Anna Kowalska");
     await page.goto("/#/oferty/ai-product-manager");
-    const gap = await page.locator(".pp-offer-actions").evaluate((element) => {
+    const gap = await page.locator(".tph-offer-actions").evaluate((element) => {
       const [apply, save] = element.querySelectorAll("a, button");
       return save.getBoundingClientRect().top - apply.getBoundingClientRect().bottom;
     });
@@ -876,13 +865,8 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     }
     await page.locator("form").dispatchEvent("submit");
     expect(
-      await page.evaluate(
-        (key) =>
-          JSON.parse(localStorage.getItem(key)!).applications.filter(
-            (item: { candidateId: string }) => item.candidateId === "candidate-anna",
-          ).length,
-        STORAGE_KEY,
-      ),
+      (await scenario(page)).applications.filter((item) => item.candidateId === "candidate-anna")
+        .length,
     ).toBe(1);
     await page.clock.fastForward(reducedMotion === "reduce" ? 1 : 1000);
     await expect(page).toHaveURL(/#\/app\/aplikacje\?wyslano=1$/);
@@ -912,10 +896,7 @@ test("candidate record shares snapshot tabs while excluding employer notes and m
   record.sourceNotes = "Dawna prywatna notatka źródłowa.";
   record.generatedAnswer = "Dawna propozycja, która nie jest zatwierdzoną odpowiedzią.";
   await page.goto("/");
-  await page.evaluate(({ key, raw }) => localStorage.setItem(key, raw), {
-    key: STORAGE_KEY,
-    raw: JSON.stringify(state),
-  });
+  await seedScenario(page, state);
   await page.goto("/#/app/aplikacje/application-example");
   await page.reload();
   await expect(
@@ -974,10 +955,7 @@ test("candidate snapshot supports custom CV and long content at desktop and mobi
   record.cv = "Niestandardowa zapisana treść CV.\n" + "DoświadczenieBezSpacji".repeat(70);
   record.answer = "Opis realizowanych projektów i podejmowanych decyzji. ".repeat(40);
   await page.goto("/");
-  await page.evaluate(({ key, raw }) => localStorage.setItem(key, raw), {
-    key: STORAGE_KEY,
-    raw: JSON.stringify(state),
-  });
+  await seedScenario(page, state);
   await page.goto("/#/app/aplikacje/application-example");
   await page.reload();
   await page.getByRole("tab", { name: "CV", exact: true }).click();

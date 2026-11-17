@@ -11,6 +11,8 @@ export default tseslint.config(
       "test-results/**",
       "artifacts/**",
       "docs/design-system/agent-kit/**",
+      "docs/design-system/technologia-po-ludzku/**",
+      "docs/design-system/history/technologia-po-ludzku-v1-originals/**",
     ],
   },
   js.configs.recommended,

@@ -1,5 +1,8 @@
+import { useId } from "react";
+import { FormSelect } from "@/components/ui/form-select";
 import type { JobFilters } from "./types";
 import { contractLabels, functionLabels, remoteLabels, seniorityLabels } from "./presentation";
+
 export function JobFiltersForm({
   filters,
   onChange,
@@ -9,11 +12,12 @@ export function JobFiltersForm({
   onChange: (key: string, value: string) => void;
   onReset: () => void;
 }) {
+  const prefix = useId();
   return (
-    <div className="pp-filter-panel">
-      <div className="pp-filter-heading">
+    <div className="tph-filter-panel">
+      <div className="tph-filter-heading">
         <h2>Po Twojemu</h2>
-        <button className="pp-text-button" onClick={onReset}>
+        <button className="tph-text-button" onClick={onReset}>
           Wyczyść
         </button>
       </div>
@@ -25,19 +29,19 @@ export function JobFiltersForm({
           ["function", "Funkcja", functionLabels],
         ] as const
       ).map(([key, label, options]) => (
-        <fieldset className="pp-filter-group" key={key}>
-          <legend>{label}</legend>
-          {Object.entries(options).map(([value, text]) => (
-            <label key={value}>
-              <input
-                type="checkbox"
-                checked={filters[key] === value}
-                onChange={() => onChange(key, filters[key] === value ? "" : value)}
-              />
-              {text}
-            </label>
-          ))}
-        </fieldset>
+        <div className="tph-facet" key={key}>
+          <label htmlFor={`${prefix}-${key}`}>{label}</label>
+          <FormSelect
+            id={`${prefix}-${key}`}
+            ariaLabel={label}
+            value={filters[key] ?? ""}
+            options={[
+              { value: "", label: "Wszystkie" },
+              ...Object.entries(options).map(([value, label]) => ({ value, label })),
+            ]}
+            onValueChange={(value) => onChange(key, value)}
+          />
+        </div>
       ))}
     </div>
   );

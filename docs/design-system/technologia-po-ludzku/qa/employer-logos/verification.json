@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-13",
+  "accepted": {
+    "hero": "assets/human-technology-hero-angular.png",
+    "defaultIconScheme": "marker"
+  },
+  "desktop": {
+    "legend": "Duży znak: logo firmyMały znacznik: obszar pracyBuildApplyLead",
+    "logos": [
+      {
+        "company": "Forma Lab",
+        "loaded": true,
+        "src": "assets/employers/forma-lab.svg"
+      },
+      {
+        "company": "Neuron Studio",
+        "loaded": true,
+        "src": "assets/employers/neuron-studio.svg"
+      },
+      {
+        "company": "Nowy Wymiar",
+        "loaded": true,
+        "src": "assets/employers/nowy-wymiar.svg"
+      },
+      {
+        "company": "Punkt Studio",
+        "loaded": true,
+        "src": "assets/employers/punkt-studio.svg"
+      },
+      {
+        "company": "Warstwa",
+        "loaded": true,
+        "src": "assets/employers/warstwa.svg"
+      },
+      {
+        "company": "Jutro Works",
+        "loaded": true,
+        "src": "assets/employers/jutro-works.svg"
+      },
+      {
+        "company": "Splot Digital",
+        "loaded": true,
+        "src": "assets/employers/splot-digital.svg"
+      },
+      {
+        "company": "Obieg",
+        "loaded": true,
+        "src": "assets/employers/obieg.svg"
+      },
+      {
+        "company": "Sygnał",
+        "loaded": true,
+        "src": "assets/employers/sygnal.svg"
+      },
+      {
+        "company": "Horyzont Labs",
+        "loaded": true,
+        "src": "assets/employers/horyzont-labs.svg"
+      },
+      {
+        "company": "Kontekst",
+        "loaded": true,
+        "src": "assets/employers/kontekst.svg"
+      },
+      {
+        "company": "Wektor AI",
+        "loaded": true,
+        "src": "assets/employers/wektor-ai.svg"
+      }
+    ],
+    "scheme": "marker",
+    "visibleAreaMarkers": 12
+  },
+  "mobile": {
+    "badges": 12,
+    "client": 375,
+    "logos": 12,
+    "scheme": "marker",
+    "scroll": 375,
+    "width": 390
+  },
+  "filterReload": {
+    "cards": 1,
+    "logo": "assets/employers/forma-lab.svg",
+    "scheme": "marker",
+    "url": "http://127.0.0.1:4173/?q=Forma+Lab#offers"
+  },
+  "consoleErrors": [],
+  "source_checks": {
+    "syntax": "npm run check passed",
+    "static_build": "npm run build passed",
+    "svg_logos_parsed": 12,
+    "built_logo_copies": "identical to sources"
+  },
+  "acceptance": "User approved the angular transparent hero and variant C; marker is now the default."
+}

@@ -1,0 +1,136 @@
+{
+  "status": "zweryfikowano lokalnie",
+  "version": "v1",
+  "date": "2026-11-13",
+  "runtime": {
+    "node": "v26.13.0",
+    "dependencies": "wyłącznie Node.js built-ins, bez npm install"
+  },
+  "syntax": "pass",
+  "unitTests": {
+    "passed": 10,
+    "failed": 0,
+    "command": "npm test"
+  },
+  "extractionRegression": {
+    "baseCardsCompared": 12,
+    "unsavedHTMLIdentical": 12,
+    "intentionalDifference": "stała nazwa dostępna zakładki przy aria-pressed=true"
+  },
+  "links": {
+    "checkedReferences": 97,
+    "files": 11,
+    "errors": []
+  },
+  "browserChecks": [
+    {
+      "check": "Dialog po I08: Tab/Shift+Tab zawijają focus, Escape zamyka i przywraca wywołanie",
+      "result": "pass",
+      "detail": {
+        "a2": "dialog-note",
+        "c2": "Zamknij przykład dialogu",
+        "reverse2": "Wróć do przykładów",
+        "back2": "open-demo-dialog"
+      }
+    },
+    {
+      "check": "Walidacja pustego formularza, odwrócony zakres, wyłączenie widełek, UoP i praca zdalna bez miasta",
+      "result": "pass"
+    },
+    {
+      "check": "Podgląd etapu3 i puste zapisane → przywrócenie4 kart, focus na pierwszym linku",
+      "result": "pass"
+    },
+    {
+      "check": "Listing po wydzieleniu komponentów: filtr Build+zdalne, zapis,0 wyników i przywrócenie listy",
+      "result": "pass",
+      "detail": {
+        "listingSaved": "true",
+        "listingRecovery": 13
+      }
+    },
+    {
+      "check": "Bieżący etap3: dwa poprzednie ukończone, focus klawiatury limonkowy3px na graficie",
+      "result": "pass"
+    },
+    {
+      "check": "Galeria: stała nazwa zakładki, zaznaczenie i odznaczenie z zachowaniem focusu",
+      "result": "pass"
+    }
+  ],
+  "visualChecks": [
+    {
+      "page": "ui-examples.html",
+      "widthsCSSpx": [
+        1280,
+        390,
+        320
+      ],
+      "result": "pass",
+      "scope": "4 karty, w tym długa nazwa firmy/roli i pojedynczy tag; brak poziomego przepełnienia strony; geometria/kolory porównane z v1."
+    },
+    {
+      "page": "ui-long-content.html",
+      "widthsCSSpx": [
+        1280,
+        390,
+        320
+      ],
+      "result": "pass",
+      "scope": "Pełna kompozycja oferty, jeden h1, neutralne inicjały, długie treści i null pensji. Tag zawija się na320px."
+    },
+    {
+      "page": "dialog galerii",
+      "widthsCSSpx": [
+        1280,
+        390
+      ],
+      "result": "pass",
+      "scope": "Obejrzano wygląd, Escape/powrót focusu i po I08 oba kierunki pętli Tab."
+    }
+  ],
+  "evidence": [
+    "../qa/agent-kit/gallery-desktop.png",
+    "../qa/agent-kit/gallery-mobile.png",
+    "../qa/agent-kit/gallery-320.png",
+    "../qa/agent-kit/long-content-desktop.png",
+    "../qa/agent-kit/long-content-mobile.png",
+    "../qa/agent-kit/form-errors-desktop.png",
+    "../qa/agent-kit/dialog-desktop.png",
+    "../qa/agent-kit/dialog-mobile.png",
+    "../qa/agent-kit/agent-kit-preview.png"
+  ],
+  "limits": [
+    "Jedna przeglądarka (ChatGPT IAB), brak audytu czytnika ekranu i testu na fizycznym telefonie.",
+    "Nie badano wszystkich kombinacji zoomu, forced-colors, RTL ani innych języków.",
+    "Nie wykonano uploadu pliku ani transmisji danych; wybór jest natywny, a walidacja formatu/rozmiaru pozostaje do próby z plikami.",
+    "Galeria nie publikuje i nie używa localStorage; pełne strony są lokalnym prototypem.",
+    "Starsze kontrolery kandydata i rekrutera zachowują własne zachowania i otwarte kwestie z dokumentacji; nie są objęte deklaracją pełnej zgodności WCAG."
+  ],
+  "decisions": [
+    "I01 textarea sans",
+    "I02 ciemniejszy placeholder",
+    "I03 focus-on-dark",
+    "I04 długi tag",
+    "I05 współdzielone renderery",
+    "I06 stała nazwa toggle karty",
+    "I07 izolowana galeria",
+    "I08 pętla focusu dialogu"
+  ],
+  "build": {
+    "command": "npm run build",
+    "result": "pass"
+  },
+  "portableExport": {
+    "command": "npm run export:agent",
+    "result": "pass",
+    "syntaxInExport": "pass",
+    "unitTestsInExport": {
+      "passed": 10,
+      "failed": 0
+    },
+    "browserInExport": "Galeria:4 karty, assety i fundament CSS; długi szczegół:1 oferta, poprawny tytuł i brak overflow przy1280px.",
+    "note": "Metadane mają odrębną nazwę agent-kit-manifest.json, aby nie kolidowały z package.json na systemach ignorujących wielkość liter.",
+    "manifestFromExportRoot": "agent-kit-manifest.json"
+  }
+}

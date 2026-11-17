@@ -23,6 +23,7 @@ export function FormSelect({
   options,
   placeholder = "Wybierz",
   ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   required,
   disabled,
   className,
@@ -37,6 +38,7 @@ export function FormSelect({
   options: FormSelectOption[];
   placeholder?: string;
   ariaLabel?: string;
+  "aria-labelledby"?: string;
   required?: boolean;
   disabled?: boolean;
   className?: string;
@@ -61,7 +63,12 @@ export function FormSelect({
         required={required}
         disabled={disabled}
       >
-        <SelectTrigger id={id} aria-label={ariaLabel} className={cn("w-full", triggerClassName)}>
+        <SelectTrigger
+          id={id}
+          aria-label={ariaLabelledBy ? undefined : ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          className={cn("w-full", triggerClassName)}
+        >
           <SelectValue placeholder={placeholder}>{selectedLabel}</SelectValue>
         </SelectTrigger>
         <SelectContent align="start">

@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-13",
+  "checks": [
+    {
+      "cards": 12,
+      "colors": [
+        "rgb(226, 235, 243)",
+        "rgb(238, 223, 248)",
+        "rgb(242, 229, 215)",
+        "rgb(234, 242, 217)"
+      ],
+      "legendVisible": true,
+      "scheme": "experience",
+      "visibleMarkers": 0
+    },
+    {
+      "cards": 12,
+      "colors": [
+        "rgb(234, 242, 217)",
+        "rgb(238, 223, 248)",
+        "rgb(226, 235, 243)"
+      ],
+      "legendVisible": true,
+      "scheme": "category",
+      "visibleMarkers": 0
+    },
+    {
+      "cards": 12,
+      "colors": [
+        "rgb(234, 236, 225)"
+      ],
+      "legendVisible": true,
+      "scheme": "marker",
+      "visibleMarkers": 12
+    },
+    {
+      "check": "Filter preserves scheme in URL",
+      "result": "passed",
+      "url": "http://127.0.0.1:4173/?iconScheme=marker&category=Build#offers"
+    },
+    {
+      "check": "Reload preserves filter and marker variant",
+      "result": "passed"
+    },
+    {
+      "check": "Mobile comparison",
+      "client": 375,
+      "scroll": 375,
+      "width": 390
+    }
+  ],
+  "consoleErrors": [],
+  "defaultScheme": "neutral",
+  "angularHero": "assets/human-technology-hero-angular.png",
+  "proposalStatus": "Alternatives for review, not a selected default",
+  "comparisonCapture": {
+    "bottom": 2059.140625,
+    "top": 557.25
+  },
+  "text_contrast_ratios": {
+    "tone-area-Build": 8.05,
+    "tone-area-Apply": 7.14,
+    "tone-area-Lead": 6.16,
+    "tone-level-Junior": 7.14,
+    "tone-level-Mid": 6.16,
+    "tone-level-Senior": 8.05,
+    "tone-level-Lead": 5.77
+  },
+  "source_checks": {
+    "syntax": "npm run check passed",
+    "build": "npm run build passed"
+  },
+  "image": {
+    "mode": "RGBA",
+    "size": [
+      1536,
+      1024
+    ],
+    "has_transparency": true
+  }
+}

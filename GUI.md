@@ -1,21 +1,20 @@
-# GUI — DoRoboty.ai Poster People
+# GUI — DoRoboty.ai / Technologia po ludzku
 
-The required visual direction for new and changed screens is the accepted **Poster People** design system. The project instructions are [docs/design-system/README.md](docs/design-system/README.md). Read them before UI work; they define how the standalone reference is adapted to this React/TypeScript/Vite application. The previous theme reference tree and skill requirements have been removed.
+**Build every new or changed screen from the local Technologia po ludzku design system.** The previous Poster People visual guidance is inactive. The current React host uses the new foundation across all routes; [status](docs/design-system/STATUS.md) records scope and evidence.
 
-## Read and preview
+Read in order:
 
-1. [Project integration guide](docs/design-system/README.md): authority, React/Base UI mapping, routes/state, assets and completion criteria.
-2. [Host implementation rules](docs/design-system/IMPLEMENTATION.md), [React component catalog](docs/design-system/HOST-COMPONENTS.md), [record/CV APIs](docs/design-system/RECORDS.md), [acceptance checklist](docs/design-system/VERIFICATION.md) and [status/open findings](docs/design-system/STATUS.md): reusable owners, actual contracts, URL/focus rules, breakpoint values and regression scenarios.
-3. [Agent entry point](docs/design-system/agent-kit/design.md): visual hierarchy, composition, exact standalone imports and extension boundaries.
-4. [Component API](docs/design-system/agent-kit/components/API.md) plus relevant [human reference](docs/design-system/agent-kit/reference/components.md): anatomy, variants, states and evidence.
-5. `npm run design-system:dev`: local catalog, full listing and offer on port 8952. `npm run design-system:check` checks the immutable kit. No global skill or extra installation is required.
+1. [Project integration](docs/design-system/README.md), [host implementation](docs/design-system/IMPLEMENTATION.md), [existing React owners](docs/design-system/HOST-COMPONENTS.md) and [acceptance checklist](docs/design-system/VERIFICATION.md).
+2. [Agent design.md](docs/design-system/technologia-po-ludzku/agent-kit/design.md) and [component contract](docs/design-system/technologia-po-ludzku/agent-kit/components.md).
+3. Relevant [designer documentation](docs/design-system/technologia-po-ludzku/docs/design-system/v1/index.html#components), its source captures and [open issues](docs/design-system/technologia-po-ludzku/docs/design-system/v1/index.html#issues).
+4. [Record APIs](docs/design-system/RECORDS.md) when touching candidate/employer materials; [status](docs/design-system/STATUS.md) before claiming adoption or finding closure.
 
-## Implement in this app
+From root: `npm run design-system:dev` serves the complete reference on port 8952. Start with `/ui-examples.html`; also inspect `/ui-long-content.html`, the listing, candidate and recruiter pages. `npm run design-system:check` verifies the active package and examples. No global skill or extra kit dependencies are required. The product remains on port 3001.
 
-- Preserve the requested scope, React/TypeScript/Vite, hash routes, Base UI's `render` composition, Zod/local data operations and current application workflows.
-- Use local Geist Serif Regular for headings, paper/white/ink/pink roles, source contours and radii, complete title wrapping and responsive listing/offer composition.
-- Adapt host tokens and existing primitives together. Do not paste the kit's global reset or vanilla controllers into React, substitute example data for product state, or create a parallel button/card library.
-- Keep docs/design-system/agent-kit unchanged as the reference; implement product UI in src/ and the host theme layer. Existing token names do not establish an alternative visual target.
-- Compare desktop/mobile evidence; test long content, missing salary/marks, keyboard focus, selection, dialogs and recovery. Run ./scripts/verify and report actual checks. The original kit report does not verify a new React screen.
+Preserve Królewski fiolet #7B2CBF as primary, lime #C2F970 as secondary, warm paper, graphite and calm cards. Use Arial/Helvetica/sans headings/body with technical mono labels; the new target does not require Geist Serif. The approved image has alpha and angular collage edges. Large neutral icon=company; small colored marker=Build/Apply/Lead area; seniority is separate text.
 
-The running application has a host adaptation; current code still requires comparison with the source on each UI task. Follow the implementation map rather than creating parallel controls. Keep Search outside mobile filters, preserve copied section URLs under HashRouter, manage focus after chip removal, reuse outlined surfaces and compare full action type roles plus one contour. Record actual evidence and partial findings; preserve old audit artifacts in separate task-specific directories.
+Adapt source anatomy/type/state into existing React/Base UI primitives, `render` composition and host tokens. Keep HashRouter, slugs/IDs, Zod operations, real local teaching workflows, CV/application snapshots and persistent state. Do not mount vanilla controllers/string HTML, substitute demo companies/jobs or import the global source reset into React. Existing MatchScore is a host feature; do not delete it merely because the standalone reference has no score family.
+
+Keep the new package byte-identical. The older kit remains immutable historical material; its runtime font/image consumers have been migrated. Write adaptations in src/ and the host theme layer. Record gaps and new host-only compositions explicitly. Compare 1280/390/320px, long/missing data, errors, keyboard/focus, portals and recovery, then run `./scripts/verify`. Installation and green reference checks alone do not establish visual adoption.
+
+The user approved reference 1.1. Use [approved profiles](docs/design-system/technologia-po-ludzku/docs/design-system/v1.1/index.html), [profile examples](docs/design-system/technologia-po-ludzku/ui-host-profiles.html) and the [machine contract](docs/design-system/technologia-po-ludzku/agent-kit/host-profiles.json) alongside the original 25-family atlas. The frozen 1.1 manifest and preserved v1 reconstruction are both checked.

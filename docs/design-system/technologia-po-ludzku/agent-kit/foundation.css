@@ -1,0 +1,18 @@
+/* Single entry point. Canonical styles remain in their existing modules. */
+@import url('../assets/tokens.css');
+@import url('../styles.css');
+@import url('../icon-colors.css');
+@import url('../job-pages.css');
+@import url('./host-profiles.css');
+
+/* Opt-in decisions I01–I04; see design.md. No new color or component system. */
+.tph-agent-ui textarea { font-family: var(--tph-font-sans); }
+.tph-agent-ui .field input::placeholder,
+.tph-agent-ui .field textarea::placeholder { color: var(--tph-muted); }
+.tph-agent-ui .offer-hero :focus-visible,
+.tph-agent-ui .composer-summary :focus-visible,
+.tph-agent-ui .sidebar-note :focus-visible,
+.tph-agent-ui .composer-steps [aria-current='step']:focus-visible {
+  outline-color: var(--tph-focus-on-dark);
+}
+.tph-agent-ui .tag { white-space: normal; overflow-wrap: anywhere; }

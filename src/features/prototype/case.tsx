@@ -2,7 +2,12 @@ import { PageTitle } from "./shell";
 export function CasePage() {
   return (
     <>
-      <PageTitle>Materiały case study</PageTitle>
+      <PageTitle
+        eyebrow="AIPH3 / Materiały dydaktyczne"
+        description="Punkt wyjścia do pracy z dowodami i hipotezami."
+      >
+        Materiały case study
+      </PageTitle>
       <section className="prototype-panel prototype-form">
         <h2>Etap początkowy</h2>
         <p>

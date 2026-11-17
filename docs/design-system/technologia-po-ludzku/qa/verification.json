@@ -1,0 +1,102 @@
+{
+  "date": "2026-11-13",
+  "source": "human-technology-ui skill only; earlier implementation not read",
+  "data": "12 fictional job records",
+  "checks": [
+    {
+      "check": "Build + remote + Senior",
+      "result": "passed",
+      "titles": [
+        "Senior AI Engineer — systemy wyszukiwania i generowania odpowiedzi",
+        "LLM Evaluation Engineer"
+      ]
+    },
+    {
+      "check": "Search within combined filters",
+      "result": "passed"
+    },
+    {
+      "check": "Empty state retains selected criteria",
+      "result": "passed"
+    },
+    {
+      "check": "Location + contract",
+      "result": "passed",
+      "count": 3
+    },
+    {
+      "check": "Salary presence and descending sort",
+      "result": "passed"
+    },
+    {
+      "check": "Save, reload persistence, saved-only view",
+      "result": "passed"
+    },
+    {
+      "check": "Remove saved item and empty saved view",
+      "result": "passed"
+    },
+    {
+      "check": "Job details and Escape dismissal",
+      "result": "passed"
+    },
+    {
+      "check": "390px layout, long title wrapping, collapsed filters, control heights",
+      "result": "passed",
+      "clientWidth": 375,
+      "filtersOpen": false,
+      "longTitleHeight": 96,
+      "scrollWidth": 375,
+      "smallButtons": [],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "check": "Mobile filter disclosure + Lead + remote",
+      "result": "passed"
+    },
+    {
+      "check": "320px page has no horizontal overflow",
+      "result": "passed"
+    },
+    {
+      "check": "850px page has no horizontal overflow",
+      "result": "passed"
+    },
+    {
+      "check": "Search without Polish diacritics",
+      "result": "passed"
+    },
+    {
+      "check": "Keyboard Tab and visible focus",
+      "result": "passed"
+    },
+    {
+      "check": "320px saved navigation has accessible name and opens view",
+      "result": "passed"
+    }
+  ],
+  "finalMetrics": {
+    "brokenImages": 0,
+    "clientWidth": 1265,
+    "jobCards": 12,
+    "scrollWidth": 1265,
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "consoleErrors": [],
+  "limitations": [
+    "Browser-local demo; no live recruitment feed or application submission.",
+    "No user testing or full accessibility audit."
+  ],
+  "source_checks": {
+    "syntax": "npm run check passed",
+    "static_build": "npm run build passed",
+    "built_html_local_assets": "all exist",
+    "external_runtime_dependencies": 0
+  }
+}

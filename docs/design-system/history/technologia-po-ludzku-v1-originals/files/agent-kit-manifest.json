@@ -1,0 +1,21 @@
+{
+  "name": "doroboty-agent-kit",
+  "version": "1",
+  "generatedAt": "2026-11-13T12:44:50.730Z",
+  "entry": "agent-kit/design.md",
+  "examples": "ui-examples.html",
+  "longContent": "ui-long-content.html",
+  "documentation": "docs/design-system/v1/index.html",
+  "signatures": {
+    "agent-kit/design.md": "234fef04c9d7adfa2208c14339ed62cb0a0edff545d41037eeadf1c07ed22da4",
+    "agent-kit/components.md": "333b55a1bc86d7d9f57d38703800ffdb970a8dd553d32ad8f495cd3259e1abf5",
+    "agent-kit/foundation.css": "f5761b3205327b2a6b3cfcb424549a3cbedf2d7dfe062af4c2a046efea328b3f",
+    "listing-components.mjs": "1b2b7c54726229bbb488dfa7003a9f29573481d48b95ece169c6f96e2d494ea1",
+    "ui-examples.html": "1c20dc2d9f9fe62fa75e30262fbd740012181cfe2a0ba9896d5cbb460bfd75e7",
+    "ui-long-content.html": "4088be3f8e0ee6bbdd9502c83e2eedba4a24ac3884149c8d04fc83c6172ec1e6",
+    "styles.css": "d90cb9175f97cc321b5a0d005394c56ad4c271c8becc7affb8fc6021d1938517",
+    "job-pages.css": "b21e02f81bd8602dc13160cef23b904676634b382a75154fea7b6de8c10c4113",
+    "icon-colors.css": "995af622517d220a3d1e1c44455d39f3895e1493f53c4162c922eb60f60da836",
+    "assets/tokens.css": "8eba0760e402b00f580a7f5173ca1d5ef74b34d1149b165ec7df3596396f2c38"
+  }
+}

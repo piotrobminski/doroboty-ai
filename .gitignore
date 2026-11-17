@@ -7,4 +7,11 @@ artifacts/
 .DS_Store
 *.tsbuildinfo
 .env*
+!.env.example
 npm-debug.log*
+
+# Runtime database, session tokens and local backups must never be committed.
+.data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm

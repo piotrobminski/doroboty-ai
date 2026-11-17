@@ -7,3 +7,14 @@ artifacts
 
 # Preserve the versioned reference byte-for-byte; checked by its own scripts.
 docs/design-system/agent-kit/
+
+# Preserve the active imported snapshot byte-for-byte.
+docs/design-system/technologia-po-ludzku/
+
+# Preserve historical integration snapshots.
+docs/design-system/history/poster-people-guidance/
+
+# Preserve original 1.0 source bytes for reconstruction across the approved 1.1 release.
+docs/design-system/history/technologia-po-ludzku-v1-originals/
+
+.data/

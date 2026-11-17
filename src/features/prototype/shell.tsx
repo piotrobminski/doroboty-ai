@@ -3,7 +3,6 @@ import { Link, NavLink, Outlet, useLocation } from "react-router";
 import {
   Menu,
   ArrowUpRight,
-  LogOut,
   X,
   BriefcaseBusiness,
   UserRound,
@@ -18,40 +17,138 @@ import { BrandMark } from "@/features/public/brand-mark";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { currentPerson } from "./model";
 import { usePrototype } from "./store";
-import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog";
 const navigation = [
   { to: "/oferty", label: "Oferty" },
   { to: "/metodologia", label: "Metodologia" },
   { to: "/auth/sign-in?audience=employer&next=/app/oferty", label: "Dla firm" },
 ];
 
-export function Notice({ children }: { children: ReactNode }) {
+export function Notice({
+  children,
+  tone = "info",
+}: {
+  children: ReactNode;
+  tone?: "info" | "success" | "warning";
+}) {
   return (
-    <div role="status" className="prototype-notice">
+    <div role="status" className="prototype-notice" data-tone={tone}>
       {children}
     </div>
   );
 }
-export function PageTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
+export function PageTitle({
+  children,
+  action,
+  description,
+  eyebrow = "DoRoboty.ai / Twoja przestrzeń",
+}: {
+  children: ReactNode;
+  action?: ReactNode;
+  description?: string;
+  eyebrow?: string;
+}) {
   return (
-    <div className="page-heading">
-      <h1>{children}</h1>
+    <header className="page-heading">
+      <div>
+        <p className="eyebrow">{eyebrow}</p>
+        <h1>{children}</h1>
+        {description && <p className="page-description">{description}</p>}
+      </div>
       {action}
-    </div>
+    </header>
   );
 }
 export function Empty({ children }: { children: ReactNode }) {
-  return <div className="prototype-panel">{children}</div>;
+  return (
+    <div className="empty-state">
+      <span className="empty-symbol" aria-hidden="true">
+        ↗
+      </span>
+      <div>{children}</div>
+    </div>
+  );
 }
 export function NotFound() {
   return (
     <section className="prototype-section">
-      <h1>Nie znaleziono strony</h1>
-      <p className="my-5">Ten adres nie prowadzi do dostępnej oferty lub aplikacji.</p>
-      <Link className={buttonVariants()} to="/oferty">
-        Wróć do ofert
-      </Link>
+      <Empty>
+        <h1>Nie znaleziono strony</h1>
+        <p className="my-5">Ten adres nie prowadzi do dostępnej oferty lub aplikacji.</p>
+        <Link className={buttonVariants()} to="/oferty">
+          Wróć do ofert
+        </Link>
+      </Empty>
     </section>
+  );
+}
+function PublicHeader({ person }: { person: ReturnType<typeof currentPerson> }) {
+  const items = [
+    ...navigation,
+    ...(person?.role === "candidate"
+      ? [
+          { to: "/app/aplikacje", label: "Aplikacje" },
+          { to: "/app/profil", label: "Profil" },
+        ]
+      : []),
+  ];
+  return (
+    <header className="public-header">
+      <div className="tph-container public-header-inner">
+        <Link className="brand" to="/" aria-label="DoRoboty.ai — strona główna">
+          DoRoboty.ai
+          <BrandMark />
+        </Link>
+        <nav className="public-nav" aria-label="Główna nawigacja">
+          {items.map((item) => (
+            <NavLink key={item.to} className="public-nav-link" to={item.to}>
+              {item.label}
+            </NavLink>
+          ))}
+          <div className="public-account">
+            <Link
+              to={person ? "/app" : "/auth/sign-in?audience=candidate"}
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              {person ? "Moje konto" : "Zaloguj się"}
+            </Link>
+          </div>
+          <Dialog>
+            <DialogTrigger
+              render={
+                <Button
+                  className="public-menu"
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Otwórz nawigację"
+                />
+              }
+            >
+              <Menu aria-hidden="true" />
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle>Dokąd teraz?</DialogTitle>
+              <DialogDescription>Oferty, profil i informacje o DoRoboty.ai.</DialogDescription>
+              <nav className="mobile-public-nav" aria-label="Nawigacja mobilna">
+                {items.map((item) => (
+                  <DialogClose key={item.to} render={<Link to={item.to} />}>
+                    {item.label}
+                  </DialogClose>
+                ))}
+                <DialogClose render={<Link to="/auth/sign-in" />}>Zaloguj się</DialogClose>
+              </nav>
+            </DialogContent>
+          </Dialog>
+        </nav>
+      </div>
+    </header>
   );
 }
 const candidateNav = [
@@ -73,6 +170,7 @@ export function Shell() {
   const workspace = pathname.startsWith("/app") && person;
   const [menuAt, setMenuAt] = useState<string | null>(null);
   const main = useRef<HTMLElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
   const lastPath = useRef(pathname);
   useEffect(() => {
     if (lastPath.current !== pathname) {
@@ -92,7 +190,7 @@ export function Shell() {
     <>
       <>
         {issue && (
-          <Notice>
+          <Notice tone="warning">
             {issue}{" "}
             <Link className="underline" to="/app/settings">
               Ustawienia danych
@@ -100,7 +198,7 @@ export function Shell() {
           </Notice>
         )}
       </>
-      {error && (
+      {error && person && !pathname.startsWith("/auth") && (
         <p className="prototype-error" role="alert">
           {error}
         </p>
@@ -130,6 +228,7 @@ export function Shell() {
               DoRoboty.ai
             </Link>
             <Button
+              ref={menuButton}
               aria-label={menuAt === pathname ? "Zamknij menu" : "Otwórz menu"}
               aria-expanded={menuAt === pathname}
               aria-controls="workspace-nav"
@@ -143,7 +242,10 @@ export function Shell() {
           <aside
             className={`sidebar ${menuAt === pathname ? "sidebar-open" : ""}`}
             onKeyDown={(e) => {
-              if (e.key === "Escape") setMenuAt(null);
+              if (e.key === "Escape") {
+                setMenuAt(null);
+                menuButton.current?.focus();
+              }
             }}
           >
             <Link className="brand" to="/">
@@ -204,110 +306,41 @@ export function Shell() {
         </div>
       ) : (
         <>
-          <header className="bg-background/95 shadow-[var(--gui-divider-bottom-shadow)] backdrop-blur supports-[backdrop-filter]:bg-background/80">
-            <div className="mx-auto flex h-16 max-w-[1360px] items-center justify-between gap-4 px-5 lg:px-8">
-              <Link
-                className="flex items-center gap-2.5 text-base font-semibold tracking-[var(--gui-tracking-s)]"
-                to="/"
-                aria-label="DoRoboty.ai — strona główna"
-              >
-                <BrandMark />
-                <span>DoRoboty.ai</span>
-              </Link>
-              <nav aria-label="Główna nawigacja" className="flex items-center gap-2 sm:gap-5">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.to}
-                    className="hidden text-sm font-medium text-muted-foreground transition-colors hover:text-foreground md:inline"
-                    to={item.to}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-                {person ? (
-                  <div className="flex items-center gap-[var(--gui-space-xs)] sm:gap-[var(--gui-space-m)]">
-                    {person.role === "candidate" && (
-                      <>
-                        <Link
-                          className="hidden text-sm font-medium text-muted-foreground md:inline"
-                          to="/app/aplikacje"
-                        >
-                          Aplikacje
-                        </Link>
-                        <Link
-                          className="hidden text-sm font-medium text-muted-foreground md:inline"
-                          to="/app/profil"
-                        >
-                          Profil
-                        </Link>
-                      </>
-                    )}
-                    <Link
-                      to="/app"
-                      className={cn(
-                        buttonVariants({ variant: "outline", size: "lg" }),
-                        "text-sm font-medium max-sm:min-h-10 max-sm:px-[var(--gui-space-xs)] max-sm:text-sm",
-                      )}
-                    >
-                      Moje konto
-                    </Link>
-                    <Link
-                      className={cn(
-                        buttonVariants({ variant: "ghost", size: "icon" }),
-                        "hidden md:inline-flex",
-                      )}
-                      to="/auth/sign-in"
-                      aria-label="Zmień osobę"
-                      title="Zmień osobę"
-                    >
-                      <LogOut aria-hidden="true" />
-                    </Link>
-                  </div>
-                ) : (
-                  <>
-                    <Link
-                      to="/auth/sign-in?audience=candidate"
-                      className={cn(
-                        buttonVariants({ variant: "outline", size: "lg" }),
-                        "text-sm font-medium max-sm:min-h-10 max-sm:px-[var(--gui-space-xs)] max-sm:text-sm",
-                      )}
-                    >
-                      Wybierz osobę
-                    </Link>
-                  </>
-                )}
-              </nav>
-            </div>
-          </header>
-          <main id="main" ref={main} tabIndex={-1} className="outline-none">
+          <PublicHeader person={person} />
+          <main
+            id="main"
+            ref={main}
+            tabIndex={-1}
+            className={
+              pathname === "/app/settings" ? "prototype-section outline-none" : "outline-none"
+            }
+          >
             {content}
           </main>
-          <footer className="bg-muted/40 text-foreground shadow-[var(--gui-divider-top-shadow)]">
-            <div className="mx-auto grid max-w-[1360px] gap-10 px-5 py-12 sm:grid-cols-2 lg:px-8">
+          <footer className="public-footer tph-container">
+            <div className="footer-main">
               <div>
-                <p className="text-base font-semibold">DoRoboty.ai</p>
-                <p className="mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground">
+                <Link className="brand" to="/">
+                  DoRoboty.ai
+                  <BrandMark />
+                </Link>
+                <p>
                   Praca dla ludzi, którzy potrafią z AI zbudować coś wartościowego — nie tylko
                   wpisać je do CV.
                 </p>
               </div>
-              <nav
-                aria-label="Stopka"
-                className="flex flex-wrap content-start gap-x-6 gap-y-3 text-sm text-muted-foreground sm:justify-end"
-              >
+              <nav aria-label="Stopka">
                 <Link to="/oferty">Oferty</Link>
                 <Link to="/metodologia">Metodologia</Link>
                 <Link to="/polityka-prywatnosci">Prywatność</Link>
-                <Link className="inline-flex items-center gap-1" to="/auth/sign-in">
-                  Strefa case <ArrowUpRight className="size-4" />
+                <Link to="/auth/sign-in">
+                  Strefa case <ArrowUpRight size={16} aria-hidden="true" />
                 </Link>
               </nav>
             </div>
-            <div className="px-5 py-4 text-xs text-muted-foreground shadow-[var(--gui-divider-top-shadow)] lg:px-8">
-              <div className="mx-auto max-w-[1360px]">
-                © {new Date().getFullYear()} DoRoboty.ai — od Superhero.tech
-              </div>
-            </div>
+            <p className="footer-credit">
+              © {new Date().getFullYear()} DoRoboty.ai · od Superhero.tech / Technologia po ludzku
+            </p>
           </footer>
         </>
       )}

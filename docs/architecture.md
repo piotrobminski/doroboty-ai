@@ -1,6 +1,6 @@
 # Architecture
 
-One React/TypeScript application is built by Vite into static files. HashRouter renders routes under /#/; route parameters created in the browser require no hosting rewrites. The running app currently uses local CSS tokens, Timeless font and Base UI primitives. New and changed UI must follow the accepted Poster People [design system](design-system/README.md), adapted into the existing stack; installing its reference did not convert runtime styles. There is no server data/API layer.
+One React/TypeScript application is built by Vite into static files. HashRouter renders routes under /#/; route parameters created in the browser require no hosting rewrites. The running app uses the shared Technologia po ludzku React adaptation, system sans/mono stacks and the approved local angular-alpha collage. All new and changed UI must follow the active **Technologia po ludzku** [design system](design-system/README.md), adapted into the existing Base UI stack within the task scope. The implementation and remaining approval boundary are recorded in design-system/STATUS.md. There is no server data store. An optional local-only Node gateway supplies recruiter AI proposals.
 
 ## Data flow
 
@@ -9,6 +9,24 @@ JSON marketplace/person fixtures → initialState → PrototypeProvider → feat
 Candidate source notes, generated draft and approved application are distinct fields. Submission snapshots CV, candidate name, job title, scenario score and summary. Employer stage events are appended, with private-in-the-UI notes. Profile/job edits do not rewrite submitted records.
 
 Storage uses one versioned localStorage key. Import validates schema/version, unique IDs, cross-references and stage history before replacing state. Unreadable/incompatible saves are protected against automatic overwrite; settings can download the original raw save, import a valid file or explicitly reset. Failed/quota-limited persistence leaves the in-memory app usable and offers export. Import/export is capped at 2 MB; no binary CV storage.
+
+## Guided composer and proposals
+
+`job-editor.tsx` implements the approved three-step composer using the existing React/Base UI fields, step buttons with aria-current, review and final publication. `job-proposals.ts` creates up to three description-matched local criteria with exact excerpts and editable questions; unmatched roles get a generic source-based question. It performs no fetch, scoring or automatic approval. Static hosting and offline generation use the same behavior.
+
+`job-editor-state.ts` supplies plain Zod schemas for partial fields, draft criteria and exclusions. Optional version-1 employerDrafts are scoped to recruiter/offer and validated for unique identity and ownership. They participate in scenario persistence/export/import/reset. Reload restores editing before preview; publication removes only the matching draft. Opening preview after validation records question review in the existing draft approval flag; the final Publish action records publication approval/provenance without redundant checkboxes. Source changes retain human edits until explicit retention or confirmed regeneration. Selected approved criteria are validated by the existing PR02 domain schema before publication; zero selection retains the legacy ordinary application flow. Existing source/generated history, locations, salary semantics and immutable application snapshots remain intact.
+
+## Submitted competency evidence support
+
+`competency-insight.ts` derives a deterministic local hint from submitted criterion/response arrays only. It uses bounded lexical/synonym matching plus first-person action and described-outcome indicators. It returns per-requirement textual statuses, exact excerpts (up to 450 characters) and follow-up prompts, with no person score, ranking or stage recommendation. These heuristics cannot establish semantic understanding, factual correctness or skill level. Negated/no-response/unrelated text receives cautious gaps; linked materials are never fetched.
+
+The authorized RecruitingApplication controller supplies CompetencyInsightPanel through ApplicationRecord.answerSupport in the existing RecordSheet Answer tab. CandidateApplication never supplies this region. Current job/profile/CV/identity/MatchScore do not enter the analysis; changing them cannot rewrite submitted evidence. The hint is derived, not persisted or auto-inserted into employer notes. Existing explicit stage operations and reason validation remain unchanged. No browser/provider network request or secret is used.
+
+## Optional recruiter AI infrastructure
+
+`vite.config.ts` loads server-side OPENAI_API_KEY/OPENAI_MODEL and installs `server/recruiter-ai.ts` in local dev/preview. The current composer is disconnected from this endpoint. Merely configuring a key never enables provider calls or a paid fallback. The former unused browser hook and fake browser-transport fixture have been removed.
+
+The retained gateway accepts discriminated title/brief or description requests under `ai-contract.ts`, calls a fixed Responses URL using strict JSON Schema and store:false, and validates output. It requires a loopback peer/local Host and same-origin POST, bounds payload/output/time/concurrency/rate and cancels on disconnect. Errors are fixed codes; credentials and free text are not logged or exported. This is not public authentication. A future UI connection requires its own transfer disclosure and validation.
 
 ## Features
 
@@ -22,4 +40,8 @@ The baseline historical CSV and JSON are separate from interactive state. Future
 
 ## Checks
 
-npm run check and ./scripts/verify run formatting, design-system reference integrity/example checks, lint, types, unit tests, build and Playwright against the static preview. Playwright checks external requests, complete workflows, error/recovery behavior, keyboard controls and mobile layout. No test starts system services. npm run dev only starts Vite.
+npm run check and ./scripts/verify run formatting, design-system reference integrity/example checks, lint, types, unit tests, build and Playwright against the static preview. Playwright disables the real key with PROTOTYPE_AI_DISABLE=1 and verifies actual local proposals, including offline generation and zero provider requests. Server tests inject fake provider fetch calls; neither suite makes paid requests. Playwright checks external requests, complete workflows, error/recovery behavior, keyboard controls and mobile layout. No test starts system services. npm run dev starts Vite, including its optional local AI middleware.
+
+## Current visual implementation
+
+The whole application uses the local Technologia po ludzku foundation and shared React/Base UI owners. `tokens.css` maps source --tph-* values into the existing --gui-* bridge. No vanilla page controller, HTML-string renderer, reference fixture store or global source reset is mounted in React. DiscoveryHero/FormSection/AreaIcon/AreaLabel are shared additions; PageTitle, JobCard, reading sheets, CV and actual timelines retain their existing owners. The user-approved [1.1 specification](design-system/PROPOSED-1.1.md) is now included in the frozen source reference and its versioned profiles. See [status](design-system/STATUS.md) for actual evidence and limits.

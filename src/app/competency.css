@@ -1,0 +1,340 @@
+.competency-editor {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+
+.competency-item {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--tph-line);
+  border-radius: var(--tph-radius-card);
+  background: var(--tph-paper);
+}
+
+.competency-item legend {
+  padding: 0 7px;
+  font: 12px/1.5 var(--tph-font-mono);
+  color: var(--tph-muted);
+}
+
+.competency-item summary {
+  min-height: 44px;
+  padding-block: 10px;
+  cursor: pointer;
+}
+
+.competency-requirement {
+  font-weight: 600;
+}
+
+.competency-editor p,
+.competency-comparison,
+.competency-item {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.competency-comparison {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  padding-block: 22px;
+  border-top: 1px solid var(--tph-line);
+}
+
+.competency-comparison > div {
+  min-width: 0;
+}
+
+.competency-comparison h4 {
+  margin: 0 0 10px;
+  font: 12px/1.5 var(--tph-font-mono);
+  color: var(--tph-muted);
+}
+
+.competency-comparison p + h4 {
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .competency-item {
+    padding: 16px;
+  }
+
+  .competency-comparison {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Host extension of the 1.1 composer: one reviewed skill at a time. */
+.job-wizard {
+  max-width: 1000px;
+  min-width: 0;
+}
+.job-steps {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.job-steps .ui-button {
+  justify-content: flex-start;
+  text-align: left;
+}
+.job-steps [aria-current="step"],
+.job-skill-nav [aria-pressed="true"] {
+  background: var(--tph-violet-tint);
+  color: var(--tph-violet);
+  border-color: var(--tph-violet);
+}
+.job-step-number {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--tph-paper);
+  color: var(--tph-ink);
+  font: 12px var(--tph-font-mono);
+}
+.job-wizard-form {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+.job-wizard-form > .form-group {
+  padding: 28px;
+  background: var(--tph-card);
+  border: 1px solid var(--tph-line);
+  border-radius: var(--tph-radius-card);
+}
+.job-wizard-form .form-group-heading h2,
+.job-wizard .competency-editor h2 {
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.job-wizard-form .form-group-heading > p:last-child {
+  max-width: 70ch;
+}
+.job-wizard .eyebrow {
+  margin-bottom: 12px;
+}
+.job-wizard h3 {
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+.job-description-summary > p,
+.job-preview > p,
+.job-preview-question > p {
+  white-space: pre-wrap;
+  margin-top: 10px;
+}
+.job-wizard-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.job-skill-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.job-skill-nav .ui-button {
+  font-size: 13px;
+  text-align: left;
+}
+.job-skill-detail {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+  padding: 22px;
+  border-left: 3px solid var(--tph-violet);
+  background: var(--tph-paper);
+}
+.job-skill-detail[hidden] {
+  display: none;
+}
+.job-skill-tag {
+  justify-self: start;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--tph-violet);
+  background: var(--tph-violet-tint);
+  font-size: 12px;
+  font-weight: 600;
+}
+.job-skill-detail textarea {
+  min-height: 110px;
+}
+.job-skill-detail .ui-button {
+  justify-self: start;
+}
+.job-review {
+  border-top: 1px solid var(--tph-line);
+  padding-top: 18px;
+}
+.job-review > p {
+  margin-top: 10px;
+}
+.job-stale {
+  border-color: var(--tph-violet);
+}
+.job-stale .workspace-actions {
+  margin-top: 16px;
+}
+.job-preview {
+  display: grid;
+  gap: 16px;
+}
+.job-preview .job-preview-title {
+  font-size: 32px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+.job-preview-terms {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding-block: 22px;
+  border-block: 1px solid var(--tph-line);
+}
+.job-preview-terms dt {
+  color: var(--tph-muted);
+  font: 12px/1.5 var(--tph-font-mono);
+  margin-bottom: 6px;
+}
+.job-preview-question {
+  padding: 20px;
+  border: 1px solid var(--tph-line);
+  border-radius: var(--tph-radius-card);
+  background: var(--tph-paper);
+}
+.job-preview-question h4 {
+  font-weight: 700;
+}
+.job-recovered {
+  margin-block: 16px;
+}
+.job-wizard :is(p, h2, h3, h4, button, dd, label) {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .job-steps {
+    grid-template-columns: 1fr;
+  }
+  .job-wizard-form > .form-group,
+  .job-wizard .prototype-panel {
+    padding: 20px 16px;
+  }
+  .job-skill-detail {
+    padding: 18px 14px;
+  }
+  .job-wizard-actions > .ui-button {
+    width: 100%;
+  }
+  .job-preview-terms {
+    grid-template-columns: 1fr;
+  }
+}
+
+.competency-insight {
+  min-width: 0;
+  margin-bottom: 28px;
+  padding: 24px;
+  border: 1px solid var(--tph-violet-border);
+  border-left: 3px solid var(--tph-violet);
+  border-radius: var(--tph-radius-card);
+  background: var(--tph-paper);
+}
+.competency-insight .eyebrow {
+  color: var(--tph-violet);
+  font-size: 11px;
+}
+.record-reading .competency-insight :is(p, summary) {
+  font-size: 14px;
+  line-height: 1.65;
+}
+.record-reading .competency-insight .record-caption {
+  font-size: 13px;
+}
+.competency-insight-summary {
+  font-weight: 600;
+  margin-block: 12px;
+}
+.competency-insight-list {
+  list-style: none;
+  padding: 0;
+  margin-block: 24px;
+}
+.competency-insight-list > li {
+  min-width: 0;
+  padding-block: 20px;
+  border-top: 1px solid var(--tph-line);
+}
+.competency-insight-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.competency-insight-heading h4 {
+  flex: 1 1 200px;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.competency-evidence-status {
+  flex: 0 1 auto;
+  max-width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--tph-line);
+  border-radius: 4px;
+  color: var(--tph-ink);
+  background: var(--tph-card);
+  font: 11px/1.6 var(--tph-font-mono);
+}
+.competency-evidence-status[data-evidence-status="described"] {
+  background: var(--tph-violet-tint);
+  border-color: var(--tph-violet-border);
+  color: var(--tph-violet);
+}
+.competency-insight details {
+  margin-top: 12px;
+}
+.competency-insight summary {
+  width: fit-content;
+  max-width: 100%;
+  min-height: 44px;
+  padding-block: 10px;
+  cursor: pointer;
+  color: var(--tph-violet);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.competency-insight blockquote {
+  margin-block: 12px;
+  padding-left: 16px;
+  border-left: 2px solid var(--tph-line);
+}
+.competency-follow-up {
+  margin-top: 12px;
+}
+.competency-insight :is(p, h3, h4, span, summary) {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .competency-insight {
+    padding: 20px 14px;
+  }
+}
