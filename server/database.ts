@@ -9,6 +9,8 @@ import {
   type State,
   type ServerAction,
 } from "../src/features/prototype/model";
+import { initializeDatabase, assertRoundTrip } from "./database-migrations";
+import { ScenarioRepository, assertForeignKeys, transaction } from "./scenario-repository";
 import { accountEmail } from "../src/features/auth/contract";
 
 const scryptOptions = { N: 32768, r: 8, p: 3, maxmem: 64 * 1024 * 1024 };
@@ -35,59 +37,39 @@ async function matches(password: string, encoded: string) {
 export class PrototypeDatabase {
   readonly sql: DatabaseSync;
   private readonly dummyHash: string;
+  private readonly repository: ScenarioRepository;
+  readonly migrationBackupPath: string | null;
   constructor(path: string) {
     if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true, mode: 0o700 });
     this.sql = new DatabaseSync(path);
-    this.sql.exec(`
-      PRAGMA journal_mode = WAL;
-      PRAGMA foreign_keys = ON;
-      PRAGMA busy_timeout = 5000;
-      CREATE TABLE IF NOT EXISTS scenario (id INTEGER PRIMARY KEY CHECK(id = 1), data TEXT NOT NULL CHECK(json_valid(data)));
-      CREATE TABLE IF NOT EXISTS users (
-        person_id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE COLLATE NOCASE,
-        password_hash TEXT NOT NULL, created_at INTEGER NOT NULL
+    try {
+      this.sql.exec("PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;");
+      this.migrationBackupPath = initializeDatabase(this.sql, path, (state) =>
+        this.seedAccounts(state),
       );
-      CREATE TABLE IF NOT EXISTS sessions (
-        token_hash TEXT PRIMARY KEY, person_id TEXT NOT NULL REFERENCES users(person_id), expires_at INTEGER NOT NULL
-      );
-      CREATE INDEX IF NOT EXISTS sessions_expiry ON sessions(expires_at);
-      CREATE TABLE IF NOT EXISTS login_failures (address TEXT PRIMARY KEY, attempts INTEGER NOT NULL, until_at INTEGER NOT NULL);
-      PRAGMA user_version = 1;
-    `);
-    this.atomic(() => {
-      if (!this.sql.prepare("SELECT id FROM scenario WHERE id = 1").get())
-        this.save(initialState());
-      this.seedAccounts(this.read());
-    });
+      this.repository = new ScenarioRepository(this.sql);
+    } catch (error) {
+      this.sql.close();
+      throw error;
+    }
     this.dummyHash = hashPassword(randomBytes(32).toString("hex"));
   }
   close() {
     this.sql.close();
   }
   private atomic<T>(operation: () => T): T {
-    this.sql.exec("BEGIN IMMEDIATE");
-    try {
-      const result = operation();
-      this.sql.exec("COMMIT");
-      return result;
-    } catch (error) {
-      this.sql.exec("ROLLBACK");
-      throw error;
-    }
+    return transaction(this.sql, "write", operation);
   }
   read(): State {
-    const row = this.sql.prepare("SELECT data FROM scenario WHERE id = 1").get()!;
-    return stateSchema.parse(JSON.parse(row.data as string));
+    return this.repository.read();
   }
-  private save(state: State) {
-    const data = JSON.stringify(stateSchema.parse({ ...state, activePersonId: null }));
-    if (Buffer.byteLength(data) > 2_000_000)
+  private save(state: State, previous?: State) {
+    const next = stateSchema.parse({ ...state, activePersonId: null });
+    if (Buffer.byteLength(JSON.stringify(next)) > 2_000_000)
       throw new OperationFailure("Dane przekraczają limit 2 MB. Wyeksportuj scenariusz.");
-    this.sql
-      .prepare(
-        "INSERT INTO scenario VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data",
-      )
-      .run(data);
+    this.repository.write(next, previous);
+    assertRoundTrip(this.repository, next);
+    assertForeignKeys(this.sql);
   }
   private seedAccounts(state: State) {
     for (const person of state.people) {
@@ -153,7 +135,7 @@ export class PrototypeDatabase {
             : "Sprawdź poprawność danych.",
         );
       }
-      this.save(next);
+      this.save(next, state);
       return this.view(personId);
     });
   }
@@ -174,19 +156,21 @@ export class PrototypeDatabase {
             "Import musi zachować istniejące konta, ich role i przypisania do firm.",
           );
       }
-      this.save(next);
       this.seedAccounts(next);
+      this.save(next);
       return this.view(personId);
     });
   }
   reset(personId: string) {
-    const next = initialState();
-    const current = this.read();
-    next.people = current.people;
-    // Retain organizations referenced by imported accounts.
-    for (const company of current.companies)
-      if (!next.companies.some((c) => c.id === company.id)) next.companies.push(company);
-    return this.replace(personId, next);
+    return this.atomic(() => {
+      const next = initialState();
+      const current = this.read();
+      next.people = current.people;
+      // Retain organizations referenced by imported accounts.
+      for (const company of current.companies)
+        if (!next.companies.some((c) => c.id === company.id)) next.companies.push(company);
+      return this.replace(personId, next);
+    });
   }
   view(personId: string | null): State {
     const state = this.read();

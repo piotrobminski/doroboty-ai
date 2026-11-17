@@ -46,9 +46,13 @@ Every existing account starts with password **`Test1234`**:
 
 Account identifiers, roles, company assignments, profile fields and CVs are preserved. Login uses salted scrypt hashes and an opaque HttpOnly/SameSite session cookie, expiring after 12 hours; logout revokes the session. Shared initial passwords are for this synthetic teaching prototype. There is no registration or password recovery flow.
 
-The ignored `.data/` directory holds the database and WAL files; never commit or distribute it. `DATABASE_PATH` can select a different persistent path. Set `AUTH_SECURE_COOKIE=1` for an HTTPS origin; local HTTP uses the default. Options can be set in `.env.local` or the process environment. Restart never resets hashes or scenario records.
+The ignored `.data/` directory holds the database, WAL files and migration backups; never commit or distribute it. `DATABASE_PATH` can select a different persistent path. Set `AUTH_SECURE_COOKIE=1` for an HTTPS origin; local HTTP uses the default. Options can be set in `.env.local` or the process environment. Restart never resets hashes or scenario records.
 
 The server is authoritative. Clearing browser storage signs out the user but does not delete the scenario. A previous `doroboty.prototype.v1` save stays untouched; the operator can download or explicitly import it in Settings after reviewing it. Import/reset affect the shared database, preserve existing account IDs/roles/memberships and never import/export passwords or sessions. Reset retains account profiles. For a scenario backup, use operator export; for an exact SQLite backup, stop the server before copying the `.data/` directory and restore it with the server stopped.
+
+Existing databases migrate automatically to schema version 2 on server startup. Jobs, applications, their history, drafts and bookmarks become separate related tables; profile metadata remains separate. Before changing a version-1 database, startup creates a private, consistent `<database-path>.v1-backup-<time>-<uuid>.sqlite` copy, including committed WAL records. The migration preserves accounts, hashes, sessions, IDs and submitted material, and rolls back if validation fails. An invalid or unsupported database is never silently reset. API/scenario-export JSON remains version 1.
+
+To recover from a migration problem, stop every server using the database, copy the backup to a different database path and set `DATABASE_PATH` to that copy. Keep the original database and its sidecars for recovery. The backup includes credentials/sessions and must stay private. [Schema, migration and verification details](docs/tasks/jobs-applications-schema.md).
 
 ## Guided recruiter proposals
 

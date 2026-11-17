@@ -24,6 +24,8 @@ BRIEF.md describes the current scope. Historical milestones remain in Git histor
 
 - [x] Add SQLite-backed scenario/accounts/sessions, preserve existing users with initial Test1234 passwords and replace persona selection with server-verified login. See docs/tasks/database-auth.md.
 
+- [x] Implement the approved relational jobs/applications schema with lossless version-1 migration, private backup, relational integrity and preserved account/export contracts. See docs/tasks/jobs-applications-schema.md for verification.
+
 ## Deliberate limitations
 
 - Human research, course release approval and publishing a participant URL remain separate activities; passing code checks does not establish these outcomes.
