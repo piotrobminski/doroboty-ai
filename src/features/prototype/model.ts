@@ -2,14 +2,13 @@ import { z } from "zod";
 import marketplace from "./data/marketplace.json" with { type: "json" };
 import people from "./data/people.json" with { type: "json" };
 import type { JobWithCompany } from "@/features/jobs/types";
-import { jobEditorDraftSchema, type JobEditorDraft } from "./job-editor-state";
+import { jobEditorDraftSchema } from "./job-editor-state";
 
 import {
   competencyCardSchema,
   competencySubmissionSchema,
   draftResponsesSchema,
   decisionReasonSchema,
-  type CompetencyResponse,
 } from "./competency";
 
 const id = z
@@ -266,34 +265,36 @@ export const stateSchema = z
 export type State = z.infer<typeof stateSchema>;
 export type Person = State["people"][number];
 export type Application = State["applications"][number];
-export type Action =
-  | { type: "select_person"; id: string | null }
-  | { type: "profile"; value: z.infer<typeof profileSchema> }
-  | { type: "toggle_saved"; jobId: string }
-  | {
-      type: "draft";
-      jobId: string;
-      notes: string;
-      generated: string;
-      answer: string;
-      competencyResponses?: CompetencyResponse[];
-      competencyRevision?: string;
-    }
-  | {
-      type: "submit";
-      jobId: string;
-      notes: string;
-      generated: string;
-      answer: string;
-      consent: boolean;
-      competencyResponses?: CompetencyResponse[];
-      competencyRevision?: string;
-    }
-  | { type: "stage"; applicationId: string; stage: Stage; note: string }
-  | { type: "withdraw"; applicationId: string }
-  | { type: "publish"; job: z.infer<typeof jobSchema> }
-  | { type: "job_editor_draft"; jobId?: string; value: JobEditorDraft }
-  | { type: "company"; name: string; description: string };
+const responseFields = {
+  jobId: id,
+  notes: text,
+  generated: text,
+  answer: text,
+  competencyResponses: draftResponsesSchema.optional(),
+  competencyRevision: z.string().max(100).optional(),
+};
+export const actionSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("profile"), value: profileSchema }).strict(),
+  z.object({ type: z.literal("toggle_saved"), jobId: id }).strict(),
+  z.object({ type: z.literal("draft"), ...responseFields }).strict(),
+  z.object({ type: z.literal("submit"), ...responseFields, consent: z.boolean() }).strict(),
+  z
+    .object({ type: z.literal("stage"), applicationId: id, stage: z.enum(stages), note: text })
+    .strict(),
+  z.object({ type: z.literal("withdraw"), applicationId: id }).strict(),
+  z.object({ type: z.literal("publish"), job: jobSchema }).strict(),
+  z
+    .object({
+      type: z.literal("job_editor_draft"),
+      jobId: id.optional(),
+      value: jobEditorDraftSchema,
+    })
+    .strict(),
+  z.object({ type: z.literal("company"), name: shortText, description: text }).strict(),
+]);
+export type ServerAction = z.infer<typeof actionSchema>;
+// Identity selection is used only by the pure scenario model; the API never accepts it.
+export type Action = ServerAction | { type: "select_person"; id: string | null };
 
 export function initialState(): State {
   const state = stateSchema.parse({

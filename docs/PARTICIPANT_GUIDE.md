@@ -13,13 +13,13 @@ Open http://127.0.0.1:3001. If Node or registry access is blocked by your organi
 
 ## Try a complete flow
 
-1. Choose Anna Kowalska and browse offers.
+1. Log in as Anna Kowalska (`candidate-anna@doroboty.test`) and browse offers.
 2. Save an offer, edit the profile and submit your own approved application answer.
-3. Choose Karolina Wiśniewska for BrightLabs and review its candidates.
+3. Log in as Karolina Wiśniewska (`employer-brightlabs@doroboty.test`) for BrightLabs and review its candidates.
 4. Record review, invitation, conversation and the next decision.
-5. Return to Anna and inspect the application history.
+5. Log back in as Anna and inspect the application history.
 
-Karolina and Tomasz see their respective companies in the interface; this is role simulation. Scenario records remain local and synthetic. CVs are prepared text examples, not real uploads. Scores and summaries simulate the scenario. The guided recruiter form proposes skills/questions locally without contacting a provider; candidates write their own answers.
+All prepared accounts use initial password `Test1234`; see the [account list](../README.md#prepared-accounts-and-database). Karolina and Tomasz receive only their companies’ applications. Scenario records remain synthetic and are stored on the local app server in SQLite. CVs are prepared text examples, not real uploads. Scores and summaries simulate the scenario. The guided recruiter form proposes skills/questions locally without contacting a provider; candidates write their own answers.
 
 ## Guided recruiter form
 
@@ -31,13 +31,13 @@ The earlier server gateway remains disconnected from the form. Existing keys sta
 
 ## Save, share and recover
 
-Changes survive reload in this browser. Settings can export a JSON file, import a scenario or reset to fixtures. Import/reset asks before replacing state. If a save is incompatible, download the original before resetting. Storage failure is shown explicitly; export before closing the tab. Use one editing tab at a time.
+Changes survive reload and server restart. Operator settings can export a JSON scenario, import one or reset scenario records. Import/reset asks before replacing the shared scenario; accounts and passwords are retained. Previous browser saves are left untouched and can be downloaded or explicitly migrated by the operator. Failed server writes preserve form input for retry. Use one editing tab at a time.
 
-A URL shares the interface, not your local changes. To transfer a scenario, share the exported file and import it in the other browser. Exports include all personas, applications and notes; never enter real personal data.
+Browsers connected to the same server share the scenario subject to account access. To transfer it to another server, the operator exports/imports the JSON file. Exports include all profiles, applications and notes, but no passwords/sessions; never enter real personal data.
 
-## Static build
+## Local build
 
-Run npm run build. Serve dist/ through any static HTTP host. No provider account is needed for the complete guided local-proposal workflow. A plain static host does not include the optional disconnected OpenAI gateway. Do not open index.html via file://; ES modules need HTTP. Hash links work without route rewrite configuration.
+Run `npm run build` followed by `npm run preview` (or `npm start`). The same server serves dist/ and the database/auth API. Static hosting alone cannot support this version. No provider account is needed for the complete guided local-proposal workflow. A plain static host does not include the optional disconnected OpenAI gateway. Do not open index.html via file://; ES modules need HTTP. Hash links work without route rewrite configuration.
 
 ## Verification
 

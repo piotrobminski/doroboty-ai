@@ -1,11 +1,11 @@
 import type { Page } from "@playwright/test";
-import { TEST_ORIGIN, test, expect, seedScenario, scenario, choosePerson } from "./fixtures";
+import { TEST_ORIGIN, test, expect, seedScenario, scenario, chooseAccount } from "./fixtures";
 import AxeBuilder from "@axe-core/playwright";
 import { initialState } from "../../src/features/prototype/model";
 import { STORAGE_KEY } from "../../src/features/prototype/storage";
 import { readFile } from "node:fs/promises";
 async function choose(page: Page, name: string) {
-  await choosePerson(page, name);
+  await chooseAccount(page, name);
 }
 async function application(page: Page) {
   await choose(page, "Anna Kowalska");
@@ -192,9 +192,9 @@ test("profile changes do not rewrite a submitted application snapshot", async ({
 test("invalid import preserves state, valid import replaces state, reset asks for confirmation", async ({
   page,
 }) => {
-  await choose(page, "Anna Kowalska");
+  await choose(page, "Prowadzący");
   await page.goto("/#/app/settings");
-  const before = await page.evaluate((key) => localStorage.getItem(key), STORAGE_KEY);
+  const before = JSON.stringify(await scenario(page));
   await page.getByLabel("Importuj plik scenariusza").setInputFiles({
     name: "invalid.json",
     mimeType: "application/json",
@@ -202,45 +202,41 @@ test("invalid import preserves state, valid import replaces state, reset asks fo
   });
   await page.getByRole("button", { name: "Importuj", exact: true }).click();
   await expect(page.getByRole("alert")).toContainText("Nieprawidłowy plik");
-  expect(await page.evaluate((key) => localStorage.getItem(key), STORAGE_KEY)).toBe(before);
+  expect(JSON.stringify(await scenario(page))).toBe(before);
   const imported = initialState();
   imported.activePersonId = "candidate-anna";
-  imported.people[0].name = "Zaimportowana Anna";
+  imported.people.find((p) => p.id === "operator")!.name = "Zaimportowany prowadzący";
   await page.getByLabel("Importuj plik scenariusza").setInputFiles({
     name: "scenario.json",
     mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify(imported)),
   });
   await page.getByRole("button", { name: "Importuj", exact: true }).click();
-  await expect(page.getByText("Zaimportowana Anna", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("Zaimportowany prowadzący", { exact: true }).first()).toBeVisible();
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Eksportuj dane" }).click();
   expect((await download).suggestedFilename()).toBe("doroboty-scenariusz.json");
   await page.getByRole("button", { name: "Resetuj scenariusz", exact: true }).click();
   await page.getByRole("button", { name: "Anuluj", exact: true }).click();
-  await expect(page.getByText("Zaimportowana Anna", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("Zaimportowany prowadzący", { exact: true }).first()).toBeVisible();
   await page.getByRole("button", { name: "Resetuj scenariusz", exact: true }).click();
   await page.getByRole("button", { name: "Resetuj", exact: true }).click();
-  expect(
-    await page.evaluate(
-      (key) => JSON.parse(localStorage.getItem(key)!).activePersonId,
-      STORAGE_KEY,
-    ),
-  ).toBe(null);
+  expect((await scenario(page)).activePersonId).toBe("operator");
 });
-test("unreadable save stays untouched while the user works in memory", async ({ page }) => {
+test("unreadable legacy save stays untouched and is available for operator recovery", async ({
+  page,
+}) => {
   await page.goto("/");
   await page.evaluate((key) => localStorage.setItem(key, '{"version":999}'), STORAGE_KEY);
   await page.reload();
-  await expect(page.getByRole("status")).toContainText("nie zostaną nadpisane");
-  await choose(page, "Anna Kowalska");
+  await choose(page, "Prowadzący");
   expect(await page.evaluate((key) => localStorage.getItem(key), STORAGE_KEY)).toBe(
     '{"version":999}',
   );
   await page.goto("/#/app/settings");
   await expect(page.getByRole("button", { name: "Pobierz poprzedni zapis" })).toBeVisible();
 });
-test("storage denial keeps the app usable and offers export", async ({ page }) => {
+test("browser storage denial keeps database persistence usable", async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(Storage.prototype, "setItem", {
       value() {
@@ -249,7 +245,7 @@ test("storage denial keeps the app usable and offers export", async ({ page }) =
     });
   });
   await choose(page, "Anna Kowalska");
-  await expect(page.getByRole("status")).toContainText("Wyeksportuj");
+
   await page.goto("/#/app/profil");
   await expect(page.getByLabel("Imię i nazwisko")).toHaveValue("Anna Kowalska");
 });
@@ -277,7 +273,9 @@ test("map, hash deep links and unknown records work without external requests", 
 test("mobile navigation, light-only appearance and keyboard person selection", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/#/auth/sign-in");
-  const anna = page.getByRole("button", { name: "Wejdź jako Anna Kowalska", exact: true });
+  await page.getByLabel("Adres e-mail", { exact: true }).fill("candidate-anna@doroboty.test");
+  await page.getByLabel("Hasło", { exact: true }).fill("Test1234");
+  const anna = page.getByRole("button", { name: "Zaloguj się", exact: true });
   await anna.focus();
   await page.keyboard.press("Enter");
   await page.getByRole("button", { name: "Otwórz menu" }).click();
@@ -359,7 +357,7 @@ for (const width of [1440, 375]) {
       answer: "Zapisana wcześniej odpowiedź kandydata do dalszej edycji.",
     };
     legacy.drafts.push(draft);
-    await choose(page, "Anna Kowalska");
+    await choose(page, "Prowadzący");
     await page.goto("/#/app/settings");
     await page.getByLabel("Importuj plik scenariusza").setInputFiles({
       name: "legacy-draft.json",
@@ -367,6 +365,7 @@ for (const width of [1440, 375]) {
       buffer: Buffer.from(JSON.stringify(legacy)),
     });
     await page.getByRole("button", { name: "Importuj", exact: true }).click();
+    await choose(page, "Anna Kowalska");
     await page.goto(`/#/aplikuj/${job.slug}`);
     await page.reload();
     const form = page.locator("main form");
@@ -488,10 +487,11 @@ test("Technologia po ludzku offer keeps desktop conditions/actions and places th
   await page.screenshot({ path: "artifacts/original-job-layout-mobile.png", fullPage: true });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await nav.getByRole("link", { name: "Dla firm", exact: true }).click();
-  await expect(
-    page.getByRole("heading", { name: "Karolina Wiśniewska", exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Zaloguj się", exact: true })).toBeVisible();
+  await expect(page.getByLabel("Adres e-mail", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Anna Kowalska", exact: true })).toHaveCount(0);
+  await choose(page, "Karolina Wiśniewska");
+  await expect(page.getByRole("heading", { name: "Moje oferty", exact: true })).toBeVisible();
 });
 
 test("restored company and public navigation keep their structure across screen sizes", async ({

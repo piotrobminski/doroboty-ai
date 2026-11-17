@@ -6,7 +6,7 @@ Read BRIEF.md, docs/case/CASE_PROTOCOL.md, TODO.md and relevant FEATURES.md entr
 ## Start and boundaries
 
 - Participant setup: Node.js 24, npm ci, npm run dev (http://127.0.0.1:3001).
-- Role selection is a simulation, not security.
+- Server sessions authenticate prepared synthetic accounts; enforce role and ownership on the API.
 - Share plain Zod schemas between forms and domain operations.
 - Preserve human editing and approval. Use synthetic data only.
 - Keep historical case evidence separate from prototype state. Include only baseline in participant packages; source history and instructor materials must not be distributed.

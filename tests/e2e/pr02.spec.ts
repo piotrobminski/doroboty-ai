@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { test, expect, seedScenario, scenario, choosePerson } from "./fixtures";
+import { test, expect, seedScenario, scenario, chooseAccount } from "./fixtures";
 import AxeBuilder from "@axe-core/playwright";
 import { initialState, transition, type State } from "../../src/features/prototype/model";
 import { proposeCriteria, type CompetencyCard } from "../../src/features/prototype/competency";
@@ -11,7 +11,7 @@ const example =
 const reason =
   "Kandydatka opisała własną analizę błędów. Na rozmowie sprawdzimy dobór próby i ograniczenia wyniku.";
 async function choose(page: Page, name: string) {
-  await choosePerson(page, name);
+  await chooseAccount(page, name);
 }
 async function seed(page: Page, state: State) {
   await page.goto("/");
@@ -69,7 +69,7 @@ test("PR02: publish an approved card, resume examples, review evidence and justi
   await expect(page.getByRole("heading", { name: "Moje oferty", exact: true })).toBeVisible();
   const formLink = page.getByRole("link", { name: "Formularz karty PR02", exact: true });
   await formLink.click();
-  await choosePerson(page, "Anna Kowalska");
+  await chooseAccount(page, "Anna Kowalska");
   await expect(page.getByRole("heading", { name: "Aplikuj na ofertę", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Wyślij aplikację", exact: true }).click();
   await expect(page.getByLabel("Twój przykład i własny wkład 1", { exact: true })).toBeFocused();

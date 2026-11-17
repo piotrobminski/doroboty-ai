@@ -1,12 +1,16 @@
 # Prototype data boundary
 
-The browser-local scenario has no real authentication or remote data store. Role-specific UI and local transition checks organize the scenario; anyone using the browser can inspect all stored data. Use synthetic data only.
+The teaching prototype authenticates prepared synthetic accounts using a local SQLite-backed API. Server sessions enforce role and ownership; the operator can access the full scenario. Initial shared `Test1234` credentials are intended for teaching. No real CVs/private material belong here, and this change does not establish production readiness, registration, password recovery or deployment.
 
-No API keys, credentials, real CVs or private material belong in frontend source, JSON, localStorage or exports. Exports include private-in-the-UI source/recruiter notes.
+`server/database.ts` uses individually salted scrypt (N=32768, r=8, p=3), random 256-bit session tokens and SHA-256 token digests at rest. Sessions expire after 12 hours and are revoked on logout; login rotates the current token. Cookies are HttpOnly/SameSite=Strict/Path=/; set AUTH_SECURE_COOKIE=1 when using HTTPS. State responses use no-store. POST requires an application-specific header, JSON content and matching Origin when present; no cross-origin credentials/CORS support is enabled. Login failures are bounded per socket address, and concurrent derivations are capped. Payloads are capped at 2 MB. Credentials and free text are never logged.
 
-Render imported text through React text nodes, validate imports with shared Zod schemas, reject unsupported versions, duplicate IDs, broken references and oversized files. Never overwrite an unreadable save automatically.
+SQLite lives in ignored `.data/` (private directory permissions) or DATABASE_PATH. A middleware guard in dev/preview and Vite filesystem denies prevent direct HTTP access to database/WAL files, including custom database paths and /@fs requests. Do not commit/distribute runtime databases, WAL files or session material. Scenario exports exclude credentials/sessions. They are operator-only and include application/CV snapshots and recruiter notes. Full backup/restore requires stopping the server and preserving the SQLite directory. A public deployment would also need HTTPS, individual credentials, recovery/account lifecycle and an independent security review.
 
-The employer-only competency evidence hint is computed locally from submitted criterion/response snapshots. It does not send candidate text, CVs, identity or protected attributes to a provider, fetch material links, log free text, rank people or mutate recruiting decisions. Persona projections organize visibility and are not confidentiality.
+GET /api/state projects records according to the authenticated identity. Public views receive published offers; candidates receive their own applications/drafts/saved jobs without recruiter notes; employers receive their company’s submitted snapshots, without current candidate full profiles or legacy private notes. Client-supplied identity changes are rejected. Mutations use complete server state, shared Zod validation and domain ownership/transition checks inside a transaction. Imported text is rendered through React; import rejects unknown versions, duplicate IDs, broken references, oversized data and removal/reassignment of existing accounts. Legacy localStorage is never automatically trusted as authenticated identity or migrated.
+
+The employer-only competency evidence hint remains computed locally from submitted criterion/response snapshots. It does not send candidate text/CVs to a provider, fetch material links, log free text, rank people or mutate decisions. Human review remains required.
+
+Implementation references: [Node 24 SQLite](https://nodejs.org/download/release/latest-v24.x/docs/api/sqlite.html), [OWASP password storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html), [OWASP sessions](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html). Actual test evidence is recorded in [the task](tasks/database-auth.md).
 
 ## Local OpenAI gateway
 

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { usePrototype } from "./store";
 import { serializeState, MAX_IMPORT_BYTES } from "./storage";
+import { currentPerson } from "./model";
 import { PageTitle } from "./shell";
 
 export function downloadText(name: string, text: string, type = "application/json") {
@@ -16,7 +17,7 @@ export function downloadText(name: string, text: string, type = "application/jso
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 export function SettingsPage() {
-  const { state, reset, importState, original } = usePrototype();
+  const { state, reset, importState, original, pending: saving } = usePrototype();
   const [pending, setPending] = useState<"reset" | "import" | null>(null);
   const [raw, setRaw] = useState("");
   const [error, setError] = useState("");
@@ -37,69 +38,93 @@ export function SettingsPage() {
       setError("Nie udało się odczytać pliku.");
     }
   }
-  function confirm() {
+  async function confirm() {
     if (pending === "reset") {
-      reset();
-      setMessage("Przywrócono scenariusz początkowy.");
-    } else if (importState(raw)) {
+      if (await reset()) setMessage("Przywrócono scenariusz początkowy.");
+    } else if (await importState(raw)) {
       setMessage("Dane zostały zaimportowane.");
     }
     setPending(null);
   }
   return (
     <>
-      <PageTitle>Ustawienia prototypu</PageTitle>
-      <section className="prototype-panel prototype-form">
-        <h2>Dane scenariusza</h2>
-        <p>
-          Zmiany są zapisane tylko w tej przeglądarce. Wysłanie linku innej osobie nie przenosi
-          Twoich danych. Eksport pozwala przekazać scenariusz lub zachować kopię przed resetem.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Button
-            variant="outline"
-            onClick={() => downloadText("doroboty-scenariusz.json", serializeState(state))}
-          >
-            Eksportuj dane
-          </Button>
-          <Button variant="outline" render={<label />}>
-            Importuj dane
-            <input
-              className="sr-only"
-              type="file"
-              accept="application/json,.json"
-              aria-label="Importuj plik scenariusza"
-              onChange={readFile}
-            />
-          </Button>
+      <PageTitle description="Zachowaj kopię swojej pracy, przenieś scenariusz lub zacznij od nowa.">
+        Ustawienia prototypu
+      </PageTitle>
+      {currentPerson(state)?.role === "operator" ? (
+        <section className="prototype-panel prototype-form">
+          <h2>Dane scenariusza</h2>
+          <p>
+            Scenariusz jest zapisany we wspólnej bazie SQLite na serwerze. Import i reset zmieniają
+            dane wszystkich kont. Eksport pozwala zachować kopię przed zmianą. Hasła i sesje nie są
+            częścią eksportu.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              variant="outline"
+              onClick={() => downloadText("doroboty-scenariusz.json", serializeState(state))}
+            >
+              Eksportuj dane
+            </Button>
+            <Button variant="outline" render={<label />}>
+              Importuj dane
+              <input
+                className="sr-only"
+                type="file"
+                accept="application/json,.json"
+                aria-label="Importuj plik scenariusza"
+                onChange={readFile}
+              />
+            </Button>
+            {original !== null && (
+              <Button
+                variant="outline"
+                onClick={() =>
+                  downloadText("doroboty-zapis-do-odzyskania.txt", original, "text/plain")
+                }
+              >
+                Pobierz poprzedni zapis
+              </Button>
+            )}
+          </div>
           {original !== null && (
             <Button
               variant="outline"
-              onClick={() =>
-                downloadText("doroboty-zapis-do-odzyskania.txt", original, "text/plain")
-              }
+              disabled={saving}
+              onClick={() => {
+                setRaw(original);
+                setPending("import");
+              }}
             >
-              Pobierz poprzedni zapis
+              Przenieś poprzedni zapis z przeglądarki
             </Button>
           )}
-        </div>
-        <Button variant="destructive" onClick={() => setPending("reset")}>
-          Resetuj scenariusz
-        </Button>
-        {error && (
-          <p className="error-message" role="alert">
-            {error}
+          <Button disabled={saving} variant="destructive" onClick={() => setPending("reset")}>
+            Resetuj scenariusz
+          </Button>
+          {error && (
+            <p className="error-message" role="alert">
+              {error}
+            </p>
+          )}
+          {message && <p role="status">{message}</p>}
+        </section>
+      ) : (
+        <section className="prototype-panel prototype-form">
+          <h2>Dane konta</h2>
+          <p>
+            Zmiany są zapisywane w bazie danych. Eksport, import i reset całego scenariusza są
+            dostępne na koncie prowadzącego.
           </p>
-        )}
-        {message && <p role="status">{message}</p>}
-      </section>
+        </section>
+      )}
       <section className="prototype-panel prototype-form mt-6">
         <h2>O prototypie</h2>
         <p>
-          Wybór osoby zastępuje logowanie. Match Score i podsumowania odtwarzają przygotowany
-          scenariusz. Formularz rekrutera proponuje umiejętności i pytania na podstawie opisu
-          stanowiska; rekruter samodzielnie je poprawia i zatwierdza. Używaj przykładowych danych i
-          CV.
+          Dostęp do konta wymaga adresu e-mail i hasła. Match Score i podsumowania odtwarzają
+          przygotowany scenariusz. Formularz rekrutera proponuje umiejętności i pytania na podstawie
+          opisu stanowiska; rekruter samodzielnie je poprawia i zatwierdza. Używaj przykładowych
+          danych i CV.
         </p>
       </section>
       <ConfirmDialog
@@ -108,9 +133,9 @@ export function SettingsPage() {
           if (!v) setPending(null);
         }}
         title={pending === "reset" ? "Zresetować scenariusz?" : "Zastąpić dane scenariusza?"}
-        description="Ta operacja zastąpi lokalne zmiany. Możesz najpierw wyeksportować dane."
+        description="Ta operacja zastąpi wspólny scenariusz w bazie. Konta i hasła pozostaną bez zmian. Możesz najpierw wyeksportować dane."
         label={pending === "reset" ? "Resetuj" : "Importuj"}
-        pending={false}
+        pending={saving}
         onConfirm={confirm}
       />
     </>
@@ -121,7 +146,7 @@ export function PrivacyPage() {
     <section className="prototype-section max-w-4xl">
       <PageTitle
         eyebrow="Informacje / Twoje dane"
-        description="Jak działa lokalny scenariusz i co możesz z nim zrobić."
+        description="Jak działa zapis danych i dostęp do kont."
       >
         Prywatność prototypu
       </PageTitle>
@@ -131,19 +156,21 @@ export function PrivacyPage() {
           ani poufnych informacji.
         </p>
         <p>
-          Profile, CV, odpowiedzi kandydatów i ustawienia pozostają w tej przeglądarce. Plik
-          eksportu zawiera cały lokalny scenariusz, w tym notatki. Aplikacja nie przesyła tych
-          danych do bazy ani systemu analitycznego.
+          Profile, CV, oferty i odpowiedzi są zapisywane w bazie SQLite na serwerze aplikacji.
+          Dostęp do danych zależy od zalogowanego konta. Prowadzący ma dostęp do całego scenariusza
+          i jego eksportu, w tym notatek rekrutera. Eksport nie zawiera haseł ani sesji. Aplikacja
+          nie wysyła danych do systemu analitycznego.
         </p>
         <p>
           Propozycje umiejętności i pytań w formularzu oferty powstają w tej przeglądarce. Opis
           stanowiska nie jest przesyłany do zewnętrznego dostawcy. Rekruter sprawdza i zatwierdza
-          treść; system nie ocenia kandydatów. Postęp formularza jest częścią lokalnego scenariusza
+          treść; system nie ocenia kandydatów. Postęp formularza jest częścią wspólnego scenariusza
           oraz jego eksportu i resetu.
         </p>
         <p>
-          Możesz usunąć zmiany przyciskiem „Resetuj scenariusz” w ustawieniach lub wyczyścić dane
-          witryny w przeglądarce. Hosting może prowadzić własne logi dostępu.
+          Prowadzący może przywrócić scenariusz w ustawieniach. Wyczyszczenie danych przeglądarki
+          wylogowuje konto, ale nie usuwa danych z bazy. Sesja jest przechowywana w pliku cookie i
+          wygasa po 12 godzinach. Hosting może prowadzić własne logi dostępu.
         </p>
       </div>
     </section>

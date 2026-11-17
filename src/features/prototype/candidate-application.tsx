@@ -5,7 +5,7 @@ import type { Application } from "./model";
 import { usePrototype } from "./store";
 
 export function CandidateApplication({ application }: { application: Application }) {
-  const { state, run } = usePrototype();
+  const { state, run, pending } = usePrototype();
   const [confirming, setConfirming] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const statusRef = useRef<HTMLSpanElement>(null);
@@ -43,8 +43,9 @@ export function CandidateApplication({ application }: { application: Application
                 <Button
                   ref={confirmRef}
                   variant="destructive"
-                  onClick={() => {
-                    if (run({ type: "withdraw", applicationId: application.id })) {
+                  disabled={pending}
+                  onClick={async () => {
+                    if (await run({ type: "withdraw", applicationId: application.id })) {
                       focusAfter.current = "status";
                       setConfirming(false);
                       setAnnouncement("Aplikacja została wycofana.");
@@ -55,7 +56,7 @@ export function CandidateApplication({ application }: { application: Application
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => {
+                  onClick={async () => {
                     focusAfter.current = "trigger";
                     setConfirming(false);
                   }}
@@ -73,7 +74,7 @@ export function CandidateApplication({ application }: { application: Application
                 <Button
                   ref={triggerRef}
                   variant="outline"
-                  onClick={() => {
+                  onClick={async () => {
                     focusAfter.current = "confirm";
                     setConfirming(true);
                   }}

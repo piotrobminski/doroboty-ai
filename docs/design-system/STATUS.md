@@ -37,3 +37,7 @@ The prior [installation record](installation-verification.json) remains historic
 The separate audit follows the frozen reference release. Read [the audit report](audits/1.1/AUDIT.md) for measured before/after findings, family coverage and actual remaining limitations. Its evidence is separate from the original redesign delivery.
 
 The completed 1.1 audit closed three findings through existing shared owners. All 128 focused measurements and the full gate (44 browser tests, 27 host units, 10 reference tests) pass. See [final audit verification](audits/1.1/verification.json). The reference hash stayed fixed throughout the application corrections.
+
+## Database/auth extension — November 17, 2026
+
+The persona-picker composition is replaced by LoginPage using HP02/HP03 and c08/c22 fields/errors. Existing Shell HP01 navigation exposes account switching/logout. Persistence and authorization now use the server database/API; older dated persona/localStorage descriptions above record the previous baseline. The frozen 1.1 package remains unchanged. New validation and comparison evidence belongs to [the database/auth task](../tasks/database-auth.md).

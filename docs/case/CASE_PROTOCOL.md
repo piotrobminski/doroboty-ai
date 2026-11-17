@@ -2,7 +2,7 @@
 
 ## Current contract
 
-The application is a teaching prototype. Participants can select personas and exercise the prepared flows.
+The application is a teaching prototype. Participants log in to prepared synthetic accounts and exercise the flows. Server sessions enforce role and ownership; the operator can manage the shared scenario.
 
 ## Narrative
 
@@ -16,7 +16,7 @@ The primary historical outcome is employer continuation after the first conversa
 - The baseline packet contains 120 historical synthetic journeys with stable IDs/timestamps, plus stage-safe funnel/outcome columns.
 - Candidates edit application answers directly. Legacy source notes/generated copy remain distinct from approved answers in version-1 saves/imports, hidden in the form and preserved on draft save/submission. New candidate drafts use empty legacy fields. Submitted CV and identity are snapshots.
 - Scenario Match Scores are fixed persona examples, not new assessments or historical text-similarity scores. Do not combine them into one trend.
-- No real CVs or personal data. Role selection does not enforce confidentiality.
+- No real CVs or personal data. Server projections restrict candidate and employer records; shared test passwords are teaching credentials, not a production access policy.
 
 ## Stage-safe distribution
 

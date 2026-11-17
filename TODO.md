@@ -22,6 +22,8 @@ BRIEF.md describes the current scope. Historical milestones remain in Git histor
 
 - [x] Replace redundant composer approval checkboxes with Preview/Publish actions and add a local employer-only competency evidence hint with exact excerpts, follow-up prompts and a recorded synthetic walkthrough. See docs/tasks/pr02-evidence-insight-and-demo.md.
 
+- [x] Add SQLite-backed scenario/accounts/sessions, preserve existing users with initial Test1234 passwords and replace persona selection with server-verified login. See docs/tasks/database-auth.md.
+
 ## Deliberate limitations
 
 - Human research, course release approval and publishing a participant URL remain separate activities; passing code checks does not establish these outcomes.

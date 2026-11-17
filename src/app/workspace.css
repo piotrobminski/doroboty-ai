@@ -583,3 +583,13 @@ code {
 }
 
 /* Login composes HP02/HP03 with the existing field and action recipes. */
+.login-page {
+  max-width: 640px;
+}
+.login-page form {
+  width: 100%;
+}
+.login-page .field,
+.login-page p {
+  overflow-wrap: anywhere;
+}
