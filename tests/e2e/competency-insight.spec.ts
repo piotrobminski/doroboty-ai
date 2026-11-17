@@ -90,7 +90,11 @@ for (const width of [1280, 390, 320]) {
     await seed(page, state);
     const api: string[] = [];
     page.on("request", (request) => {
-      if (request.url().includes("/api/") || request.url().includes("example.com"))
+      if (
+        request.url().includes("/api/recruiter-ai") ||
+        request.url().includes("openai.com") ||
+        request.url().includes("example.com")
+      )
         api.push(request.url());
     });
     await page.goto("/#/app/kandydaci/insight-example");

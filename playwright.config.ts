@@ -5,10 +5,10 @@ if (!Number.isInteger(testPort) || testPort < 1024 || testPort > 65535)
 const testOrigin = `http://127.0.0.1:${testPort}`;
 export default defineConfig({
   testDir: "./tests/e2e",
-  fullyParallel: true,
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 2 : undefined,
+  workers: 1,
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: testOrigin,
@@ -19,7 +19,7 @@ export default defineConfig({
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     command: `npm run preview -- --port ${testPort}`,
-    env: { PROTOTYPE_AI_DISABLE: "1" },
+    env: { PROTOTYPE_AI_DISABLE: "1", DATABASE_PATH: `.data/e2e-${testPort}.sqlite` },
     url: testOrigin,
     reuseExistingServer: false,
   },

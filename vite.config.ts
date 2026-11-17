@@ -2,12 +2,21 @@ import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
+import { databasePlugin } from "./server/api";
 import { recruiterAiPlugin } from "./server/recruiter-ai";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, fileURLToPath(new URL(".", import.meta.url)), "OPENAI_");
+  const serverEnv = loadEnv(mode, fileURLToPath(new URL(".", import.meta.url)), [
+    "DATABASE_",
+    "AUTH_",
+  ]);
   return {
     plugins: [
+      databasePlugin({
+        path: process.env.DATABASE_PATH || serverEnv.DATABASE_PATH,
+        secureCookie: (process.env.AUTH_SECURE_COOKIE ?? serverEnv.AUTH_SECURE_COOKIE) === "1",
+      }),
       react(),
       tailwindcss(),
       recruiterAiPlugin({
@@ -16,6 +25,20 @@ export default defineConfig(({ mode }) => {
       }),
     ],
     base: "./",
+    optimizeDeps: { entries: ["index.html"] },
+    server: {
+      fs: {
+        deny: [
+          ".env",
+          ".env.*",
+          "*.{crt,pem}",
+          "**/.git/**",
+          "**/.data/**",
+          "**/*.sqlite*",
+          "**/*.db",
+        ],
+      },
+    },
     resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   };
 });

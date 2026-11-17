@@ -8,7 +8,7 @@ import { decisionReasonSchema } from "./competency";
 import { CompetencyInsightPanel } from "./competency-insight-panel";
 
 export function RecruitingApplication({ application }: { application: Application }) {
-  const { state, run } = usePrototype();
+  const { state, run, pending } = usePrototype();
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
   const noteRef = useRef<HTMLTextAreaElement>(null);
@@ -49,9 +49,10 @@ export function RecruitingApplication({ application }: { application: Applicatio
               <div className="record-actions">
                 {availableStages.map((stage) => (
                   <Button
+                    disabled={pending}
                     key={stage}
                     variant={stage === "rejected" ? "outline" : "default"}
-                    onClick={() => {
+                    onClick={async () => {
                       if (application.competency && !decisionReasonSchema.safeParse(note).success) {
                         setError(
                           "Uzasadnij następny krok, odnosząc się do wymagań i odpowiedzi (minimum 20 znaków).",
@@ -59,7 +60,9 @@ export function RecruitingApplication({ application }: { application: Applicatio
                         noteRef.current?.focus();
                         return;
                       }
-                      if (run({ type: "stage", applicationId: application.id, stage, note })) {
+                      if (
+                        await run({ type: "stage", applicationId: application.id, stage, note })
+                      ) {
                         setNote("");
                         setAnnouncement(`Zapisano etap: ${stageLabels[stage]}.`);
                         pendingFocus.current = true;

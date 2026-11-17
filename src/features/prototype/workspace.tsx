@@ -1,3 +1,4 @@
+import { LoginPage } from "../auth/login";
 import {
   cloneElement,
   useId,
@@ -48,64 +49,6 @@ export function Field({
     </div>
   );
 }
-export function PersonPicker() {
-  const { state, run } = usePrototype();
-  const navigate = useNavigate();
-  const [params] = useSearchParams();
-  const next = params.get("next");
-  const audience = params.get("audience");
-  const people =
-    audience === "candidate" || audience === "employer"
-      ? state.people.filter((person) => person.role === audience)
-      : state.people;
-  const safeNext = next && /^\/(?!\/)/.test(next) && !next.startsWith("/auth") ? next : null;
-  return (
-    <section className="prototype-section max-w-4xl">
-      <PageTitle
-        eyebrow="Prototyp / Wybór profilu"
-        description="Wybierz profil, z którego chcesz korzystać w prototypie. Hasło nie jest potrzebne."
-      >
-        Wybierz osobę
-      </PageTitle>
-      <div className="persona-grid">
-        {people.map((person) => (
-          <article key={person.id} className="prototype-panel persona-card">
-            <span className="persona-avatar" aria-hidden="true">
-              {person.name
-                .split(" ")
-                .map((part) => part[0])
-                .join("")}
-            </span>
-            <span className="eyebrow mt-5">
-              {person.role === "candidate"
-                ? "Kandydat"
-                : person.role === "employer"
-                  ? "Pracodawca"
-                  : "Prowadzący"}
-            </span>
-            <h2 className="text-xl">{person.name}</h2>
-            <p className="my-4 text-muted-foreground">{person.headline}</p>
-            <Button
-              variant="outline"
-              onClick={() => {
-                run({ type: "select_person", id: person.id });
-                navigate(
-                  person.role === "candidate"
-                    ? (safeNext ?? "/app")
-                    : person.role === "employer"
-                      ? "/app/oferty"
-                      : "/app/case",
-                );
-              }}
-            >
-              Wejdź jako {person.name}
-            </Button>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
 export function RequireRole({
   role,
   children,
@@ -115,18 +58,18 @@ export function RequireRole({
 }) {
   const { state } = usePrototype();
   const person = currentPerson(state);
-  if (!person) return <PersonPicker />;
+  if (!person) return <LoginPage />;
   if (role && person.role !== role)
     return (
       <Empty>
-        <h1 className="mb-4">Wybierz właściwy profil</h1>
+        <h1 className="mb-4">Zaloguj się na właściwe konto</h1>
         <p className="mb-4">
           Ten widok jest dostępny dla{" "}
           {role === "candidate" ? "kandydata" : role === "employer" ? "pracodawcy" : "prowadzącego"}
           .
         </p>
         <Link className={buttonVariants({ variant: "outline" })} to="/auth/sign-in">
-          Zmień osobę
+          Zmień konto
         </Link>
       </Empty>
     );
@@ -190,11 +133,11 @@ export function ProfilePage({ preview = false }: { preview?: boolean }) {
   const { state, run } = usePrototype();
   const person = currentPerson(state)!;
   const [message, setMessage] = useState("");
-  function save(e: FormEvent<HTMLFormElement>) {
+  async function save(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     if (
-      run({
+      await run({
         type: "profile",
         value: {
           name: String(data.get("name")),
@@ -295,7 +238,7 @@ export function SavedPage() {
 }
 export function ApplyPage() {
   const { slug } = useParams();
-  const { state, run } = usePrototype();
+  const { state, run, pending } = usePrototype();
   const person = currentPerson(state)!;
   const navigate = useNavigate();
   const job = publishedJobs(state).find((x) => x.slug === slug);
@@ -337,7 +280,7 @@ export function ApplyPage() {
         </Link>
       </section>
     );
-  function submit(e: FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault();
     if (submittedOnce.current) return;
     setAttempted(true);
@@ -367,8 +310,9 @@ export function ApplyPage() {
       consentInput.current?.focus();
       return;
     }
+    submittedOnce.current = true;
     if (
-      run({
+      await run({
         type: "submit",
         jobId: job!.id,
         notes,
@@ -381,14 +325,13 @@ export function ApplyPage() {
         ),
       })
     ) {
-      submittedOnce.current = true;
       setSubmitted(true);
       if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         const rect = sendButton.current?.getBoundingClientRect();
         if (rect)
           setConfettiOrigin({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
       }
-    }
+    } else submittedOnce.current = false;
   }
   return (
     <section className="tph-container application-page">
@@ -434,7 +377,7 @@ export function ApplyPage() {
                 card={job.competencyCard}
                 responses={responses}
                 attempted={attempted}
-                disabled={submitted}
+                disabled={submitted || pending}
                 onChange={(value) => {
                   setResponses(value);
                   setConsent(false);
@@ -450,7 +393,7 @@ export function ApplyPage() {
               <SavedCompetencyExamples responses={responses} cardRemoved />
               <Field label="Dlaczego pasujesz do tej roli?">
                 <Textarea
-                  disabled={submitted}
+                  disabled={submitted || pending}
                   ref={answerInput}
                   required
                   minLength={MIN_APPLICATION_ANSWER_LENGTH}
@@ -480,7 +423,7 @@ export function ApplyPage() {
               <Checkbox
                 id="application-consent"
                 ref={consentInput}
-                disabled={submitted}
+                disabled={submitted || pending}
                 checked={consent}
                 onCheckedChange={(v) => setConsent(v)}
                 aria-invalid={consentInvalid || undefined}
@@ -501,7 +444,7 @@ export function ApplyPage() {
                 ref={sendButton}
                 variant="lime"
                 type="submit"
-                disabled={submitted}
+                disabled={submitted || pending}
                 className="application-send"
               >
                 {submitted && <CheckCircle2 aria-hidden="true" />}
@@ -509,11 +452,11 @@ export function ApplyPage() {
               </Button>
               <Button
                 type="button"
-                disabled={submitted}
+                disabled={submitted || pending}
                 variant="outline"
-                onClick={() => {
+                onClick={async () => {
                   if (
-                    run({
+                    await run({
                       type: "draft",
                       jobId: job.id,
                       notes,
@@ -541,7 +484,7 @@ export function ApplyPage() {
               {submitted ? "Wysłano aplikację. Otwieramy listę Twoich aplikacji." : message}
             </p>
             <p className="application-help">
-              Prototyp: aplikacja zostaje w tym przeglądarkowym scenariuszu.
+              Prototyp: aplikacja zostaje zapisana w bazie i jest dostępna dla pracodawcy.
             </p>
           </div>
         </form>

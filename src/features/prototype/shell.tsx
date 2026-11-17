@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router";
 import {
   Menu,
   ArrowUpRight,
+  LogOut,
   X,
   BriefcaseBusiness,
   UserRound,
@@ -90,6 +91,7 @@ export function NotFound() {
   );
 }
 function PublicHeader({ person }: { person: ReturnType<typeof currentPerson> }) {
+  const { logout, pending } = usePrototype();
   const items = [
     ...navigation,
     ...(person?.role === "candidate"
@@ -119,6 +121,17 @@ function PublicHeader({ person }: { person: ReturnType<typeof currentPerson> }) 
             >
               {person ? "Moje konto" : "Zaloguj się"}
             </Link>
+            {person && (
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Wyloguj się"
+                disabled={pending}
+                onClick={() => void logout()}
+              >
+                <LogOut size={18} aria-hidden="true" />
+              </Button>
+            )}
           </div>
           <Dialog>
             <DialogTrigger
@@ -164,7 +177,7 @@ const employerNav = [
   ["/app/organizacja", "Organizacja", Building2],
 ] as const;
 export function Shell() {
-  const { state, issue, error, clearError } = usePrototype();
+  const { state, issue, error, clearError, logout, pending } = usePrototype();
   const person = currentPerson(state);
   const { pathname } = useLocation();
   const workspace = pathname.startsWith("/app") && person;
@@ -284,8 +297,16 @@ export function Shell() {
                 Wszystkie oferty
               </Link>
               <Link className="nav-link" to="/auth/sign-in">
-                Zmień osobę
+                Zmień konto
               </Link>
+              <Button
+                variant="ghost"
+                className="nav-link"
+                disabled={pending}
+                onClick={() => void logout()}
+              >
+                Wyloguj się
+              </Button>
             </nav>
           </aside>
           <div className="workspace">

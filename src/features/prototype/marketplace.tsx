@@ -467,7 +467,7 @@ export function JobPage() {
               ) : (
                 <p>Aplikacje są dostępne z profilu kandydata.</p>
               )}
-              <p>Prototyp: aplikacja zostaje w tym przeglądarkowym scenariuszu.</p>
+              <p>Prototyp: aplikacja zostaje zapisana w bazie i jest dostępna dla pracodawcy.</p>
             </div>
           </div>
         </aside>

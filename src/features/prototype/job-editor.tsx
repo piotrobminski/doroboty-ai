@@ -210,7 +210,7 @@ function JobEditor() {
       move(3, { card: { ...card, approved: true } });
     }
   }
-  function submit(event: FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
     if (draft.step === 1) {
       nextToQuestions();
@@ -241,7 +241,7 @@ function JobEditor() {
       fail("Sprawdź pytania dla aktualnego opisu.", "skills-heading", 2);
       return;
     }
-    if (run({ type: "publish", job: parsed.data })) navigate("/app/oferty");
+    if (await run({ type: "publish", job: parsed.data })) navigate("/app/oferty");
   }
   const invalid = (name: string) => ({
     "aria-invalid": invalidId === `job-${name}` || undefined,
