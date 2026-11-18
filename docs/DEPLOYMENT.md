@@ -26,6 +26,8 @@ The server binds all interfaces on port 3001 by default. Configure the host fire
 
 Configuration comes from the process environment. The standalone server does not load `.env.local` or call the optional local-only OpenAI gateway. The current recruiter proposals work locally without a provider; `/api/recruiter-ai` is unavailable in this bundle.
 
+To opt into analytics for the synthetic prototype, set `POSTHOG_PROJECT_TOKEN` to its write-only PostHog project token and `POSTHOG_REGION` to `eu` (default) or `us`. With no token, the server makes no PostHog requests. It sends counts of successful publication saves, application submissions, recorded stage changes and recruitment closures. Events carry independent random IDs and no form contents or account information.
+
 ## HTTPS reverse proxy
 
 Terminate HTTPS at a reverse proxy, forward the **original Host header**, and forward the entire site, including `/api/`, to this server. For example, launch the app with:

@@ -4,6 +4,7 @@ import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } 
 import { pipeline } from "node:stream";
 import { createApi } from "./api";
 import type { PasswordRecovery } from "./password-recovery";
+import type { PostHogCapture } from "./posthog";
 import { PrototypeDatabase } from "./database";
 
 const contentTypes: Record<string, string> = {
@@ -49,6 +50,7 @@ export function createProductionServer(config: {
   databasePath: string;
   secureCookie?: boolean;
   recovery?: PasswordRecovery;
+  capture?: PostHogCapture;
 }) {
   const root = realpathSync(config.publicDirectory);
   const databasePath = canonicalPath(config.databasePath);
@@ -75,7 +77,7 @@ export function createProductionServer(config: {
   if (!files.has("/index.html")) throw new Error("Production index.html is missing.");
   files.set("/", files.get("/index.html")!);
   const database = new PrototypeDatabase(databasePath);
-  const api = createApi(database, config.secureCookie, config.recovery);
+  const api = createApi(database, config.secureCookie, config.recovery, config.capture);
   const server = createServer((req, res) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");

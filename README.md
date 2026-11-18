@@ -54,6 +54,12 @@ Existing databases migrate automatically to schema version 5 on server startup. 
 
 To recover from a migration problem, stop every server using the database, copy the backup to a different database path and set `DATABASE_PATH` to that copy. Keep the original database and its sidecars for recovery. The backup includes credentials/sessions and must stay private. [Schema, migration and verification details](docs/tasks/jobs-applications-schema.md).
 
+## Optional PostHog analytics
+
+Set `POSTHOG_PROJECT_TOKEN` in `.env.local` to the write-only token from the PostHog project for this teaching prototype. Set `POSTHOG_REGION` to `eu` (default) or `us` to match that project, then restart dev or preview. Leave the token unset to disable analytics. For the standalone server, set the same variables in the service environment.
+
+The server reports successful saves of published offers, application submissions, recorded stage changes and recruitment closures. Each event has an independent random identifier. It contains no form text, account information or request metadata, and creates no PostHog person profile. The static demo and browser tests do not send events. Use event counts as observations about the prototype, separate from historical case evidence.
+
 ## Account administration
 
 Set `AUTH_ADMIN_PASSWORD` in the private `.env.local` file for dev/preview, or in the Node service environment, before provisioning the primary account `piotr.obminski@allegro.com`. Restart the server after setting it. The first sign-in requires a password change in Settings. Subsequent startups retain the stored password. A database started without this setting can provision the administrator on a later startup after configuration.

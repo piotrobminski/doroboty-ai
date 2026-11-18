@@ -28,6 +28,7 @@ export default defineConfig({
       : `npm run preview -- --port ${testPort}`,
     env: {
       PROTOTYPE_AI_DISABLE: "1",
+      POSTHOG_PROJECT_TOKEN: "",
       DATABASE_PATH: resolve(
         `.data/e2e-${productionDirectory ? "production-" : ""}${testPort}-${randomUUID()}.sqlite`,
       ),

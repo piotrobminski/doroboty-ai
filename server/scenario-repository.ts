@@ -131,8 +131,23 @@ export class ScenarioRepository {
       `INSERT INTO ${table} (${columns.join(", ")}) VALUES (${columns.map(() => "?").join(", ")})${update}`,
     ).run(...Object.values(row));
   }
-  private rows(table: string) {
-    return this.statement(`SELECT * FROM ${table} ORDER BY list_position`).all();
+  private rows(table: string, columns: string[], order = "list_position") {
+    // Node.js 24.14 can truncate TEXT results at a null character. Read affected UTF-8
+    // values as bytes while retaining SQLite's original storage types for other values.
+    const fields = columns.map((column) => {
+      const field = `${table}.${column}`;
+      return `CASE WHEN typeof(${field}) = 'text' AND instr(${field}, char(0)) > 0
+        THEN CAST(${field} AS BLOB) ELSE ${field} END AS ${column}`;
+    });
+    const rows = this.statement(
+      `SELECT ${fields.join(", ")} FROM ${table} ORDER BY ${order}`,
+    ).all();
+    for (const row of rows) {
+      for (const [column, value] of Object.entries(row)) {
+        if (value instanceof Uint8Array) row[column] = Buffer.from(value).toString("utf8");
+      }
+    }
+    return rows;
   }
   archiveDue(now: number) {
     const due = this.statement(
@@ -153,18 +168,29 @@ export class ScenarioRepository {
       const row = this.statement("SELECT data FROM prototype_state WHERE id = 1").get();
       if (!row) throw new Error("Database profile metadata is missing; no data was reset.");
       const metadata = metadataSchema.parse(JSON.parse(String(row.data)));
-      const locations = this.statement(
-        "SELECT * FROM job_locations ORDER BY job_id, position",
-      ).all();
-      const events = this.statement(
-        "SELECT * FROM application_events ORDER BY application_id, position",
-      ).all();
+      const locations = this.rows(
+        "job_locations",
+        ["job_id", "label"],
+        "job_locations.job_id, position",
+      );
+      const events = this.rows(
+        "application_events",
+        ["application_id", "stage", "at", "note"],
+        "application_events.application_id, position",
+      );
       return stateSchema.parse({
         version: 1,
         activePersonId: null,
         people: metadata.people,
-        companies: this.rows("companies").map((company) => decode(company, companyFields)),
-        jobs: this.rows("jobs").map((job) => ({
+        companies: this.rows("companies", Object.values(companyFields)).map((company) =>
+          decode(company, companyFields),
+        ),
+        jobs: this.rows("jobs", [
+          ...Object.values(jobFields),
+          "latitude",
+          "longitude",
+          "competency_card_json",
+        ]).map((job) => ({
           ...decode(job, jobFields),
           locations: locations
             .filter((location) => location.job_id === job.id)
@@ -176,7 +202,10 @@ export class ScenarioRepository {
             ? {}
             : { competencyCard: optionalJson(job.competency_card_json) }),
         })),
-        applications: this.rows("applications").map((application) => ({
+        applications: this.rows("applications", [
+          ...Object.values(applicationFields),
+          "competency_snapshot_json",
+        ]).map((application) => ({
           ...decode(application, applicationFields),
           ...(application.competency_snapshot_json === null
             ? {}
@@ -185,19 +214,26 @@ export class ScenarioRepository {
             .filter((event) => event.application_id === application.id)
             .map((event) => ({ stage: event.stage, at: event.at, note: event.note })),
         })),
-        drafts: this.rows("application_drafts").map((draft) => ({
+        drafts: this.rows("application_drafts", [
+          ...Object.values(draftFields),
+          "competency_responses_json",
+        ]).map((draft) => ({
           ...decode(draft, draftFields),
           ...(draft.competency_responses_json === null
             ? {}
             : { competencyResponses: optionalJson(draft.competency_responses_json) }),
         })),
-        saved: this.rows("saved_jobs").map((saved) => ({
+        saved: this.rows("saved_jobs", ["candidate_id", "job_id"]).map((saved) => ({
           candidateId: saved.candidate_id,
           jobId: saved.job_id,
         })),
         ...(metadata.employerDraftsPresent
           ? {
-              employerDrafts: this.rows("job_editor_drafts").map((draft) => ({
+              employerDrafts: this.rows("job_editor_drafts", [
+                "employer_id",
+                "job_id",
+                "draft_json",
+              ]).map((draft) => ({
                 employerId: draft.employer_id,
                 ...(draft.job_id === null ? {} : { jobId: draft.job_id }),
                 value: optionalJson(draft.draft_json),

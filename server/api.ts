@@ -13,6 +13,7 @@ import type { PasswordRecovery } from "./password-recovery";
 import { actionSchema } from "../src/features/prototype/model";
 import { parseState } from "../src/features/prototype/storage";
 import { PrototypeDatabase, SESSION_SECONDS, OperationFailure } from "./database";
+import { postHogEvent, type PostHogCapture } from "./posthog";
 
 const COOKIE = "doroboty_session";
 function token(req: IncomingMessage) {
@@ -65,6 +66,7 @@ export function createApi(
   database: PrototypeDatabase,
   secureCookie = false,
   recovery?: PasswordRecovery,
+  capture?: PostHogCapture,
 ) {
   let logins = 0;
   let deliveries = 0;
@@ -228,6 +230,10 @@ export function createApi(
           throw new RequestFailure(403, "To działanie nie jest dostępne dla Twojej roli.");
         database.act(personId, parsed.data);
         reply(res, 200, database.sessionView(personId));
+        if (capture) {
+          const event = postHogEvent(parsed.data);
+          if (event) capture(event);
+        }
         return;
       }
       if (!currentAccess.admin) throw new RequestFailure(403, "Wymagane konto administratora.");
@@ -260,6 +266,7 @@ export function databasePlugin(
     secureCookie?: boolean;
     adminPassword?: string;
     recovery?: PasswordRecovery;
+    capture?: PostHogCapture;
   } = {},
 ): Plugin {
   const install = (server: {
@@ -271,7 +278,9 @@ export function databasePlugin(
     const path = resolve(config.path || ".data/doroboty.sqlite");
     const database = new PrototypeDatabase(path, config.adminPassword);
     server.middlewares.use(databaseFileGuard(path));
-    server.middlewares.use(createApi(database, config.secureCookie, config.recovery));
+    server.middlewares.use(
+      createApi(database, config.secureCookie, config.recovery, config.capture),
+    );
     server.httpServer?.once("close", () => database.close());
   };
   return { name: "prototype-database", configureServer: install, configurePreviewServer: install };

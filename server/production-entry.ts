@@ -2,6 +2,7 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createProductionServer } from "./production";
 import { passwordRecoveryFromEnv } from "./password-recovery";
+import { postHogFromEnv } from "./posthog";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const port = process.env.PORT ?? "3001";
@@ -18,6 +19,7 @@ const server = createProductionServer({
   databasePath: resolve(root, process.env.DATABASE_PATH || ".data/doroboty.sqlite"),
   secureCookie: process.env.AUTH_SECURE_COOKIE === "1",
   recovery: passwordRecoveryFromEnv(process.env),
+  capture: postHogFromEnv(process.env),
 });
 server.once("error", () => {
   console.error("Server could not start. Check HOST, PORT and directory permissions.");

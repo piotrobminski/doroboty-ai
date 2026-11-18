@@ -204,10 +204,17 @@ export function PrivacyPage() {
               Profile, CV, oferty i odpowiedzi są zapisywane w bazie SQLite na serwerze aplikacji.
               Dostęp do danych zależy od zalogowanego konta. Prowadzący ma dostęp do całego
               scenariusza i jego eksportu, w tym notatek rekrutera. Eksport nie zawiera haseł ani
-              sesji. Aplikacja nie wysyła danych do systemu analitycznego.
+              sesji.
             </>
           )}
         </p>
+        {!STATIC_DEMO && (
+          <p>
+            Jeśli prowadzący włączy analitykę, serwer powiadamia PostHog o zapisaniu opublikowanej
+            oferty, wysłaniu aplikacji, zmianie etapu i zamknięciu rekrutacji. Zdarzenia mają losowe
+            identyfikatory. Nie zawierają treści formularzy ani danych kont. Sesje nie są nagrywane.
+          </p>
+        )}
         <p>
           Propozycje umiejętności i pytań w formularzu oferty powstają w tej przeglądarce. Opis
           stanowiska nie jest przesyłany do zewnętrznego dostawcy. Rekruter sprawdza i zatwierdza

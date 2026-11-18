@@ -3,8 +3,9 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { request, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { createProductionServer } from "./production";
+import { postHogFromEnv } from "./posthog";
 import { API_HEADER, accountEmail } from "../src/features/auth/contract";
 import { initialState } from "../src/features/prototype/model";
 
@@ -138,6 +139,70 @@ describe("standalone production HTTP server", () => {
       expect(response.status).toBe(200);
       expect(response.headers.get("set-cookie")).toContain("; Secure");
     } finally {
+      if (server.listening) await close(server);
+      rmSync(config.root, { recursive: true, force: true });
+    }
+  });
+
+  it("captures only successful, allowlisted actions without sending application data", async () => {
+    expect(postHogFromEnv({})).toBeUndefined();
+    expect(postHogFromEnv({ POSTHOG_PROJECT_TOKEN: "phx_personal" })).toBeUndefined();
+    const capture = postHogFromEnv({ POSTHOG_PROJECT_TOKEN: "phc_test" });
+    const config = fixture();
+    const server = createProductionServer({ ...config, capture });
+    const outgoing: unknown[] = [];
+    const localFetch = globalThis.fetch;
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation((input, init) => {
+      if (input !== "https://eu.i.posthog.com/i/v0/e/") return localFetch(input, init);
+      outgoing.push(JSON.parse(String(init?.body)));
+      return Promise.reject(new Error("PostHog unavailable"));
+    });
+    try {
+      const url = await listen(server);
+      const demo = initialState();
+      const job = demo.jobs.find(
+        (job) =>
+          job.publicationStatus === "published" &&
+          !job.competencyCard &&
+          !demo.applications.some(
+            (app) => app.jobId === job.id && app.candidateId === "candidate-anna",
+          ),
+      )!;
+      const action = {
+        type: "submit",
+        jobId: job.id,
+        consent: true,
+        answer: "Synthetic private free text",
+        notes: "Legacy synthetic notes",
+        generated: "",
+      };
+      expect((await post(url, "/api/actions", action)).status).toBe(401);
+      const login = await post(url, "/api/auth/login", {
+        email: accountEmail("candidate-anna"),
+        password: "Test1234",
+      });
+      expect(login.status).toBe(200);
+      const headers = { Cookie: login.headers.get("set-cookie")!.split(";")[0] };
+      expect((await post(url, "/api/actions", { ...action, consent: false }, headers)).status).toBe(
+        422,
+      );
+      expect(outgoing).toEqual([]);
+      expect((await post(url, "/api/actions", action, headers)).status).toBe(200);
+      expect((await post(url, "/api/actions", action, headers)).status).toBe(422);
+      expect(outgoing).toEqual([
+        {
+          api_key: "phc_test",
+          distinct_id: expect.stringMatching(/^[0-9a-f-]{36}$/),
+          event: "application submitted",
+          properties: {
+            source: "doroboty-aiph3",
+            $process_person_profile: false,
+            $geoip_disable: true,
+          },
+        },
+      ]);
+    } finally {
+      fetchSpy.mockRestore();
       if (server.listening) await close(server);
       rmSync(config.root, { recursive: true, force: true });
     }

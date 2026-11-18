@@ -5,12 +5,14 @@ import { fileURLToPath } from "node:url";
 import { databasePlugin } from "./server/api";
 import { recruiterAiPlugin } from "./server/recruiter-ai";
 import { passwordRecoveryFromEnv } from "./server/password-recovery";
+import { postHogFromEnv } from "./server/posthog";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, fileURLToPath(new URL(".", import.meta.url)), "OPENAI_");
   const serverEnv = loadEnv(mode, fileURLToPath(new URL(".", import.meta.url)), [
     "DATABASE_",
     "AUTH_",
+    "POSTHOG_",
   ]);
   return {
     plugins: [
@@ -22,6 +24,7 @@ export default defineConfig(({ mode }) => {
           mode === "static-demo"
             ? undefined
             : passwordRecoveryFromEnv({ ...serverEnv, ...process.env }),
+        capture: mode === "static-demo" ? undefined : postHogFromEnv(serverEnv),
       }),
       react(),
       tailwindcss(),
