@@ -192,7 +192,7 @@ test("profile changes do not rewrite a submitted application snapshot", async ({
 test("invalid import preserves state, valid import replaces state, reset asks for confirmation", async ({
   page,
 }) => {
-  await choose(page, "Prowadzący");
+  await choose(page, "Administrator");
   await page.goto("/#/app/settings");
   const before = JSON.stringify(await scenario(page));
   await page.getByLabel("Importuj plik scenariusza").setInputFiles({
@@ -212,16 +212,20 @@ test("invalid import preserves state, valid import replaces state, reset asks fo
     buffer: Buffer.from(JSON.stringify(imported)),
   });
   await page.getByRole("button", { name: "Importuj", exact: true }).click();
-  await expect(page.getByText("Zaimportowany prowadzący", { exact: true }).first()).toBeVisible();
+  expect((await scenario(page)).people.find((person) => person.id === "operator")?.name).toBe(
+    "Zaimportowany prowadzący",
+  );
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Eksportuj dane" }).click();
   expect((await download).suggestedFilename()).toBe("doroboty-scenariusz.json");
   await page.getByRole("button", { name: "Resetuj scenariusz", exact: true }).click();
   await page.getByRole("button", { name: "Anuluj", exact: true }).click();
-  await expect(page.getByText("Zaimportowany prowadzący", { exact: true }).first()).toBeVisible();
+  expect((await scenario(page)).people.find((person) => person.id === "operator")?.name).toBe(
+    "Zaimportowany prowadzący",
+  );
   await page.getByRole("button", { name: "Resetuj scenariusz", exact: true }).click();
   await page.getByRole("button", { name: "Resetuj", exact: true }).click();
-  expect((await scenario(page)).activePersonId).toBe("operator");
+  expect((await scenario(page)).activePersonId).toBe("primary-admin");
 });
 test("unreadable legacy save stays untouched and is available for operator recovery", async ({
   page,
@@ -229,7 +233,7 @@ test("unreadable legacy save stays untouched and is available for operator recov
   await page.goto("/");
   await page.evaluate((key) => localStorage.setItem(key, '{"version":999}'), STORAGE_KEY);
   await page.reload();
-  await choose(page, "Prowadzący");
+  await choose(page, "Administrator");
   expect(await page.evaluate((key) => localStorage.getItem(key), STORAGE_KEY)).toBe(
     '{"version":999}',
   );
@@ -357,7 +361,7 @@ for (const width of [1440, 375]) {
       answer: "Zapisana wcześniej odpowiedź kandydata do dalszej edycji.",
     };
     legacy.drafts.push(draft);
-    await choose(page, "Prowadzący");
+    await choose(page, "Administrator");
     await page.goto("/#/app/settings");
     await page.getByLabel("Importuj plik scenariusza").setInputFiles({
       name: "legacy-draft.json",

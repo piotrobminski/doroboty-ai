@@ -26,6 +26,16 @@ BRIEF.md describes the current scope. Historical milestones remain in Git histor
 
 - [x] Implement the approved relational jobs/applications schema with lossless version-1 migration, private backup, relational integrity and preserved account/export contracts. See docs/tasks/jobs-applications-schema.md for verification.
 
+- [x] Build a portable Node.js 24 production archive with optimized assets, the SQLite/session API, deployment instructions and verification against the extracted bundle. See docs/tasks/production-bundle.md.
+
+- [x] Add the explicitly selected browser-only S3 demo with simulated accounts, isolated localStorage, visible limitations and a drag-and-drop upload folder. See docs/tasks/static-s3-demo.md.
+
+- [x] Add primary administrator provisioning, password rotation and account administration. See docs/tasks/account-administration.md.
+
+- [x] Add recruitment closure and automatic archiving of linked offers and applications after 90 days. See docs/tasks/recruitment-archiving.md.
+
+- [x] Add one-time password recovery links with private local delivery and optional hosted email. See docs/tasks/password-recovery.md.
+
 ## Deliberate limitations
 
 - Human research, course release approval and publishing a participant URL remain separate activities; passing code checks does not establish these outcomes.

@@ -20,6 +20,7 @@ export function ApplicationRecord({
   companyName,
   audience,
   history,
+  archived = false,
   statusRef,
   children,
   footer,
@@ -40,6 +41,7 @@ export function ApplicationRecord({
   companyName: string;
   audience: "candidate" | "employer";
   history: RecordEvent[];
+  archived?: boolean;
   statusRef?: Ref<HTMLSpanElement>;
   children?: ReactNode;
   footer?: ReactNode;
@@ -53,8 +55,10 @@ export function ApplicationRecord({
     <article className="recruiting-record">
       <header className="recruiting-header">
         <nav aria-label="Ścieżka nawigacji" className="record-breadcrumb">
-          <BackLink to={candidate ? "/app/aplikacje" : "/app/kandydaci"}>
-            {candidate ? "Moje aplikacje" : "Kandydaci"}
+          <BackLink
+            to={`${candidate ? "/app/aplikacje" : "/app/kandydaci"}${archived ? "?archiwum=1" : ""}`}
+          >
+            {archived ? "Archiwum aplikacji" : candidate ? "Moje aplikacje" : "Kandydaci"}
           </BackLink>
           <span aria-hidden="true">/</span>
           <span aria-current="page">{title}</span>
@@ -64,6 +68,7 @@ export function ApplicationRecord({
           <span>
             {context} · {companyName}
           </span>
+          {archived && <span className="record-stage">Archiwalna</span>}
           <span className="record-stage" tabIndex={-1} ref={statusRef}>
             {stageLabels[application.stage]}
           </span>

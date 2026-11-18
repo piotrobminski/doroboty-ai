@@ -8,7 +8,7 @@ export function FormSection({
   description,
   children,
 }: {
-  index: string;
+  index?: string;
   title: string;
   eyebrow?: string;
   description?: string;
@@ -18,9 +18,11 @@ export function FormSection({
   return (
     <section className="form-group" aria-labelledby={id}>
       <header className="form-group-heading">
-        <p className="eyebrow">
-          {index} / {eyebrow}
-        </p>
+        {index && (
+          <p className="eyebrow">
+            {index} / {eyebrow}
+          </p>
+        )}
         <h2 id={id}>{title}</h2>
         {description && <p>{description}</p>}
       </header>

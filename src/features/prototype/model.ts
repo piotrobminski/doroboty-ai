@@ -1,3 +1,4 @@
+import { uuid } from "../../lib/uuid";
 import { z } from "zod";
 import marketplace from "./data/marketplace.json" with { type: "json" };
 import people from "./data/people.json" with { type: "json" };
@@ -58,12 +59,20 @@ export const jobSchema = z
     publicationStatus: z.enum(["draft", "review", "published", "hidden", "expired", "archived"]),
     publishedAt: z.iso.datetime(),
     expiryAt: z.iso.datetime(),
+    recruitmentClosedAt: z.iso.datetime().optional(),
     verificationStatus: z.enum(["unverified", "editorial", "employer_verified"]),
     competencyCard: competencyCardSchema.optional(),
     sourceBrief: text.optional(),
     generatedDescription: text.optional(),
     generatedDescriptionModel: z.string().trim().min(1).max(100).optional(),
   })
+  .refine(
+    (job) => !job.recruitmentClosedAt || ["hidden", "archived"].includes(job.publicationStatus),
+    {
+      path: ["recruitmentClosedAt"],
+      message: "Closed recruitment requires a hidden or archived offer",
+    },
+  )
   .refine(
     (job) => !job.competencyCard || job.competencyCard.sourceDescription === job.description,
     {
@@ -121,6 +130,9 @@ export const nextStages: Record<Stage, Stage[]> = {
   withdrawn: [],
   hired: [],
 };
+export const isFinalStage = (stage: Stage) => nextStages[stage].length === 0;
+export const ARCHIVE_DELAY_MS = 90 * 24 * 60 * 60 * 1000;
+export const archiveDueAt = (closedAt: string) => Date.parse(closedAt) + ARCHIVE_DELAY_MS;
 const applicationSchema = z.object({
   id,
   candidateId: id,
@@ -211,6 +223,12 @@ export const stateSchema = z
     const keys = new Set<string>();
     for (const a of s.applications) {
       const key = `${a.candidateId}:${a.jobId}`;
+      const closedAt = jobs.get(a.jobId)?.recruitmentClosedAt;
+      if (
+        closedAt &&
+        (!isFinalStage(a.stage) || Date.parse(a.events.at(-1)?.at ?? "") > Date.parse(closedAt))
+      )
+        problem("Closed recruitment requires final application outcomes before closure");
       if (
         !candidates.has(a.candidateId) ||
         jobs.get(a.jobId)?.companyId !== a.companyId ||
@@ -282,6 +300,7 @@ export const actionSchema = z.discriminatedUnion("type", [
     .object({ type: z.literal("stage"), applicationId: id, stage: z.enum(stages), note: text })
     .strict(),
   z.object({ type: z.literal("withdraw"), applicationId: id }).strict(),
+  z.object({ type: z.literal("close_recruitment"), jobId: id }).strict(),
   z.object({ type: z.literal("publish"), job: jobSchema }).strict(),
   z
     .object({
@@ -336,11 +355,27 @@ export function publishedJobs(state: State): JobWithCompany[] {
 export function currentPerson(state: State) {
   return state.people.find((x) => x.id === state.activePersonId);
 }
+export function archiveCompletedRecruitments(state: State, now = Date.now()): State {
+  const due = state.jobs.filter(
+    (job) =>
+      job.publicationStatus === "hidden" &&
+      job.recruitmentClosedAt !== undefined &&
+      archiveDueAt(job.recruitmentClosedAt) <= now,
+  );
+  if (!due.length) return state;
+  const ids = new Set(due.map((job) => job.id));
+  return {
+    ...state,
+    jobs: state.jobs.map((job) =>
+      ids.has(job.id) ? { ...job, publicationStatus: "archived" } : job,
+    ),
+  };
+}
 export function transition(
   state: State,
   action: Action,
   now = new Date().toISOString(),
-  newId: string = crypto.randomUUID(),
+  newId: string = uuid(),
 ): State {
   const s = structuredClone(state);
   const person = currentPerson(s);
@@ -408,9 +443,20 @@ export function transition(
       }),
     );
     s.drafts = s.drafts.filter((x) => !(x.candidateId === p.id && x.jobId === job.id));
+  } else if (action.type === "close_recruitment") {
+    const p = employer();
+    const job = s.jobs.find((item) => item.id === action.jobId && item.companyId === p.companyId);
+    if (!job || job.publicationStatus !== "published")
+      return fail("Wybierz opublikowaną ofertę swojej firmy.");
+    if (s.applications.some((item) => item.jobId === job.id && !isFinalStage(item.stage)))
+      return fail("Przed zamknięciem rekrutacji zakończ wszystkie aplikacje na tę ofertę.");
+    job.publicationStatus = "hidden";
+    job.recruitmentClosedAt = now;
   } else if (action.type === "stage" || action.type === "withdraw") {
     const application = s.applications.find((x) => x.id === action.applicationId);
     if (!application) return fail("Nie znaleziono aplikacji.");
+    if (s.jobs.find((job) => job.id === application.jobId)?.publicationStatus === "archived")
+      fail("Archiwalna aplikacja jest dostępna do odczytu.");
     const stage = action.type === "withdraw" ? "withdrawn" : action.stage;
     if (action.type === "withdraw") {
       const p = candidate();
@@ -430,8 +476,10 @@ export function transition(
     application.events.push({ stage, at: now, note: action.type === "stage" ? action.note : "" });
   } else if (action.type === "job_editor_draft") {
     const p = employer();
-    if (action.jobId && s.jobs.find((job) => job.id === action.jobId)?.companyId !== p.companyId)
-      fail("Wybierz ofertę własnej firmy.");
+    const job = s.jobs.find((entry) => entry.id === action.jobId);
+    if (action.jobId && job?.companyId !== p.companyId) fail("Wybierz ofertę własnej firmy.");
+    if (job?.recruitmentClosedAt || job?.publicationStatus === "archived")
+      fail("Zakończona oferta jest dostępna do odczytu.");
     const value = jobEditorDraftSchema.parse(action.value);
     s.employerDrafts = (s.employerDrafts ?? []).filter(
       (draft) => !(draft.employerId === p.id && draft.jobId === action.jobId),
@@ -440,12 +488,16 @@ export function transition(
   } else if (action.type === "publish") {
     const p = employer();
     const job = jobSchema.parse(action.job);
+    if (job.recruitmentClosedAt || job.publicationStatus === "archived")
+      fail("Aby zakończyć proces, użyj akcji zakończenia rekrutacji.");
     if (job.companyId !== p.companyId) fail("Wybierz ofertę własnej firmy.");
     if (job.competencyCard && job.competencyCard.approvedBy !== p.id)
       fail("Zatwierdź kartę kryteriów jako bieżący rekruter.");
     const index = s.jobs.findIndex((x) => x.id === job.id);
     if (index >= 0) {
       if (s.jobs[index].companyId !== p.companyId) fail("Nie można zmienić tej oferty.");
+      if (s.jobs[index].recruitmentClosedAt || s.jobs[index].publicationStatus === "archived")
+        fail("Zakończona oferta jest dostępna do odczytu.");
       s.jobs[index] = job;
     } else s.jobs.unshift(job);
     if (s.employerDrafts)

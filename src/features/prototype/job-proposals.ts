@@ -1,3 +1,4 @@
+import { uuid } from "../../lib/uuid";
 import { z } from "zod";
 import type { Criterion } from "./competency";
 
@@ -86,15 +87,13 @@ export function proposeJobSkills(description: string): Criterion[] {
       const position = fragment.search(match);
       // Keep the matching phrase inside the exact source excerpt, even in very long lines.
       const start = Math.max(0, position - 150);
-      return [
-        { id: crypto.randomUUID(), ...proposal, sourceExcerpt: fragment.slice(start, start + 500) },
-      ];
+      return [{ id: uuid(), ...proposal, sourceExcerpt: fragment.slice(start, start + 500) }];
     })
     .slice(0, 3);
   if (proposals.length) return proposals;
   return [
     {
-      id: crypto.randomUUID(),
+      id: uuid(),
       requirement: "Własny wkład w realizację zadania",
       sourceExcerpt: fragments[0].slice(0, 500),
       explanation:

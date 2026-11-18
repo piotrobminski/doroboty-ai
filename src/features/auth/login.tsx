@@ -1,15 +1,16 @@
 import { useRef, useState, type FormEvent } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FormSection } from "@/components/form-section";
-import { PageTitle } from "../prototype/shell";
+import { Notice, PageTitle } from "../prototype/shell";
 import { usePrototype } from "../prototype/store";
-import { currentPerson } from "../prototype/model";
-import { loginSchema } from "./contract";
+import { currentPerson, initialState } from "../prototype/model";
+import { loginSchema, accountEmail } from "./contract";
+import { STATIC_DEMO } from "../prototype/runtime";
 
 export function LoginPage() {
-  const { state, login, logout, error, clearError, pending } = usePrototype();
+  const { state, recoveryMode, login, logout, error, clearError, pending } = usePrototype();
   const navigate = useNavigate();
   const location = useLocation();
   const [params] = useSearchParams();
@@ -37,12 +38,23 @@ export function LoginPage() {
     const loggedIn = await login(values.email, values.password);
     if (loggedIn) {
       const role = currentPerson(loggedIn)?.role;
-      const home = role === "employer" ? "/app/oferty" : role === "operator" ? "/app/case" : "/app";
+      const home =
+        role === "employer"
+          ? "/app/oferty"
+          : role === "operator"
+            ? STATIC_DEMO
+              ? "/app/case"
+              : "/app/admin"
+            : "/app";
       const next =
         params.get("next") ??
         (!location.pathname.startsWith("/auth") ? location.pathname + location.search : home);
       navigate(
-        /^\/(?!\/)/.test(next) && !next.startsWith("/auth") && !next.includes("\\") ? next : home,
+        loggedIn.account?.mustChangePassword
+          ? "/app/settings"
+          : /^\/(?!\/)/.test(next) && !next.startsWith("/auth") && !next.includes("\\")
+            ? next
+            : home,
       );
     } else password.current?.focus();
   }
@@ -54,6 +66,9 @@ export function LoginPage() {
       >
         Zaloguj się
       </PageTitle>
+      {!STATIC_DEMO && location.state?.passwordRecovered === true && (
+        <Notice tone="success">Hasło zostało zmienione. Zaloguj się nowym hasłem.</Notice>
+      )}
       {person && (
         <p className="mb-6">
           Zalogowano jako {person.name}. Możesz zalogować się na inne konto lub{" "}
@@ -113,10 +128,32 @@ export function LoginPage() {
         <Button type="submit" disabled={pending}>
           {pending ? "Logowanie…" : "Zaloguj się"}
         </Button>
+        {!STATIC_DEMO && recoveryMode !== "off" && (
+          <Link className="underline underline-offset-4" to="/auth/forgot-password">
+            Nie pamiętasz hasła?
+          </Link>
+        )}
       </form>
       <p className="mt-6 text-muted-foreground">
-        Prototyp szkoleniowy. Korzystaj wyłącznie z przygotowanych kont i danych przykładowych.
+        {STATIC_DEMO
+          ? "Logowanie w tym demo służy wyłącznie do wyboru roli. Nie chroni danych. Korzystaj tylko z danych przykładowych."
+          : "Prototyp szkoleniowy. Korzystaj wyłącznie z przygotowanych kont i danych przykładowych."}
       </p>
+      {STATIC_DEMO && (
+        <details className="prototype-panel mt-6">
+          <summary className="min-h-11 cursor-pointer py-3">Konta demonstracyjne</summary>
+          <p className="my-4">
+            Hasło dla każdego konta: <code>Test1234</code>.
+          </p>
+          <ul className="space-y-3">
+            {initialState().people.map((person) => (
+              <li key={person.id}>
+                {person.name}: <code className="break-all">{accountEmail(person.id)}</code>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
     </section>
   );
 }

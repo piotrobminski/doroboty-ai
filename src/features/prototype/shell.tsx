@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router";
+import { Link, NavLink, Navigate, Outlet, useLocation } from "react-router";
 import {
   Menu,
   ArrowUpRight,
@@ -18,6 +18,7 @@ import { BrandMark } from "@/features/public/brand-mark";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { currentPerson } from "./model";
 import { usePrototype } from "./store";
+import { STATIC_DEMO } from "./runtime";
 import {
   Dialog,
   DialogTrigger,
@@ -193,15 +194,37 @@ export function Shell() {
       lastPath.current = pathname;
     }
   }, [pathname, clearError]);
-  const nav =
+  const roleNav =
     person?.role === "employer"
       ? employerNav
       : person?.role === "operator"
         ? [["/app/case", "Materiały case study", FileText] as const]
         : candidateNav;
+  const nav = state.account?.mustChangePassword
+    ? []
+    : [
+        ...roleNav,
+        ...(!STATIC_DEMO && state.account?.admin
+          ? [
+              ["/app/admin", "Panel administracyjny", Users] as const,
+              ...(person?.role === "operator"
+                ? []
+                : [["/app/case", "Materiały case study", FileText] as const]),
+            ]
+          : []),
+      ];
   const content = (
     <>
       <>
+        {STATIC_DEMO && (
+          <Notice>
+            <strong>Demo w przeglądarce.</strong> Logowanie jest symulowane, a dane pozostają tylko
+            w tej przeglądarce. Zgłoszenia nie są wysyłane do firm.{" "}
+            <Link className="underline" to="/polityka-prywatnosci">
+              Jak działa demo
+            </Link>
+          </Notice>
+        )}
         {issue && (
           <Notice tone="warning">
             {issue}{" "}
@@ -217,7 +240,12 @@ export function Shell() {
         </p>
       )}
       <div key={`${state.activePersonId}:${pathname}`}>
-        <Outlet />
+        {state.account?.mustChangePassword &&
+        !["/app/settings", "/auth/forgot-password", "/auth/reset-password"].includes(pathname) ? (
+          <Navigate to="/app/settings" replace />
+        ) : (
+          <Outlet />
+        )}
       </div>
     </>
   );

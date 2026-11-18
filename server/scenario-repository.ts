@@ -1,6 +1,6 @@
 import type { DatabaseSync, SQLInputValue, SQLOutputValue, StatementSync } from "node:sqlite";
 import { z } from "zod";
-import { stateSchema, type State } from "../src/features/prototype/model";
+import { archiveDueAt, stateSchema, type State } from "../src/features/prototype/model";
 
 type Row = Record<string, SQLOutputValue>;
 type Mapping = Record<string, string>;
@@ -36,6 +36,7 @@ const jobFields = {
   publicationStatus: "publication_status",
   publishedAt: "published_at",
   expiryAt: "expires_at",
+  recruitmentClosedAt: "recruitment_closed_at",
   verificationStatus: "verification_status",
   sourceBrief: "source_brief",
   generatedDescription: "generated_description",
@@ -132,6 +133,20 @@ export class ScenarioRepository {
   }
   private rows(table: string) {
     return this.statement(`SELECT * FROM ${table} ORDER BY list_position`).all();
+  }
+  archiveDue(now: number) {
+    const due = this.statement(
+      "SELECT id, recruitment_closed_at FROM jobs WHERE publication_status = 'hidden' AND recruitment_closed_at IS NOT NULL",
+    )
+      .all()
+      .filter((job) => archiveDueAt(String(job.recruitment_closed_at)) <= now);
+    if (!due.length) return;
+    transaction(this.db, "write", () => {
+      const archive = this.statement(
+        "UPDATE jobs SET publication_status = 'archived' WHERE id = ? AND publication_status = 'hidden' AND recruitment_closed_at = ?",
+      );
+      for (const job of due) archive.run(job.id, job.recruitment_closed_at);
+    });
   }
   read(): State {
     return transaction(this.db, "read", () => {

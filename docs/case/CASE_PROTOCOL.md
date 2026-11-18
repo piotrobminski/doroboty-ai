@@ -2,9 +2,11 @@
 
 ## Current contract
 
-The application is a teaching prototype. Participants log in to prepared synthetic accounts and exercise the flows. Server sessions enforce role and ownership; the operator can manage the shared scenario.
+The application is a teaching prototype. Participants log in to prepared synthetic accounts and exercise the flows. Server sessions enforce role and ownership; active administrators can manage the shared scenario and accounts.
 
 ## Narrative
+
+The separately selected static S3 demo simulates account selection and all operations in one browser, with an explicit visible label. Its localStorage state is independent of the normal server database and is not an access-control boundary. Published offers and applications in that variant are local demonstrations; they are not delivered to companies or shared with other browsers. Historical baseline evidence remains separate and unchanged.
 
 Employers publish jobs; candidates submit applications; employers record recruiting stages and decisions. The initial executive hypothesis is that more completed applications will improve recruiting outcomes. Treat this as a hypothesis to test, not the diagnosis.
 

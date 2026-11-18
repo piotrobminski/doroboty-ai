@@ -31,9 +31,9 @@ The earlier server gateway remains disconnected from the form. Existing keys sta
 
 ## Save, share and recover
 
-Changes survive reload and server restart. Startup automatically migrates older databases to relational tables after creating a private SQLite backup; an unsuccessful migration leaves the previous database intact. Migration backups contain account/session data and must not be shared as scenario exports. Operator settings can export a JSON scenario, import one or reset scenario records. Import/reset asks before replacing the shared scenario; accounts and passwords are retained. Previous browser saves are left untouched and can be downloaded or explicitly migrated by the operator. Failed server writes preserve form input for retry. Use one editing tab at a time.
+Changes survive reload and server restart. Startup automatically migrates older databases to relational tables after creating a private SQLite backup; an unsuccessful migration leaves the previous database intact. Migration backups contain account/session data and must not be shared as scenario exports. Operator settings can export a JSON scenario, import one or reset scenario records. Import/reset asks before replacing the shared scenario; accounts and passwords are retained. Previous browser saves are left untouched and can be downloaded or explicitly migrated by an active administrator. Failed server writes preserve form input for retry. Use one editing tab at a time.
 
-Browsers connected to the same server share the scenario subject to account access. To transfer it to another server, the operator exports/imports the JSON file. Exports include all profiles, applications and notes, but no passwords/sessions; never enter real personal data.
+Browsers connected to the same server share the scenario subject to account access. To transfer it to another server, an active administrator exports/imports the JSON file. Exports include all profiles, applications and notes, but no passwords/sessions; never enter real personal data.
 
 ## Local build
 

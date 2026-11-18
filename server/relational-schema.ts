@@ -35,6 +35,8 @@ const allowedTransition = Object.entries(nextStages)
   .filter(([, next]) => next.length)
   .map(([before, next]) => `(${previousStage} = '${before}' AND NEW.stage IN (${values(next)}))`)
   .join(" OR ");
+export const RECRUITMENT_CLOSURE_COLUMN =
+  "recruitment_closed_at TEXT CHECK(recruitment_closed_at IS NULL OR publication_status IN ('hidden','archived'))";
 
 export const RELATIONAL_SCHEMA = `
   CREATE TABLE prototype_state (
@@ -62,6 +64,7 @@ export const RELATIONAL_SCHEMA = `
     latitude REAL CHECK(latitude BETWEEN -90 AND 90), longitude REAL CHECK(longitude BETWEEN -180 AND 180),
     publication_status TEXT NOT NULL CHECK(publication_status IN ('draft','review','published','hidden','expired','archived')),
     published_at TEXT NOT NULL, expires_at TEXT NOT NULL,
+    ${RECRUITMENT_CLOSURE_COLUMN},
     verification_status TEXT NOT NULL CHECK(verification_status IN ('unverified','editorial','employer_verified')),
     source_brief TEXT, generated_description TEXT, generated_description_model TEXT,
     competency_card_json TEXT CHECK(competency_card_json IS NULL OR (json_valid(competency_card_json) AND json_type(competency_card_json) = 'object')),

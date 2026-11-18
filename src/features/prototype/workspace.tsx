@@ -29,6 +29,7 @@ import { RecruitingApplication } from "./recruiting-application";
 import { CandidateApplication } from "./candidate-application";
 import { CompetencyResponses, SavedCompetencyExamples } from "./competency-responses";
 import { competencySubmissionSchema, type CompetencyResponse } from "./competency";
+import { ArchiveLinks } from "./archive-links";
 
 export function Field({
   label,
@@ -51,14 +52,25 @@ export function Field({
 }
 export function RequireRole({
   role,
+  admin,
   children,
 }: {
   role?: "candidate" | "employer" | "operator";
+  admin?: boolean;
   children: ReactNode;
 }) {
   const { state } = usePrototype();
   const person = currentPerson(state);
   if (!person) return <LoginPage />;
+  if (admin && !state.account?.admin)
+    return (
+      <Empty>
+        <h1 className="mb-4">Brak dostępu administracyjnego</h1>
+        <Link className={buttonVariants({ variant: "outline" })} to="/app">
+          Wróć do konta
+        </Link>
+      </Empty>
+    );
   if (role && person.role !== role)
     return (
       <Empty>
@@ -498,9 +510,20 @@ export function ApplicationsPage({ employer = false }: { employer?: boolean }) {
   const person = currentPerson(state)!;
   const [query, setQuery] = useState("");
   const [params] = useSearchParams();
+  const archived = params.get("archiwum") === "1";
+  const archivedJobs = new Set(
+    state.jobs.filter((job) => job.publicationStatus === "archived").map((job) => job.id),
+  );
+  const filteredJob = employer
+    ? state.jobs.find(
+        (job) => job.id === params.get("oferta") && job.companyId === person.companyId,
+      )
+    : undefined;
   const applications = state.applications.filter(
     (x) =>
       (employer ? x.companyId === person.companyId : x.candidateId === person.id) &&
+      archivedJobs.has(x.jobId) === archived &&
+      (!filteredJob || filteredJob.id === x.jobId) &&
       `${x.candidateName} ${x.jobTitle}`
         .toLocaleLowerCase("pl")
         .includes(query.toLocaleLowerCase("pl")),
@@ -516,6 +539,18 @@ export function ApplicationsPage({ employer = false }: { employer?: boolean }) {
       >
         {employer ? "Kandydaci" : "Moje aplikacje"}
       </PageTitle>
+      <ArchiveLinks current="Aplikacje bieżące" archive="Archiwum aplikacji" />
+      {filteredJob && (
+        <Notice>
+          Oferta: {filteredJob.title}{" "}
+          <Link
+            className="underline"
+            to={archived ? "/app/kandydaci?archiwum=1" : "/app/kandydaci"}
+          >
+            Pokaż wszystkie oferty
+          </Link>
+        </Notice>
+      )}
       {params.has("wyslano") && (
         <Notice tone="success">
           <CheckCircle2 className="inline size-5" /> Aplikacja została wysłana.
@@ -551,7 +586,11 @@ export function ApplicationsPage({ employer = false }: { employer?: boolean }) {
             </article>
           ))
         ) : (
-          <Empty>Brak aplikacji spełniających kryteria.</Empty>
+          <Empty>
+            {archived
+              ? "Brak zarchiwizowanych aplikacji spełniających kryteria."
+              : "Brak aplikacji spełniających kryteria."}
+          </Empty>
         )}
       </div>
     </>
@@ -566,6 +605,13 @@ export function ApplicationDetail({ employer = false }: { employer?: boolean }) 
       x.id === id && (employer ? x.companyId === person.companyId : x.candidateId === person.id),
   );
   if (!application) return <NotFound />;
-  if (employer) return <RecruitingApplication key={application.id} application={application} />;
-  return <CandidateApplication key={application.id} application={application} />;
+  const archived =
+    state.jobs.find((job) => job.id === application.jobId)?.publicationStatus === "archived";
+  if (employer)
+    return (
+      <RecruitingApplication key={application.id} application={application} archived={archived} />
+    );
+  return (
+    <CandidateApplication key={application.id} application={application} archived={archived} />
+  );
 }

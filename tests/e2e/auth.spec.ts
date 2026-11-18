@@ -1,3 +1,4 @@
+import { serverInitialState } from "../admin-fixture";
 import { test, expect, chooseAccount, signIn } from "./fixtures";
 import { initialState } from "../../src/features/prototype/model";
 import { API_HEADER, accountEmail } from "../../src/features/auth/contract";
@@ -49,10 +50,10 @@ for (const width of [1280, 390, 320]) {
   });
 }
 
-test("all five existing accounts authenticate with their original identity and role", async ({
+test("existing accounts retain their identities and only the primary account starts as administrator", async ({
   page,
 }) => {
-  for (const person of initialState().people) {
+  for (const person of serverInitialState().people) {
     await chooseAccount(page, person.name);
     const state = await (await page.request.get("/api/state")).json();
     expect(state.activePersonId).toBe(person.id);
@@ -132,7 +133,7 @@ test("operator migrates a browser save only after confirmation and preserves the
   await page.goto("/");
   await page.evaluate((raw) => localStorage.setItem("doroboty.prototype.v1", raw), raw);
   await page.reload();
-  await chooseAccount(page, "Prowadzący");
+  await chooseAccount(page, "Administrator");
   await page.goto("/#/app/settings");
   await page
     .getByRole("button", { name: "Przenieś poprzedni zapis z przeglądarki", exact: true })
@@ -146,7 +147,9 @@ test("operator migrates a browser save only after confirmation and preserves the
   await page.getByRole("button", { name: "Importuj", exact: true }).click();
   await expect(page.getByRole("status")).toHaveText("Dane zostały zaimportowane.");
   saved = await (await page.request.get("/api/state")).json();
-  expect(saved.people).toEqual(legacy.people);
+  const expected = serverInitialState();
+  expected.people[0].bio = legacy.people[0].bio;
+  expect(saved.people).toEqual(expected.people);
   expect(await page.evaluate(() => localStorage.getItem("doroboty.prototype.v1"))).toBe(raw);
   await chooseAccount(page, "Anna Kowalska");
   await page.goto("/#/app/profil");

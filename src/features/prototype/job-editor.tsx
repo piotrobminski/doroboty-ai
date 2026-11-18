@@ -1,12 +1,15 @@
+import { uuid } from "../../lib/uuid";
 import { useRef, useState, type FormEvent } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
+import { BackLink } from "@/components/back-link";
 import { FormSection } from "@/components/form-section";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FormSelect } from "@/components/ui/form-select";
 import { CompanyLogo } from "@/features/jobs/company-logo";
+import { JobDescription } from "@/features/jobs/job-description";
 import { SalaryFact } from "@/features/jobs/salary-fact";
 import {
   categoryLabels,
@@ -18,7 +21,7 @@ import {
 import { currentPerson, jobSchema } from "./model";
 import { usePrototype } from "./store";
 import { Field } from "./workspace";
-import { NotFound, PageTitle } from "./shell";
+import { NotFound, Notice, PageTitle } from "./shell";
 import { criteriaSchema } from "./competency";
 import { CompetencyEditor } from "./competency-editor";
 import { proposeJobSkills } from "./job-proposals";
@@ -30,6 +33,44 @@ const steps = ["Stanowisko", "Umiejętności i pytania", "Podgląd"];
 export function EmployerJobEditor() {
   const { id } = useParams();
   const { state } = usePrototype();
+  const person = currentPerson(state);
+  const job = state.jobs.find((item) => item.id === id && item.companyId === person?.companyId);
+  if (job && (job.recruitmentClosedAt || job.publicationStatus === "archived")) {
+    const archived = job.publicationStatus === "archived";
+    const search = new URLSearchParams({ oferta: job.id });
+    if (archived) search.set("archiwum", "1");
+    return (
+      <>
+        <BackLink to={archived ? "/app/oferty?archiwum=1" : "/app/oferty"}>Moje oferty</BackLink>
+        <PageTitle
+          eyebrow="Dla pracodawców / Oferta"
+          action={
+            <Link
+              to={{ pathname: "/app/kandydaci", search: search.toString() }}
+              className={buttonVariants({ variant: "outline" })}
+            >
+              {archived ? "Zobacz aplikacje w archiwum" : "Zobacz aplikacje"}
+            </Link>
+          }
+        >
+          {job.title}
+        </PageTitle>
+        <Notice>
+          {archived
+            ? "Oferta jest w archiwum."
+            : "Rekrutacja zakończona. Oferta nie przyjmuje zgłoszeń."}
+        </Notice>
+        <section className="prototype-panel prototype-form wrap-anywhere">
+          <h2>Opis stanowiska</h2>
+          <p>
+            {job.locations.join(" · ")} · {remoteLabels[job.remoteStatus]}
+          </p>
+          <SalaryFact job={job} />
+          <JobDescription description={job.description} />
+        </section>
+      </>
+    );
+  }
   return <JobEditor key={`${state.activePersonId}/${id}`} />;
 }
 function JobEditor() {
@@ -73,7 +114,7 @@ function JobEditor() {
   const [regenerate, setRegenerate] = useState(false);
   const [recovered] = useState(!!saved);
   const heading = useRef<HTMLHeadingElement>(null);
-  const newId = useRef(crypto.randomUUID());
+  const newId = useRef(uuid());
   const card = draft.card;
   const stale = !!card && card.sourceDescription !== draft.description.trim();
   const selected = card?.criteria.filter((item) => !card.excludedIds.includes(item.id)) ?? [];

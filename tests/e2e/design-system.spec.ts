@@ -88,8 +88,9 @@ for (const width of [1280, 390, 320]) {
       ["candidates", "employer-brightlabs", "/app/kandydaci"],
       ["employer-record", "employer-brightlabs", "/app/kandydaci/application-example"],
       ["employer-settings", "employer-brightlabs", "/app/settings"],
-      ["case", "operator", "/app/case"],
-      ["operator-settings", "operator", "/app/settings"],
+      ["case", "primary-admin", "/app/case"],
+      ["operator-settings", "primary-admin", "/app/settings"],
+      ["admin", "primary-admin", "/app/admin"],
       ["wrong-role", "candidate-anna", "/app/oferty"],
       ["wrong-person", "candidate-anna", "/app/aplikacje/application-example"],
     ];

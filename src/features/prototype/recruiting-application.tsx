@@ -7,7 +7,13 @@ import { usePrototype } from "./store";
 import { decisionReasonSchema } from "./competency";
 import { CompetencyInsightPanel } from "./competency-insight-panel";
 
-export function RecruitingApplication({ application }: { application: Application }) {
+export function RecruitingApplication({
+  application,
+  archived,
+}: {
+  application: Application;
+  archived: boolean;
+}) {
   const { state, run, pending } = usePrototype();
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +22,7 @@ export function RecruitingApplication({ application }: { application: Applicatio
   const statusRef = useRef<HTMLSpanElement>(null);
   const pendingFocus = useRef(false);
   const company = state.companies.find((item) => item.id === application.companyId);
-  const availableStages = nextStages[application.stage];
+  const availableStages = archived ? [] : nextStages[application.stage];
 
   useLayoutEffect(() => {
     if (pendingFocus.current) {
@@ -31,6 +37,7 @@ export function RecruitingApplication({ application }: { application: Applicatio
         application={application}
         companyName={company?.name ?? ""}
         audience="employer"
+        archived={archived}
         history={application.events}
         statusRef={statusRef}
         answerSupport={
@@ -39,7 +46,9 @@ export function RecruitingApplication({ application }: { application: Applicatio
           ) : undefined
         }
         footer={
-          availableStages.length > 0 ? (
+          archived ? (
+            <p className="record-caption">Aplikacja jest dostępna w archiwum do odczytu.</p>
+          ) : availableStages.length > 0 ? (
             <>
               <p className="record-caption">
                 {application.competency

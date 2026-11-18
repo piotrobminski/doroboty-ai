@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
 import { databasePlugin } from "./server/api";
 import { recruiterAiPlugin } from "./server/recruiter-ai";
+import { passwordRecoveryFromEnv } from "./server/password-recovery";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, fileURLToPath(new URL(".", import.meta.url)), "OPENAI_");
@@ -16,6 +17,11 @@ export default defineConfig(({ mode }) => {
       databasePlugin({
         path: process.env.DATABASE_PATH || serverEnv.DATABASE_PATH,
         secureCookie: (process.env.AUTH_SECURE_COOKIE ?? serverEnv.AUTH_SECURE_COOKIE) === "1",
+        adminPassword: process.env.AUTH_ADMIN_PASSWORD ?? serverEnv.AUTH_ADMIN_PASSWORD,
+        recovery:
+          mode === "static-demo"
+            ? undefined
+            : passwordRecoveryFromEnv({ ...serverEnv, ...process.env }),
       }),
       react(),
       tailwindcss(),

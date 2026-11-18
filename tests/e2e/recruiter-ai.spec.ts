@@ -187,13 +187,15 @@ test("legacy metadata, multiple locations and EUR/year/net salary survive editin
   });
 });
 
-test("verification preview keeps the real provider disabled", async ({ page }) => {
+test("verification host keeps the real provider unavailable", async ({ page }) => {
+  const standalone = !!process.env.PLAYWRIGHT_PRODUCTION_DIR;
   const status = await page.request.get(AI_ENDPOINT);
-  expect(await status.json()).toMatchObject({ configured: false });
+  if (standalone) expect(status.status()).toBe(404);
+  else expect(await status.json()).toMatchObject({ configured: false });
   const response = await page.request.post(AI_ENDPOINT, {
     headers: { Origin: TEST_ORIGIN },
     data: { kind: "criteria", description: source },
   });
-  expect(response.status()).toBe(503);
-  expect(await response.json()).toEqual({ error: "not_configured" });
+  expect(response.status()).toBe(standalone ? 404 : 503);
+  if (!standalone) expect(await response.json()).toEqual({ error: "not_configured" });
 });

@@ -2,9 +2,25 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { initialState, type ServerAction, type State } from "./model";
 import { STORAGE_KEY, parseState } from "./storage";
 import { Button } from "@/components/ui/button";
-import { API_HEADER, loginSchema } from "../auth/contract";
+import { API_HEADER, loginSchema, type AccountAccess, type RecoveryMode } from "../auth/contract";
+import { STATIC_DEMO } from "./runtime";
+import { createStaticDemo } from "./static-demo";
 
-export async function requestState(path = "/api/state", input?: unknown): Promise<State> {
+let demo: ReturnType<typeof createStaticDemo> | undefined;
+function staticDemo() {
+  if (!demo) {
+    let storage = null;
+    try {
+      storage = window.localStorage;
+    } catch {
+      /* Recovery remains available in memory. */
+    }
+    demo = createStaticDemo(storage);
+  }
+  return demo;
+}
+
+export async function requestJson(path: string, input?: unknown): Promise<unknown> {
   let response: Response;
   try {
     response = await fetch(path, {
@@ -21,19 +37,28 @@ export async function requestState(path = "/api/state", input?: unknown): Promis
     );
   }
   const value = await response.json().catch(() => null);
-  if (!response.ok || !value || value.version !== 1)
+  if (!response.ok || !value)
     throw new Error(
       value?.error || "Baza danych jest niedostępna. Uruchom serwer aplikacji i spróbuj ponownie.",
     );
-  return value as State;
+  return value;
+}
+type SessionState = State & { account?: AccountAccess; recoveryMode?: RecoveryMode };
+export async function requestState(path = "/api/state", input?: unknown): Promise<SessionState> {
+  if (STATIC_DEMO) return staticDemo().request(path, input);
+  const value = (await requestJson(path, input)) as SessionState;
+  if (value.version !== 1) throw new Error("Otrzymano nieprawidłowe dane scenariusza.");
+  return value;
 }
 function useStore() {
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState<SessionState>(initialState);
+  const [recoveryMode, setRecoveryMode] = useState<RecoveryMode>("off");
   const [loading, setLoading] = useState(true);
   const [issue, setIssue] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(0);
   const [original] = useState(() => {
+    if (STATIC_DEMO) return staticDemo().original;
     try {
       return window.localStorage.getItem(STORAGE_KEY);
     } catch {
@@ -44,12 +69,17 @@ function useStore() {
   const clearError = useRef(() => setError("")).current;
   async function refresh() {
     try {
-      setState(await requestState());
-      setIssue("");
+      const next = await requestState();
+      setState(next);
+      if (!STATIC_DEMO) setRecoveryMode(next.recoveryMode ?? "off");
+      if (STATIC_DEMO) setIssue(staticDemo().issue);
+      else setIssue("");
       setLoading(false);
-    } catch {
+    } catch (error) {
       setIssue(
-        "Nie można połączyć się z bazą danych. Sprawdź, czy serwer aplikacji działa, i spróbuj ponownie.",
+        STATIC_DEMO
+          ? (error as Error).message
+          : "Nie można połączyć się z bazą danych. Sprawdź, czy serwer aplikacji działa, i spróbuj ponownie.",
       );
     }
   }
@@ -60,14 +90,15 @@ function useStore() {
     document.documentElement.classList.remove("dark");
     void refresh();
   }, []);
-  async function mutate(path: string, input: unknown): Promise<State | null> {
+  async function mutate(path: string, input: unknown): Promise<SessionState | null> {
     document.body.dataset.saving = "true";
     setPending((n) => n + 1);
-    let succeeded: State | null = null;
+    let succeeded: SessionState | null = null;
     const operation = queue.current.then(async () => {
       try {
         succeeded = await requestState(path, input);
         setState(succeeded);
+        if (STATIC_DEMO) setIssue(staticDemo().issue);
         setError("");
       } catch (e) {
         setError(e instanceof Error ? e.message : "Nie udało się zapisać zmian. Spróbuj ponownie.");
@@ -81,6 +112,7 @@ function useStore() {
   }
   return {
     state,
+    recoveryMode,
     loading,
     issue,
     error,
@@ -106,6 +138,8 @@ function useStore() {
       }
     },
     reset: () => mutate("/api/scenario/reset", {}),
+    changePassword: (input: { currentPassword: string; newPassword: string }) =>
+      mutate("/api/auth/change-password", input),
     clearError,
   };
 }

@@ -1,3 +1,10 @@
+import {
+  FIXTURE_TEMPORARY_PASSWORD,
+  FIXTURE_ADMIN_PASSWORD,
+  PRIMARY_ADMIN_EMAIL,
+  PRIMARY_ADMIN_ID,
+} from "../tests/admin-fixture";
+import { removeLegacyOperatorRoles } from "./admin-bootstrap";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -9,10 +16,15 @@ import { databaseFileGuard } from "./database-files";
 import { createApi } from "./api";
 import { initialState, type State } from "../src/features/prototype/model";
 import { API_HEADER, accountEmail } from "../src/features/auth/contract";
+import type { PasswordRecovery } from "./password-recovery";
 
-async function api(check: (url: string, db: PrototypeDatabase) => Promise<void>, secure = false) {
-  const db = new PrototypeDatabase(":memory:");
-  const handler = createApi(db, secure);
+async function api(
+  check: (url: string, db: PrototypeDatabase) => Promise<void>,
+  secure = false,
+  recovery?: PasswordRecovery,
+) {
+  const db = new PrototypeDatabase(":memory:", FIXTURE_TEMPORARY_PASSWORD);
+  const handler = createApi(db, secure, recovery);
   const guard = databaseFileGuard(resolve("private-session-store"));
   const server = createServer((req, res) => {
     guard(req, res, () => {
@@ -47,6 +59,30 @@ async function login(url: string, id: string) {
   return response.headers.get("set-cookie")!.split(";")[0];
 }
 
+async function activateAdmin(db: PrototypeDatabase) {
+  const login = await db.login(PRIMARY_ADMIN_EMAIL, FIXTURE_TEMPORARY_PASSWORD, "test-setup");
+  if (!login || !("token" in login)) throw new Error("Unable to provision test administrator.");
+  await db.changePassword(
+    PRIMARY_ADMIN_ID,
+    login.token,
+    FIXTURE_TEMPORARY_PASSWORD,
+    FIXTURE_ADMIN_PASSWORD,
+  );
+}
+async function adminCookie(url: string) {
+  const login = await post(url, "/api/auth/login", {
+    email: PRIMARY_ADMIN_EMAIL,
+    password: FIXTURE_TEMPORARY_PASSWORD,
+  });
+  const response = await post(
+    url,
+    "/api/auth/change-password",
+    { currentPassword: FIXTURE_TEMPORARY_PASSWORD, newPassword: FIXTURE_ADMIN_PASSWORD },
+    login.headers.get("set-cookie")!.split(";")[0],
+  );
+  expect(response.status).toBe(200);
+  return response.headers.get("set-cookie")!.split(";")[0];
+}
 describe("SQLite accounts and scenario", () => {
   it("preserves every account/profile, uses distinct hashes, and survives restart without reseeding", async () => {
     const folder = mkdtempSync(join(tmpdir(), "doroboty-db-"));
@@ -54,6 +90,7 @@ describe("SQLite accounts and scenario", () => {
     let db = new PrototypeDatabase(path);
     try {
       const initial = initialState();
+      removeLegacyOperatorRoles(initial);
       expect(db.read()).toEqual(initial);
       const hashes = db.sql
         .prepare("SELECT password_hash FROM users")
@@ -90,15 +127,18 @@ describe("SQLite accounts and scenario", () => {
       rmSync(folder, { recursive: true });
     }
   }, 20000);
-  it("projects private records and rolls back invalid mutations/imports", () => {
-    const db = new PrototypeDatabase(":memory:");
+  it("projects private records and rolls back invalid mutations/imports", async () => {
+    const db = new PrototypeDatabase(":memory:", FIXTURE_TEMPORARY_PASSWORD);
     try {
+      await activateAdmin(db);
       const before = db.read();
       expect(() =>
         db.act("candidate-anna", { type: "withdraw", applicationId: "application-example" }),
       ).toThrow();
       expect(db.read()).toEqual(before);
-      expect(() => db.replace("operator", { ...before, people: before.people.slice(1) })).toThrow();
+      expect(() =>
+        db.replace(PRIMARY_ADMIN_ID, { ...before, people: before.people.slice(1) }),
+      ).toThrow();
       expect(db.read()).toEqual(before);
       expect(db.view(null).applications).toEqual([]);
       expect(db.view(null).people.some((p) => p.role === "candidate")).toBe(false);
@@ -114,7 +154,7 @@ describe("SQLite accounts and scenario", () => {
       expect(db.view("employer-brightlabs").applications[0].events[1].note).toBe(
         "Notatka prywatna",
       );
-      db.reset("operator");
+      db.reset(PRIMARY_ADMIN_ID);
       expect(db.read()).toEqual(before);
     } finally {
       db.close();
@@ -123,6 +163,162 @@ describe("SQLite accounts and scenario", () => {
 });
 
 describe("authenticated API", () => {
+  it("delivers one-time reset links privately and revokes sessions on successful reset", async () => {
+    const deliveries: { email: string; link: string }[] = [];
+    await api(
+      async (url, db) => {
+        const email = accountEmail("candidate-anna");
+        const existing = await login(url, "candidate-anna");
+        const request = (email: string, headers = {}) =>
+          post(url, "/api/auth/forgot-password", { email }, "", headers);
+        expect((await request(email, { Origin: "https://foreign.test" })).status).toBe(403);
+        const unknown = await request("unknown@example.test");
+        const known = await request(email);
+        expect(known.status).toBe(202);
+        expect(unknown.status).toBe(202);
+        expect(await known.json()).toEqual(await unknown.json());
+        expect(deliveries).toHaveLength(1);
+        expect(deliveries[0].email).toBe(email);
+        const link = new URL(deliveries[0].link);
+        expect(link.origin).toBe("http://localhost:3001");
+        const token = new URLSearchParams(link.hash.split("?")[1]).get("token")!;
+        expect(db.sql.prepare("SELECT token_hash FROM password_resets").get()!.token_hash).not.toBe(
+          token,
+        );
+        await request(email);
+        await request(email);
+        await request(email);
+        expect(deliveries).toHaveLength(3);
+        const reset = (token: string) =>
+          post(url, "/api/auth/reset-password", { token, newPassword: "New-Recovery-Password" });
+        expect((await reset(token)).status).toBe(200);
+        expect((await reset(token)).status).toBe(422);
+        const other = new URLSearchParams(new URL(deliveries[1].link).hash.split("?")[1]).get(
+          "token",
+        )!;
+        expect((await reset(other)).status).toBe(422);
+        expect(
+          (await (await fetch(url + "/api/state", { headers: { Cookie: existing } })).json())
+            .activePersonId,
+        ).toBeNull();
+        expect((await post(url, "/api/auth/login", { email, password: "Test1234" })).status).toBe(
+          401,
+        );
+        expect(
+          (await post(url, "/api/auth/login", { email, password: "New-Recovery-Password" })).status,
+        ).toBe(200);
+      },
+      false,
+      {
+        mode: "local",
+        origin: "http://localhost:3001",
+        async deliver(email, link) {
+          deliveries.push({ email, link });
+        },
+      },
+    );
+  }, 15000);
+  it("restricts temporary sessions, protects the primary account and revokes sessions after credential and permission changes", async () => {
+    await api(async (url) => {
+      const path = "/api/admin/accounts";
+      const oldOperator = await login(url, "operator");
+      const list = (cookie: string) => fetch(url + path, { headers: { Cookie: cookie } });
+      expect((await list(oldOperator)).status).toBe(403);
+      expect((await post(url, "/api/scenario/reset", {}, oldOperator)).status).toBe(403);
+      const temporary = await post(url, "/api/auth/login", {
+        email: PRIMARY_ADMIN_EMAIL,
+        password: FIXTURE_TEMPORARY_PASSWORD,
+      });
+      expect(await temporary.json()).toMatchObject({
+        account: { admin: true, mustChangePassword: true },
+        applications: [],
+      });
+      const locked = temporary.headers.get("set-cookie")!.split(";")[0];
+      expect((await list(locked)).status).toBe(403);
+      expect((await post(url, "/api/scenario/reset", {}, locked)).status).toBe(403);
+      const admin = await adminCookie(url);
+      expect((await list(locked)).status).toBe(403);
+      const accounts = await (await list(admin)).json();
+      expect(accounts.filter((account: { admin: boolean }) => account.admin)).toEqual([
+        expect.objectContaining({
+          id: PRIMARY_ADMIN_ID,
+          email: PRIMARY_ADMIN_EMAIL,
+          primary: true,
+        }),
+      ]);
+      expect(JSON.stringify(accounts)).not.toContain("password");
+      expect(
+        (await post(url, path, { type: "set-admin", id: PRIMARY_ADMIN_ID, admin: false }, admin))
+          .status,
+      ).toBe(422);
+      const input = {
+        type: "create",
+        role: "candidate",
+        name: "Przykładowe konto",
+        email: "new-account@example.test",
+        password: "New-Temporary-24",
+      };
+      expect((await post(url, path, input, oldOperator)).status).toBe(403);
+      const created = await post(url, path, input, admin);
+      expect(created.status).toBe(200);
+      expect(
+        (await post(url, path, { ...input, email: input.email.toUpperCase() }, admin)).status,
+      ).toBe(422);
+      const { id } = (await created.json()).find(
+        (item: { email: string }) => item.email === input.email,
+      );
+      const loginNew = (password: string) =>
+        post(url, "/api/auth/login", { email: input.email, password });
+      const newLogin = await loginNew(input.password);
+      const newCookie = newLogin.headers.get("set-cookie")!.split(";")[0];
+      const change = (currentPassword: string, cookie: string) =>
+        post(
+          url,
+          "/api/auth/change-password",
+          { currentPassword, newPassword: "New-Private-24" },
+          cookie,
+        );
+      expect((await change("wrong", newCookie)).status).toBe(422);
+      const rotated = await change(input.password, newCookie);
+      expect(rotated.status).toBe(200);
+      expect((await loginNew(input.password)).status).toBe(401);
+      const active = rotated.headers.get("set-cookie")!.split(";")[0];
+      expect((await post(url, path, { type: "set-admin", id, admin: true }, admin)).status).toBe(
+        200,
+      );
+      expect((await list(active)).status).toBe(403);
+      const permitted = (await loginNew("New-Private-24")).headers.get("set-cookie")!.split(";")[0];
+      expect((await list(permitted)).status).toBe(200);
+      expect(
+        (
+          await post(
+            url,
+            path,
+            { type: "reset-password", id: PRIMARY_ADMIN_ID, password: "New-Temporary-24" },
+            permitted,
+          )
+        ).status,
+      ).toBe(422);
+      expect((await post(url, path, { type: "set-admin", id, admin: false }, admin)).status).toBe(
+        200,
+      );
+      expect((await list(permitted)).status).toBe(403);
+      expect(
+        (
+          await post(
+            url,
+            path,
+            { type: "reset-password", id, password: "Reset-Temporary-24" },
+            admin,
+          )
+        ).status,
+      ).toBe(200);
+      expect((await loginNew("New-Private-24")).status).toBe(401);
+      expect(await (await loginNew("Reset-Temporary-24")).json()).toMatchObject({
+        account: { admin: false, mustChangePassword: true },
+      });
+    });
+  }, 20000);
   it("enforces sessions, same origin, strict commands and operator-only import/reset", async () => {
     await api(async (url, db) => {
       for (const file of [
@@ -190,7 +386,7 @@ describe("authenticated API", () => {
       expect(response.people.find((p) => p.id === "candidate-anna")?.cv).toBe("");
       await post(url, "/api/auth/logout", {}, candidate);
       expect((await post(url, "/api/actions", profile, candidate)).status).toBe(401);
-      const operator = await login(url, "operator");
+      const operator = await adminCookie(url);
       expect((await post(url, "/api/scenario/import", { version: 99 }, operator)).status).toBe(422);
       expect((await post(url, "/api/scenario/reset", {}, operator)).status).toBe(200);
     });

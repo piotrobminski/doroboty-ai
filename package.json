@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 3001 --strictPort",
     "build": "tsc --noEmit && vite build",
+    "build:s3": "tsc --noEmit && vite build --mode static-demo --outDir artifacts/s3-upload",
+    "bundle:production": "npm run build && node scripts/package-production.mjs",
     "preview": "vite preview --host 127.0.0.1 --port 3001 --strictPort",
     "start": "npm run preview",
     "lint": "eslint --max-warnings=0 .",
@@ -14,6 +16,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:static": "playwright test --config tests/static/playwright.config.ts",
     "check": "npm run format:check && npm run design-system:check && npm run lint && npm run typecheck && npm test && npm run verify:packet && npm run build && npm run test:e2e",
     "package:participant": "node scripts/package-participant.mjs",
     "verify:packet": "node scripts/verify-participant.mjs",

@@ -1,18 +1,53 @@
-import { useState, type FormEvent } from "react";
-import { Link } from "react-router";
+import { useRef, useState, type FormEvent } from "react";
+import { Link, useSearchParams } from "react-router";
 import { FormSection } from "@/components/form-section";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { currentPerson } from "./model";
+import { archiveDueAt, currentPerson, isFinalStage, type State } from "./model";
 import { usePrototype } from "./store";
 import { Field } from "./workspace";
 import { Empty, PageTitle } from "./shell";
+import { ArchiveLinks } from "./archive-links";
+
+const jobStatuses: Record<State["jobs"][number]["publicationStatus"], string> = {
+  draft: "Szkic",
+  review: "Do weryfikacji",
+  published: "Opublikowana",
+  hidden: "Ukryta",
+  expired: "Wygasła",
+  archived: "Zarchiwizowana",
+};
+const archiveDate = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 
 export function EmployerJobs() {
-  const { state } = usePrototype();
+  const { state, run, pending } = usePrototype();
+  const [params] = useSearchParams();
+  const [closingId, setClosingId] = useState<string | null>(null);
+  const [closingError, setClosingError] = useState("");
+  const trigger = useRef<HTMLButtonElement>(null);
+  const archived = params.get("archiwum") === "1";
   const person = currentPerson(state)!;
-  const jobs = state.jobs.filter((x) => x.companyId === person.companyId);
+  const jobs = state.jobs.filter(
+    (job) =>
+      job.companyId === person.companyId && (job.publicationStatus === "archived") === archived,
+  );
+  function dismiss() {
+    setClosingId(null);
+    setClosingError("");
+    requestAnimationFrame(() => trigger.current?.focus());
+  }
+  async function closeRecruitment() {
+    if (!closingId) return;
+    if (await run({ type: "close_recruitment", jobId: closingId })) {
+      setClosingId(null);
+      requestAnimationFrame(() => document.getElementById(`recruitment-${closingId}`)?.focus());
+    } else
+      setClosingError(
+        "Nie udało się zakończyć rekrutacji. Sprawdź status aplikacji i spróbuj ponownie.",
+      );
+  }
   return (
     <>
       <PageTitle
@@ -25,41 +60,101 @@ export function EmployerJobs() {
       >
         Moje oferty
       </PageTitle>
+      <ArchiveLinks current="Oferty bieżące" archive="Archiwum ofert" />
       <div className="space-y-4">
         {jobs.length ? (
-          jobs.map((job) => (
-            <article key={job.id} className="prototype-panel">
-              <div className="flex flex-wrap justify-between gap-4">
-                <div>
-                  <Link className="work-list-title" to={`/app/oferty/${job.id}`}>
-                    {job.title}
-                  </Link>
-                  <p className="mt-3 text-muted-foreground">
-                    {job.competencyCard && (
+          jobs.map((job) => {
+            const applications = state.applications.filter((item) => item.jobId === job.id);
+            const open = applications.filter((item) => !isFinalStage(item.stage)).length;
+            const isPublished = job.publicationStatus === "published";
+            const archiveSearch = new URLSearchParams({ oferta: job.id });
+            if (archived) archiveSearch.set("archiwum", "1");
+            return (
+              <article key={job.id} className="prototype-panel">
+                <div className="flex flex-wrap justify-between gap-4">
+                  <div className="min-w-0 wrap-anywhere">
+                    <Link className="work-list-title" to={`/app/oferty/${job.id}`}>
+                      {job.title}
+                    </Link>
+                    <p className="mt-3 text-muted-foreground">
+                      {isPublished && job.competencyCard && (
+                        <Link
+                          className="block mb-3 text-[var(--gui-link)] underline"
+                          to={`/auth/sign-in?audience=candidate&next=${encodeURIComponent(`/aplikuj/${job.slug}`)}`}
+                        >
+                          Formularz karty PR02
+                        </Link>
+                      )}
                       <Link
-                        className="block mb-3 text-[var(--gui-link)] underline"
-                        to={`/auth/sign-in?audience=candidate&next=${encodeURIComponent(`/aplikuj/${job.slug}`)}`}
+                        className="underline"
+                        to={{ pathname: "/app/kandydaci", search: archiveSearch.toString() }}
                       >
-                        Formularz karty PR02
-                      </Link>
+                        Aplikacje ({applications.length})
+                      </Link>{" "}
+                      ·{" "}
+                      <span id={`recruitment-${job.id}`} tabIndex={-1}>
+                        {!archived && job.recruitmentClosedAt
+                          ? "Rekrutacja zakończona"
+                          : jobStatuses[job.publicationStatus]}
+                      </span>
+                    </p>
+                    {!archived && job.recruitmentClosedAt && (
+                      <p className="mt-2 text-sm">
+                        Archiwizacja: {archiveDate.format(archiveDueAt(job.recruitmentClosedAt))}
+                      </p>
                     )}
-                    {state.applications.filter((x) => x.jobId === job.id).length} aplikacji ·{" "}
-                    {job.publicationStatus === "published" ? "Opublikowana" : "Szkic"}
-                  </p>
+                    {isPublished && open > 0 && (
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        Otwarte aplikacje: {open}. Zakończ je przed zamknięciem rekrutacji.
+                      </p>
+                    )}
+                  </div>
+                  {isPublished && (
+                    <div className="flex flex-wrap items-start gap-2">
+                      <Link
+                        to={`/oferty/${job.slug}`}
+                        className={buttonVariants({ variant: "outline", size: "sm" })}
+                      >
+                        Zobacz ofertę
+                      </Link>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={open > 0 || pending}
+                        onClick={(event) => {
+                          trigger.current = event.currentTarget;
+                          setClosingId(job.id);
+                        }}
+                      >
+                        Zakończ rekrutację
+                      </Button>
+                    </div>
+                  )}
                 </div>
-                <Link
-                  to={`/oferty/${job.slug}`}
-                  className={buttonVariants({ variant: "outline", size: "sm" })}
-                >
-                  Zobacz ofertę
-                </Link>
-              </div>
-            </article>
-          ))
+              </article>
+            );
+          })
         ) : (
-          <Empty>Nie masz jeszcze ofert. Dodaj pierwszą ofertę.</Empty>
+          <Empty>
+            {archived
+              ? "Brak zarchiwizowanych ofert."
+              : "Brak bieżących ofert. Dodaj ofertę lub przejdź do archiwum."}
+          </Empty>
         )}
       </div>
+      <ConfirmDialog
+        open={closingId !== null}
+        onOpenChange={(open) => {
+          if (!open) dismiss();
+        }}
+        title="Zakończyć rekrutację?"
+        description="Oferta przestanie przyjmować zgłoszenia. Po 90 dniach oferta i jej aplikacje trafią do archiwum. Zachowasz dostęp do ich historii i materiałów."
+        label="Zakończ rekrutację"
+        pending={pending}
+        error={closingError}
+        onConfirm={() => void closeRecruitment()}
+      />
     </>
   );
 }

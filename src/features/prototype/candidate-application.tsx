@@ -1,10 +1,16 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ApplicationRecord } from "./application-record";
-import type { Application } from "./model";
+import { isFinalStage, type Application } from "./model";
 import { usePrototype } from "./store";
 
-export function CandidateApplication({ application }: { application: Application }) {
+export function CandidateApplication({
+  application,
+  archived,
+}: {
+  application: Application;
+  archived: boolean;
+}) {
   const { state, run, pending } = usePrototype();
   const [confirming, setConfirming] = useState(false);
   const [announcement, setAnnouncement] = useState("");
@@ -13,7 +19,7 @@ export function CandidateApplication({ application }: { application: Application
   const confirmRef = useRef<HTMLButtonElement>(null);
   const focusAfter = useRef<"status" | "trigger" | "confirm" | null>(null);
   const company = state.companies.find((item) => item.id === application.companyId);
-  const terminal = ["withdrawn", "rejected", "hired"].includes(application.stage);
+  const terminal = isFinalStage(application.stage);
 
   useLayoutEffect(() => {
     const targets = { status: statusRef, trigger: triggerRef, confirm: confirmRef };
@@ -27,10 +33,13 @@ export function CandidateApplication({ application }: { application: Application
         application={application}
         companyName={company?.name ?? ""}
         audience="candidate"
+        archived={archived}
         history={application.events.map(({ stage, at }) => ({ stage, at }))}
         statusRef={statusRef}
         footer={
-          terminal ? (
+          archived ? (
+            <p className="record-caption">Aplikacja jest dostępna w archiwum do odczytu.</p>
+          ) : terminal ? (
             <p className="record-caption">
               {application.stage === "withdrawn"
                 ? "Aplikacja została wycofana."

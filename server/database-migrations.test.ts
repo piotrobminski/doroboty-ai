@@ -1,3 +1,10 @@
+import {
+  FIXTURE_TEMPORARY_PASSWORD,
+  FIXTURE_ADMIN_PASSWORD,
+  PRIMARY_ADMIN_EMAIL,
+  PRIMARY_ADMIN_ID,
+} from "../tests/admin-fixture";
+import { removeLegacyOperatorRoles } from "./admin-bootstrap";
 import { DatabaseSync } from "node:sqlite";
 import { createHash, scryptSync } from "node:crypto";
 import { mkdtempSync, readdirSync, rmSync, statSync } from "node:fs";
@@ -7,6 +14,8 @@ import { describe, expect, it } from "vitest";
 import { initialState, stateSchema, transition, type State } from "../src/features/prototype/model";
 import { accountEmail } from "../src/features/auth/contract";
 import { PrototypeDatabase } from "./database";
+import { RELATIONAL_SCHEMA } from "./relational-schema";
+import { ScenarioRepository, transaction } from "./scenario-repository";
 
 function richState(): State {
   let state = initialState();
@@ -169,7 +178,11 @@ function authRows(sql: DatabaseSync) {
   return Object.fromEntries(
     ["users", "sessions", "login_failures"].map((table) => [
       table,
-      sql.prepare(`SELECT * FROM ${table} ORDER BY 1`).all(),
+      sql
+        .prepare(
+          `SELECT ${table === "users" ? "person_id, email, password_hash, created_at" : "*"} FROM ${table} ORDER BY 1`,
+        )
+        .all(),
     ]),
   );
 }
@@ -183,6 +196,54 @@ async function temporary(check: (path: string, folder: string) => void | Promise
 }
 
 describe("version-1 to relational migration", () => {
+  it("upgrades version 2, retains the old account and provisions the primary administrator only once", async () => {
+    await temporary(async (path) => {
+      const source = initialState();
+      const prior = legacy(path, source);
+      transaction(prior, "write", () => {
+        prior.exec(RELATIONAL_SCHEMA);
+        new ScenarioRepository(prior).write(source);
+        prior.exec(
+          "ALTER TABLE jobs DROP COLUMN recruitment_closed_at; DROP TABLE scenario; PRAGMA user_version = 2;",
+        );
+      });
+      const before = authRows(prior);
+      prior.close();
+      const db = new PrototypeDatabase(path, FIXTURE_TEMPORARY_PASSWORD);
+      try {
+        expect(db.migrationBackupPath).toContain(".v2-backup-");
+        expect(db.read().applications).toEqual(source.applications);
+        expect(db.read().people.find((person) => person.id === "operator")?.role).toBe("candidate");
+        expect(db.access("operator").admin).toBe(false);
+        expect(db.access(PRIMARY_ADMIN_ID)).toEqual({ admin: true, mustChangePassword: true });
+        expect(
+          authRows(db.sql).users.filter((user) => user.person_id !== PRIMARY_ADMIN_ID),
+        ).toEqual(before.users);
+        const login = await db.login(PRIMARY_ADMIN_EMAIL, FIXTURE_TEMPORARY_PASSWORD, "setup");
+        if (!login || !("token" in login)) throw new Error("Administrator login failed");
+        await db.changePassword(
+          PRIMARY_ADMIN_ID,
+          login.token,
+          FIXTURE_TEMPORARY_PASSWORD,
+          FIXTURE_ADMIN_PASSWORD,
+        );
+      } finally {
+        db.close();
+      }
+      const reopened = new PrototypeDatabase(path, FIXTURE_TEMPORARY_PASSWORD);
+      try {
+        expect(reopened.migrationBackupPath).toBe(null);
+        expect(
+          await reopened.login(PRIMARY_ADMIN_EMAIL, FIXTURE_TEMPORARY_PASSWORD, "retired"),
+        ).toBeNull();
+        expect(
+          await reopened.login(PRIMARY_ADMIN_EMAIL, FIXTURE_ADMIN_PASSWORD, "new"),
+        ).toMatchObject({ personId: PRIMARY_ADMIN_ID });
+      } finally {
+        reopened.close();
+      }
+    });
+  });
   it("preserves ordered records, snapshots, drafts, credentials and WAL sessions with a consistent private backup", async () => {
     await temporary(async (path, folder) => {
       const state = richState();
@@ -204,10 +265,12 @@ describe("version-1 to relational migration", () => {
         } finally {
           backup.close();
         }
-        expect(db.read()).toEqual(state);
+        const expected = structuredClone(state);
+        removeLegacyOperatorRoles(expected);
+        expect(db.read()).toEqual(expected);
         expect(authRows(db.sql)).toEqual(before);
         expect(db.session("legacy-token")).toBe("candidate-anna");
-        expect(db.sql.prepare("PRAGMA user_version").get()!.user_version).toBe(2);
+        expect(db.sql.prepare("PRAGMA user_version").get()!.user_version).toBe(5);
         expect(db.sql.prepare("PRAGMA foreign_key_check").all()).toEqual([]);
         expect(
           db.sql.prepare("SELECT name FROM sqlite_schema WHERE name='scenario'").get(),
@@ -234,7 +297,7 @@ describe("version-1 to relational migration", () => {
         db = undefined;
         db = new PrototypeDatabase(path);
         expect(db.migrationBackupPath).toBe(null);
-        expect(db.read()).toEqual(state);
+        expect(db.read()).toEqual(expected);
         expect(authRows(db.sql)).toEqual(before);
         expect(readdirSync(folder).filter((name) => name.includes(".v1-backup-")).length).toBe(
           count,
@@ -259,6 +322,7 @@ describe("version-1 to relational migration", () => {
         let db: PrototypeDatabase | undefined;
         try {
           db = new PrototypeDatabase(path);
+          removeLegacyOperatorRoles(state);
           expect(db.read()).toEqual(state);
         } finally {
           db?.close();
@@ -287,6 +351,7 @@ describe("version-1 to relational migration", () => {
         old.exec("DROP TABLE jobs");
         const retry = new PrototypeDatabase(path);
         try {
+          removeLegacyOperatorRoles(state);
           expect(retry.read()).toEqual(state);
         } finally {
           retry.close();
@@ -392,7 +457,7 @@ describe("relational integrity and transactional workflows", () => {
       const current = db.read().jobs.find((job) => job.id === first.jobId)!;
       db.act("employer-brightlabs", {
         type: "publish",
-        job: { ...current, title: "Zmienione ogłoszenie", publicationStatus: "archived" },
+        job: { ...current, title: "Zmienione ogłoszenie", publicationStatus: "hidden" },
       });
       expect(db.read().applications[0]).toEqual(snapshot);
       db.act("employer-brightlabs", {
@@ -411,10 +476,18 @@ describe("relational integrity and transactional workflows", () => {
       db.close();
     }
   });
-  it("rolls back submission/draft cleanup and imported accounts when a later SQL write fails", () => {
-    const db = new PrototypeDatabase(":memory:");
+  it("rolls back submission/draft cleanup and imported accounts when a later SQL write fails", async () => {
+    const db = new PrototypeDatabase(":memory:", FIXTURE_TEMPORARY_PASSWORD);
     try {
-      db.replace("operator", richState());
+      const login = await db.login(PRIMARY_ADMIN_EMAIL, FIXTURE_TEMPORARY_PASSWORD, "test-setup");
+      if (!login || !("token" in login)) throw new Error("Unable to provision test administrator.");
+      await db.changePassword(
+        PRIMARY_ADMIN_ID,
+        login.token,
+        FIXTURE_TEMPORARY_PASSWORD,
+        FIXTURE_ADMIN_PASSWORD,
+      );
+      db.replace(PRIMARY_ADMIN_ID, richState());
       let before = db.read();
       const auth = authRows(db.sql);
       db.sql.exec(
@@ -438,17 +511,17 @@ describe("relational integrity and transactional workflows", () => {
       const incoming = structuredClone(before);
       incoming.people.push({ ...incoming.people[0], id: "candidate-added" });
       incoming.companies[0].name = "blocked";
-      expect(() => db.replace("operator", incoming)).toThrow(/injected/);
+      expect(() => db.replace(PRIMARY_ADMIN_ID, incoming)).toThrow(/injected/);
       expect(db.read()).toEqual(before);
       expect(authRows(db.sql)).toEqual(auth);
       db.sql.exec("DROP TRIGGER fail_company");
       incoming.companies[0].name = before.companies[0].name;
-      db.replace("operator", incoming);
+      db.replace(PRIMARY_ADMIN_ID, incoming);
       expect(
         db.sql.prepare("SELECT person_id FROM users WHERE person_id='candidate-added'").get(),
       ).toBeDefined();
       before = db.read();
-      db.reset("operator");
+      db.reset(PRIMARY_ADMIN_ID);
       expect(db.read().people).toEqual(before.people);
       expect(db.sql.prepare("PRAGMA foreign_key_check").all()).toEqual([]);
     } finally {
@@ -490,7 +563,7 @@ describe("relational integrity and transactional workflows", () => {
       const raw = new DatabaseSync(path);
       try {
         expect(raw.prepare("SELECT COUNT(*) AS n FROM prototype_state").get()!.n).toBe(0);
-        expect(raw.prepare("PRAGMA user_version").get()!.user_version).toBe(2);
+        expect(raw.prepare("PRAGMA user_version").get()!.user_version).toBe(5);
       } finally {
         raw.close();
       }

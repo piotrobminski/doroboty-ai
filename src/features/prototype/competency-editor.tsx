@@ -1,3 +1,4 @@
+import { uuid } from "../../lib/uuid";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -158,10 +159,7 @@ export function CompetencyEditor({
             onChange({
               ...value,
               approved: false,
-              criteria: [
-                ...value.criteria,
-                { id: crypto.randomUUID(), requirement: "", question: "" },
-              ],
+              criteria: [...value.criteria, { id: uuid(), requirement: "", question: "" }],
             });
             onActiveChange(value.criteria.length);
             requestAnimationFrame(() =>

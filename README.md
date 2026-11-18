@@ -30,29 +30,45 @@ npm run dev
 
 Open http://127.0.0.1:3001. The local server creates `.data/doroboty.sqlite` automatically. No database service, environment file or provider account is required. Package installation requires access to the npm registry.
 
-Log in using one of the prepared accounts below. Publish a job, apply, switch accounts and record the employer decision. Changes persist in SQLite across browser reloads and server restarts. The operator settings provide confirmed export/import/reset and migration of previous browser saves. Scores and summaries remain fixed scenario examples. The guided job composer proposes questions locally, with no API key or credits. Use synthetic descriptions and example CVs only.
+Log in using one of the prepared accounts below. Publish a job, apply, switch accounts and record the employer decision. Changes persist in SQLite across browser reloads and server restarts. Administrator settings provide confirmed export/import/reset and migration of previous browser saves. Scores and summaries remain fixed scenario examples. The guided job composer proposes questions locally, with no API key or credits. Use synthetic descriptions and example CVs only.
 
 ## Prepared accounts and database
 
 Every existing account starts with password **`Test1234`**:
 
-| Person              | Login                               |
-| ------------------- | ----------------------------------- |
-| Anna Kowalska       | `candidate-anna@doroboty.test`      |
-| Marek Nowak         | `candidate-marek@doroboty.test`     |
-| Karolina Wiśniewska | `employer-brightlabs@doroboty.test` |
-| Tomasz Zieliński    | `employer-northstar@doroboty.test`  |
-| Prowadzący          | `operator@doroboty.test`            |
+| Person                      | Login                               |
+| --------------------------- | ----------------------------------- |
+| Anna Kowalska               | `candidate-anna@doroboty.test`      |
+| Marek Nowak                 | `candidate-marek@doroboty.test`     |
+| Karolina Wiśniewska         | `employer-brightlabs@doroboty.test` |
+| Tomasz Zieliński            | `employer-northstar@doroboty.test`  |
+| Dawny prowadzący (kandydat) | `operator@doroboty.test`            |
 
-Account identifiers, roles, company assignments, profile fields and CVs are preserved. Login uses salted scrypt hashes and an opaque HttpOnly/SameSite session cookie, expiring after 12 hours; logout revokes the session. Shared initial passwords are for this synthetic teaching prototype. There is no registration or password recovery flow.
+Account identifiers, roles, company assignments, profile fields and CVs are preserved. Login uses salted scrypt hashes and an opaque HttpOnly/SameSite session cookie, expiring after 12 hours; logout revokes the session. Shared initial passwords are for this synthetic teaching prototype. Users can change their password in Settings. Administrators can set temporary passwords for other accounts. Public registration is unavailable.
 
 The ignored `.data/` directory holds the database, WAL files and migration backups; never commit or distribute it. `DATABASE_PATH` can select a different persistent path. Set `AUTH_SECURE_COOKIE=1` for an HTTPS origin; local HTTP uses the default. Options can be set in `.env.local` or the process environment. Restart never resets hashes or scenario records.
 
-The server is authoritative. Clearing browser storage signs out the user but does not delete the scenario. A previous `doroboty.prototype.v1` save stays untouched; the operator can download or explicitly import it in Settings after reviewing it. Import/reset affect the shared database, preserve existing account IDs/roles/memberships and never import/export passwords or sessions. Reset retains account profiles. For a scenario backup, use operator export; for an exact SQLite backup, stop the server before copying the `.data/` directory and restore it with the server stopped.
+The server is authoritative. Clearing browser storage signs out the user but does not delete the scenario. A previous `doroboty.prototype.v1` save stays untouched; an administrator can download or explicitly import it in Settings after reviewing it. Import/reset affect the shared database, preserve existing account IDs/roles/memberships and never import/export passwords or sessions. Reset retains account profiles. For a scenario backup, use operator export; for an exact SQLite backup, stop the server before copying the `.data/` directory and restore it with the server stopped.
 
-Existing databases migrate automatically to schema version 2 on server startup. Jobs, applications, their history, drafts and bookmarks become separate related tables; profile metadata remains separate. Before changing a version-1 database, startup creates a private, consistent `<database-path>.v1-backup-<time>-<uuid>.sqlite` copy, including committed WAL records. The migration preserves accounts, hashes, sessions, IDs and submitted material, and rolls back if validation fails. An invalid or unsupported database is never silently reset. API/scenario-export JSON remains version 1.
+Existing databases migrate automatically to schema version 5 on server startup. Jobs, applications, their history, drafts and bookmarks use separate related tables. Version 5 stores password recovery token digests. Before upgrading a database from versions 1 through 4, startup creates a private, consistent `<database-path>.v<version>-backup-<time>-<uuid>.sqlite` copy, including committed WAL records. The migration preserves accounts, hashes, sessions, IDs and submitted material, and rolls back if validation fails. An invalid or unsupported database is never silently reset. API/scenario-export JSON remains version 1.
 
 To recover from a migration problem, stop every server using the database, copy the backup to a different database path and set `DATABASE_PATH` to that copy. Keep the original database and its sidecars for recovery. The backup includes credentials/sessions and must stay private. [Schema, migration and verification details](docs/tasks/jobs-applications-schema.md).
+
+## Account administration
+
+Set `AUTH_ADMIN_PASSWORD` in the private `.env.local` file for dev/preview, or in the Node service environment, before provisioning the primary account `piotr.obminski@allegro.com`. Restart the server after setting it. The first sign-in requires a password change in Settings. Subsequent startups retain the stored password. A database started without this setting can provision the administrator on a later startup after configuration.
+
+The administration panel at `/#/app/admin` supports account creation, temporary password resets and administrative access grants. A new employer requires a company. Administrative permissions are separate from candidate/employer roles. Credential or permission changes revoke existing sessions for the affected account. Scenario exports omit credentials and administrative grants.
+
+## Password recovery
+
+Set `AUTH_RESET_DELIVERY=local` in `.env.local` and restart the server to try recovery on localhost. Set `AUTH_RESET_ORIGIN` to the loopback HTTP origin used by the browser. The default is `http://localhost:3001`. Choose **Nie pamiętasz hasła?** on the sign-in screen, then open the reset link from the matching JSON message in `.data/password-reset-mail/3001/`. Different loopback ports use their own folders. Keep the directory private.
+
+A link is valid for 30 minutes and can be used once. Reset revokes the account's active sessions and all its remaining links. The account holder signs in again with the new password. Recovery is off until a delivery mode is configured and is unavailable in the static S3 demo. For hosted email delivery, see the [deployment guide](docs/DEPLOYMENT.md#password-recovery).
+
+## Recruitment archive
+
+Use **Zakończ rekrutację** on a published offer once all its applications have a final outcome. The offer stops accepting applications immediately. After 90 full days, the offer and its submitted applications move into their Archive views. Application results, snapshots and history remain available to the relevant accounts. The server handles overdue offers on startup and checks regularly while running. In the static demo, the same deadline is applied when the browser next interacts with the scenario.
 
 ## Guided recruiter proposals
 
@@ -76,7 +92,11 @@ npm run preview
 ./scripts/verify
 ```
 
-The frontend output is dist/. Run `npm run preview` (or `npm start`) to serve it with the SQLite/auth API. Serving dist/ alone does not provide login or persistence. Automated browser checks explicitly disable the real key and exercise the local proposals, including offline behavior; server tests inject a fake provider. They make no paid API calls. Browser checks require an already provisioned Playwright Chromium; starting the app never installs it. See [participant guide](docs/PARTICIPANT_GUIDE.md), [architecture](docs/architecture.md), [current features](FEATURES.md) and [case protocol](docs/case/CASE_PROTOCOL.md).
+The frontend output is dist/. Run `npm run preview` (or `npm start` in the source checkout) to preview it locally with the SQLite/auth API. Serving dist/ alone does not provide login or persistence. Automated browser checks explicitly disable the real key and exercise the local proposals, including offline behavior; server tests inject a fake provider. They make no paid API calls. Browser checks require an already provisioned Playwright Chromium; starting the app never installs it. See [participant guide](docs/PARTICIPANT_GUIDE.md), [architecture](docs/architecture.md), [current features](FEATURES.md) and [case protocol](docs/case/CASE_PROTOCOL.md).
+
+To deploy on another server, run `npm run bundle:production`. It builds `artifacts/production/doroboty-ai-production.tar.gz` plus a SHA-256 checksum. Extract the archive and run `node server.mjs` with Node.js 24; the extracted bundle also supports `npm start`, with no dependency installation. It contains its own HTTP server, frontend and SQLite/session API. Configure HOST, PORT, DATABASE_PATH and AUTH_SECURE_COOKIE through the environment. Local databases, secrets, source history and instructor materials are excluded; a fresh installation seeds the prepared synthetic scenario. See the included [deployment guide](docs/DEPLOYMENT.md) for HTTPS, persistent storage, account details and recovery. This build does not deploy or certify the teaching prototype for unrestricted public use.
+
+For a **browser-only static demo** on S3-style storage, run `npm run build:s3`. Upload the contents of `artifacts/s3-upload/` and set index.html as the website's index document. This explicitly selected build simulates login and keeps synthetic edits only in each browser, using its own localStorage key. It requires no API/server and provides no account security or synchronization. Every route labels the simulation. The existing server-backed build remains the default; it never silently falls back to this demo. See [S3 upload instructions](docs/S3_DEPLOYMENT.md). After building, `npm run test:static` verifies the folder on a file-only HTTP host with no API.
 
 To distribute a baseline participant package, run npm run package:participant -- /absolute/output/directory. This excludes Git history and instructor source material. Never distribute this repository’s history as a stage-safe packet.
 

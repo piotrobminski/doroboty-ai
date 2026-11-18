@@ -17,6 +17,9 @@ import {
 import { EmployerJobs, EmployerJobEditor, CompanyEditor } from "./employer";
 import { SettingsPage, PrivacyPage } from "./settings";
 import { CasePage } from "./case";
+import { AdminPage } from "../auth/admin-page";
+import { PasswordRecoveryPage } from "../auth/recovery-page";
+import { STATIC_DEMO } from "./runtime";
 function AppRoutes() {
   return (
     <Routes>
@@ -28,6 +31,10 @@ function AppRoutes() {
         <Route path="metodologia" element={<MethodologyPage />} />
         <Route path="polityka-prywatnosci" element={<PrivacyPage />} />
         <Route path="auth/:mode" element={<LoginPage />} />
+        {!STATIC_DEMO && <Route path="auth/forgot-password" element={<PasswordRecoveryPage />} />}
+        {!STATIC_DEMO && (
+          <Route path="auth/reset-password" element={<PasswordRecoveryPage reset />} />
+        )}
         <Route
           path="aplikuj/:slug"
           element={
@@ -136,11 +143,21 @@ function AppRoutes() {
         <Route
           path="app/case"
           element={
-            <RequireRole role="operator">
+            <RequireRole role={STATIC_DEMO ? "operator" : undefined} admin={!STATIC_DEMO}>
               <CasePage />
             </RequireRole>
           }
         />
+        {!STATIC_DEMO && (
+          <Route
+            path="app/admin"
+            element={
+              <RequireRole admin>
+                <AdminPage />
+              </RequireRole>
+            }
+          />
+        )}
         <Route
           path="app/settings"
           element={

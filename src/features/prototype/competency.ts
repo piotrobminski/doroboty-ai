@@ -1,3 +1,4 @@
+import { uuid } from "../../lib/uuid";
 import { z } from "zod";
 
 const identifier = z
@@ -87,7 +88,7 @@ export function proposeCriteria(description: string): Criterion[] {
   return (tasks.length ? tasks : fragments.length ? fragments : [source])
     .slice(0, 3)
     .map((task) => ({
-      id: crypto.randomUUID(),
+      id: uuid(),
       requirement: task.slice(0, 800),
       question: `Opisz przykład związany z zadaniem: „${task.slice(0, 350)}”. Co zrobiłeś/zrobiłaś osobiście, jakie decyzje podjąłeś/podjęłaś, jak użyłeś/użyłaś AI i jak sprawdziłeś/sprawdziłaś wynik? Oddziel swój wkład od pracy zespołu.`,
     }));
